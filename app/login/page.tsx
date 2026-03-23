@@ -25,27 +25,27 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0A0A0F' }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#FFFFFF' }}>
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#6366F1' }}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#1aaa5e' }}>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M8 2L14 6V10L8 14L2 10V6L8 2Z" fill="white" fillOpacity="0.9"/>
               </svg>
             </div>
-            <span className="text-xl font-semibold" style={{ color: '#F4F4F8' }}>RP CRM</span>
+            <span className="text-xl font-semibold" style={{ color: '#191D25' }}>RP CRM</span>
           </div>
-          <p className="text-sm" style={{ color: '#9090A8' }}>Revenue Precision</p>
+          <p className="text-sm" style={{ color: '#638070' }}>Revenue Precision</p>
         </div>
 
         {/* Card */}
-        <div className="rounded-xl p-8" style={{ background: '#111118', border: '1px solid #2A2A38' }}>
-          <h1 className="text-lg font-semibold mb-6" style={{ color: '#F4F4F8' }}>Sign in to your account</h1>
+        <div className="rounded-xl p-8" style={{ background: '#F8FBF9', border: '1px solid #D4E8DC' }}>
+          <h1 className="text-lg font-semibold mb-6" style={{ color: '#191D25' }}>Sign in to your account</h1>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: '#9090A8' }}>Email</label>
+              <label className="block text-sm font-medium mb-1.5" style={{ color: '#638070' }}>Email</label>
               <input
                 type="email"
                 value={email}
@@ -54,16 +54,16 @@ export default function LoginPage() {
                 placeholder="you@company.com"
                 className="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-all"
                 style={{
-                  background: '#1A1A24',
-                  border: '1px solid #2A2A38',
-                  color: '#F4F4F8',
+                  background: '#EEF7F2',
+                  border: '1px solid #D4E8DC',
+                  color: '#191D25',
                 }}
-                onFocus={e => e.target.style.borderColor = '#6366F1'}
-                onBlur={e => e.target.style.borderColor = '#2A2A38'}
+                onFocus={e => e.target.style.borderColor = '#1aaa5e'}
+                onBlur={e => e.target.style.borderColor = '#D4E8DC'}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: '#9090A8' }}>Password</label>
+              <label className="block text-sm font-medium mb-1.5" style={{ color: '#638070' }}>Password</label>
               <input
                 type="password"
                 value={password}
@@ -72,12 +72,12 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 className="w-full px-3 py-2.5 text-sm rounded-md outline-none transition-all"
                 style={{
-                  background: '#1A1A24',
-                  border: '1px solid #2A2A38',
-                  color: '#F4F4F8',
+                  background: '#EEF7F2',
+                  border: '1px solid #D4E8DC',
+                  color: '#191D25',
                 }}
-                onFocus={e => e.target.style.borderColor = '#6366F1'}
-                onBlur={e => e.target.style.borderColor = '#2A2A38'}
+                onFocus={e => e.target.style.borderColor = '#1aaa5e'}
+                onBlur={e => e.target.style.borderColor = '#D4E8DC'}
               />
             </div>
             <button
@@ -85,7 +85,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-2.5 rounded-md text-sm font-medium transition-all mt-2"
               style={{
-                background: loading ? '#4F46E5' : '#6366F1',
+                background: loading ? '#157a46' : '#1aaa5e',
                 color: 'white',
                 opacity: loading ? 0.7 : 1,
                 cursor: loading ? 'not-allowed' : 'pointer'
@@ -95,7 +95,7 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
-        <p className="text-center text-xs mt-4" style={{ color: '#5A5A70' }}>
+        <p className="text-center text-xs mt-4" style={{ color: '#8aaa98' }}>
           Contact your admin to create an account
         </p>
       </div>

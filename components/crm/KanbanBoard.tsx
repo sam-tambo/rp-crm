@@ -10,9 +10,9 @@ import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
 
 const STAGES: { id: DealStage; label: string; color: string; bg: string }[] = [
-  { id: 'prospecting', label: 'Prospecting', color: '#9090A8', bg: 'rgba(90,90,112,0.06)' },
+  { id: 'prospecting', label: 'Prospecting', color: '#638070', bg: 'rgba(90,90,112,0.06)' },
   { id: 'qualification', label: 'Qualification', color: '#3B82F6', bg: 'rgba(59,130,246,0.06)' },
-  { id: 'proposal', label: 'Proposal', color: '#6366F1', bg: 'rgba(99,102,241,0.06)' },
+  { id: 'proposal', label: 'Proposal', color: '#1aaa5e', bg: 'rgba(99,102,241,0.06)' },
   { id: 'negotiation', label: 'Negotiation', color: '#F59E0B', bg: 'rgba(245,158,11,0.06)' },
   { id: 'closed_won', label: 'Closed Won', color: '#10B981', bg: 'rgba(16,185,129,0.08)' },
   { id: 'closed_lost', label: 'Closed Lost', color: '#EF4444', bg: 'rgba(239,68,68,0.06)' },
@@ -22,21 +22,21 @@ function DealCard({ deal, isDragging }: { deal: Deal; isDragging?: boolean }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: deal.id })
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }
 
-  const cardStyle = { ...style, background: '#1A1A24', border: '1px solid #2A2A38', marginBottom: '8px' }
+  const cardStyle = { ...style, background: '#EEF7F2', border: '1px solid #D4E8DC', marginBottom: '8px' }
 
   return (
     <div ref={setNodeRef} style={cardStyle} {...attributes} {...listeners}
       className="rounded-lg p-3 cursor-grab active:cursor-grabbing">
-      <div className="font-medium text-sm mb-1.5 truncate" style={{ color: '#F4F4F8' }}>{deal.name}</div>
+      <div className="font-medium text-sm mb-1.5 truncate" style={{ color: '#191D25' }}>{deal.name}</div>
       {(deal as any).company?.name && (
-        <div className="text-xs mb-1.5 truncate" style={{ color: '#9090A8' }}>{(deal as any).company.name}</div>
+        <div className="text-xs mb-1.5 truncate" style={{ color: '#638070' }}>{(deal as any).company.name}</div>
       )}
       <div className="flex items-center justify-between mt-2">
         <span className="text-sm font-semibold" style={{ color: '#10B981' }}>{formatCurrency(deal.value)}</span>
-        <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(99,102,241,0.12)', color: '#6366F1' }}>{deal.probability}%</span>
+        <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(99,102,241,0.12)', color: '#1aaa5e' }}>{deal.probability}%</span>
       </div>
       {deal.close_date && (
-        <div className="text-xs mt-1.5" style={{ color: '#5A5A70' }}>Close: {formatDate(deal.close_date)}</div>
+        <div className="text-xs mt-1.5" style={{ color: '#8aaa98' }}>Close: {formatDate(deal.close_date)}</div>
       )}
     </div>
   )
@@ -110,7 +110,7 @@ export default function KanbanBoard({ deals, onAddDeal, onRefresh }: Props) {
                 ))}
               </SortableContext>
               {dealsByStage(stage.id).length === 0 && (
-                <div className="text-center py-6 text-xs" style={{ color: '#5A5A70' }}>Drop deals here</div>
+                <div className="text-center py-6 text-xs" style={{ color: '#8aaa98' }}>Drop deals here</div>
               )}
             </div>
           </div>
@@ -118,8 +118,8 @@ export default function KanbanBoard({ deals, onAddDeal, onRefresh }: Props) {
       </div>
       <DragOverlay>
         {activeDeal && (
-          <div className="rounded-lg p-3 shadow-xl" style={{ background: '#1A1A24', border: '1px solid #6366F1', width: '256px' }}>
-            <div className="font-medium text-sm" style={{ color: '#F4F4F8' }}>{activeDeal.name}</div>
+          <div className="rounded-lg p-3 shadow-xl" style={{ background: '#EEF7F2', border: '1px solid #1aaa5e', width: '256px' }}>
+            <div className="font-medium text-sm" style={{ color: '#191D25' }}>{activeDeal.name}</div>
             <div className="text-sm font-semibold mt-1" style={{ color: '#10B981' }}>{formatCurrency(activeDeal.value)}</div>
           </div>
         )}

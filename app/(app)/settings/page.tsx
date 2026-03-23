@@ -6,8 +6,8 @@ export default function SettingsPage() {
     <div className="flex flex-col h-full">
       <TopBar title="Settings" breadcrumb={[{ label: 'Settings' }]} />
       <div className="flex-1 flex flex-col items-center justify-center gap-3">
-        <Settings size={40} style={{ color: '#2A2A38' }} />
-        <p className="text-sm" style={{ color: '#5A5A70' }}>Settings coming soon</p>
+        <Settings size={40} style={{ color: '#D4E8DC' }} />
+        <p className="text-sm" style={{ color: '#8aaa98' }}>Settings coming soon</p>
       </div>
     </div>
   )

@@ -31,8 +31,8 @@ export default function CompaniesPage() {
     (c.domain ?? '').toLowerCase().includes(search.toLowerCase())
   )
 
-  const thStyle = { color: '#5A5A70', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.05em', padding: '10px 16px', borderBottom: '1px solid #2A2A38', whiteSpace: 'nowrap' as const }
-  const tdStyle = { padding: '12px 16px', borderBottom: '1px solid #1A1A24', fontSize: '13px', color: '#F4F4F8' }
+  const thStyle = { color: '#8aaa98', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.05em', padding: '10px 16px', borderBottom: '1px solid #D4E8DC', whiteSpace: 'nowrap' as const }
+  const tdStyle = { padding: '12px 16px', borderBottom: '1px solid #EEF7F2', fontSize: '13px', color: '#191D25' }
 
   return (
     <div className="flex flex-col h-full">
@@ -43,7 +43,7 @@ export default function CompaniesPage() {
           <button
             onClick={() => setModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium"
-            style={{ background: '#6366F1', color: 'white' }}
+            style={{ background: '#1aaa5e', color: 'white' }}
           >
             <Plus size={14} /> New Company
           </button>
@@ -54,22 +54,22 @@ export default function CompaniesPage() {
         {/* Search */}
         <div className="flex items-center gap-2 mb-4">
           <div className="relative flex-1 max-w-xs">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#5A5A70' }} />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#8aaa98' }} />
             <input
               className="w-full pl-9 pr-4 py-2 text-sm rounded-md outline-none"
-              style={{ background: '#111118', border: '1px solid #2A2A38', color: '#F4F4F8' }}
+              style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}
               placeholder="Search companies..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
           </div>
-          <span className="text-xs" style={{ color: '#5A5A70' }}>{filtered.length} companies</span>
+          <span className="text-xs" style={{ color: '#8aaa98' }}>{filtered.length} companies</span>
         </div>
 
         {/* Table */}
-        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #2A2A38' }}>
+        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #D4E8DC' }}>
           <table className="w-full border-collapse">
-            <thead style={{ background: '#111118' }}>
+            <thead style={{ background: '#F8FBF9' }}>
               <tr>
                 <th style={thStyle} className="text-left">Name</th>
                 <th style={thStyle} className="text-left">Domain</th>
@@ -79,13 +79,13 @@ export default function CompaniesPage() {
                 <th style={thStyle} className="text-left">Created</th>
               </tr>
             </thead>
-            <tbody style={{ background: '#0A0A0F' }}>
+            <tbody style={{ background: '#FFFFFF' }}>
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i}>
                     {Array.from({ length: 6 }).map((_, j) => (
                       <td key={j} style={tdStyle}>
-                        <div className="h-4 rounded animate-pulse" style={{ background: '#1A1A24', width: j === 0 ? '120px' : '80px' }} />
+                        <div className="h-4 rounded animate-pulse" style={{ background: '#EEF7F2', width: j === 0 ? '120px' : '80px' }} />
                       </td>
                     ))}
                   </tr>
@@ -93,12 +93,12 @@ export default function CompaniesPage() {
               ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="text-center py-16">
-                    <Building2 size={32} className="mx-auto mb-3 opacity-20" style={{ color: '#9090A8' }} />
-                    <p className="text-sm" style={{ color: '#5A5A70' }}>No companies yet</p>
+                    <Building2 size={32} className="mx-auto mb-3 opacity-20" style={{ color: '#638070' }} />
+                    <p className="text-sm" style={{ color: '#8aaa98' }}>No companies yet</p>
                     <button
                       onClick={() => setModalOpen(true)}
                       className="mt-3 px-4 py-2 rounded-md text-sm font-medium"
-                      style={{ background: '#6366F1', color: 'white' }}
+                      style={{ background: '#1aaa5e', color: 'white' }}
                     >
                       Add your first company
                     </button>
@@ -110,22 +110,22 @@ export default function CompaniesPage() {
                     key={company.id}
                     className="cursor-pointer transition-colors"
                     onClick={() => router.push(`/companies/${company.id}`)}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#111118'}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#F8FBF9'}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
                   >
                     <td style={tdStyle}>
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 text-xs font-semibold" style={{ background: '#1A1A24', color: '#6366F1' }}>
+                        <div className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 text-xs font-semibold" style={{ background: '#EEF7F2', color: '#1aaa5e' }}>
                           {company.name.charAt(0).toUpperCase()}
                         </div>
                         <span className="font-medium">{company.name}</span>
                       </div>
                     </td>
-                    <td style={{ ...tdStyle, color: '#9090A8' }}>{company.domain ?? '—'}</td>
-                    <td style={{ ...tdStyle, color: '#9090A8' }}>{company.industry ?? '—'}</td>
-                    <td style={{ ...tdStyle, color: '#9090A8' }}>{company.employee_count ?? '—'}</td>
+                    <td style={{ ...tdStyle, color: '#638070' }}>{company.domain ?? '—'}</td>
+                    <td style={{ ...tdStyle, color: '#638070' }}>{company.industry ?? '—'}</td>
+                    <td style={{ ...tdStyle, color: '#638070' }}>{company.employee_count ?? '—'}</td>
                     <td style={tdStyle}><StatusBadge type="company" value={company.status} /></td>
-                    <td style={{ ...tdStyle, color: '#5A5A70' }}>{formatDate(company.created_at)}</td>
+                    <td style={{ ...tdStyle, color: '#8aaa98' }}>{formatDate(company.created_at)}</td>
                   </tr>
                 ))
               )}

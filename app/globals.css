@@ -3,11 +3,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* RP brand variables */
+:root {
+  --rp-green: #1aaa5e;
+  --rp-green-hover: #157a46;
+  --rp-green-light: #EEF7F2;
+  --rp-green-border: #D4E8DC;
+  --rp-text: #191D25;
+  --rp-text-secondary: #638070;
+  --rp-surface: #F8FBF9;
+  --rp-sidebar: #F0F7F3;
+}
+
 * { box-sizing: border-box; }
-body { background: #0A0A0F; color: #F4F4F8; font-family: 'Inter', sans-serif; }
+body { background: #FFFFFF; color: #191D25; font-family: 'Inter', sans-serif; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #0A0A0F; }
-::-webkit-scrollbar-thumb { background: #2A2A38; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #3A3A48; }
+::-webkit-scrollbar-track { background: #F8FBF9; }
+::-webkit-scrollbar-thumb { background: #D4E8DC; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #1aaa5e; }
+
+/* Clean inputs on light background */
+input, select, textarea { color: #191D25; }
+input::placeholder, textarea::placeholder { color: #8aaa98; }
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
+  outline: none;
+  border-color: #1aaa5e !important;
+  box-shadow: 0 0 0 2px rgba(26, 170, 94, 0.12);
+}

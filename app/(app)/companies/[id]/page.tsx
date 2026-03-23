@@ -23,7 +23,7 @@ function InlineField({ label, value, onSave, type = 'text' }: {
 
   return (
     <div>
-      <div className="text-xs font-medium mb-1" style={{ color: '#5A5A70' }}>{label}</div>
+      <div className="text-xs font-medium mb-1" style={{ color: '#8aaa98' }}>{label}</div>
       {editing ? (
         <input
           autoFocus
@@ -33,15 +33,15 @@ function InlineField({ label, value, onSave, type = 'text' }: {
           onBlur={handleBlur}
           onKeyDown={e => { if (e.key === 'Enter') handleBlur() }}
           className="w-full px-2 py-1 text-sm rounded-md outline-none"
-          style={{ background: '#1A1A24', border: '1px solid #6366F1', color: '#F4F4F8' }}
+          style={{ background: '#EEF7F2', border: '1px solid #1aaa5e', color: '#191D25' }}
         />
       ) : (
         <div
           className="text-sm py-1 px-2 rounded-md cursor-text hover:bg-white/5 transition-colors min-h-[28px]"
-          style={{ color: val ? '#F4F4F8' : '#5A5A70' }}
+          style={{ color: val ? '#191D25' : '#8aaa98' }}
           onClick={() => setEditing(true)}
         >
-          {val || <span style={{ color: '#5A5A70' }}>Click to edit</span>}
+          {val || <span style={{ color: '#8aaa98' }}>Click to edit</span>}
         </div>
       )}
     </div>
@@ -88,7 +88,7 @@ export default function CompanyDetailPage() {
       <div className="flex flex-col h-full">
         <TopBar title="Loading..." breadcrumb={[{ label: 'Companies', href: '/companies' }, { label: '...' }]} />
         <div className="flex-1 p-6 flex items-center justify-center">
-          <div className="animate-pulse text-sm" style={{ color: '#5A5A70' }}>Loading...</div>
+          <div className="animate-pulse text-sm" style={{ color: '#8aaa98' }}>Loading...</div>
         </div>
       </div>
     )
@@ -99,8 +99,8 @@ export default function CompanyDetailPage() {
       <div className="flex flex-col h-full">
         <TopBar title="Not found" />
         <div className="flex-1 p-6 flex flex-col items-center justify-center gap-3">
-          <p style={{ color: '#9090A8' }}>Company not found</p>
-          <button onClick={() => router.push('/companies')} className="text-sm" style={{ color: '#6366F1' }}>Back to Companies</button>
+          <p style={{ color: '#638070' }}>Company not found</p>
+          <button onClick={() => router.push('/companies')} className="text-sm" style={{ color: '#1aaa5e' }}>Back to Companies</button>
         </div>
       </div>
     )
@@ -110,8 +110,8 @@ export default function CompanyDetailPage() {
     padding: '8px 16px',
     fontSize: '13px',
     fontWeight: tab === t ? 500 : 400,
-    color: tab === t ? '#F4F4F8' : '#9090A8',
-    borderBottom: tab === t ? '2px solid #6366F1' : '2px solid transparent',
+    color: tab === t ? '#191D25' : '#638070',
+    borderBottom: tab === t ? '2px solid #1aaa5e' : '2px solid transparent',
     cursor: 'pointer' as const,
     transition: 'all 0.15s',
   })
@@ -122,7 +122,7 @@ export default function CompanyDetailPage() {
         title={company.name}
         breadcrumb={[{ label: 'Companies', href: '/companies' }, { label: company.name }]}
         action={
-          <button onClick={() => router.push('/companies')} className="flex items-center gap-1.5 text-sm px-3 py-2 rounded-md hover:bg-white/5 transition-colors" style={{ color: '#9090A8' }}>
+          <button onClick={() => router.push('/companies')} className="flex items-center gap-1.5 text-sm px-3 py-2 rounded-md hover:bg-white/5 transition-colors" style={{ color: '#638070' }}>
             <ArrowLeft size={14} /> Back
           </button>
         }
@@ -133,10 +133,10 @@ export default function CompanyDetailPage() {
           {/* Left column */}
           <div className="flex-1 min-w-0">
             {/* Name */}
-            <h1 className="text-2xl font-semibold mb-4" style={{ color: '#F4F4F8' }}>{company.name}</h1>
+            <h1 className="text-2xl font-semibold mb-4" style={{ color: '#191D25' }}>{company.name}</h1>
 
             {/* Tabs */}
-            <div className="flex border-b mb-6" style={{ borderColor: '#2A2A38' }}>
+            <div className="flex border-b mb-6" style={{ borderColor: '#D4E8DC' }}>
               {(['overview', 'activity', 'contacts', 'deals'] as const).map(t => (
                 <button key={t} style={tabStyle(t)} onClick={() => setTab(t)}>
                   {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -153,13 +153,13 @@ export default function CompanyDetailPage() {
                 <InlineField label="Website" value={company.website} onSave={v => updateField('website', v)} />
                 <InlineField label="LinkedIn URL" value={company.linkedin_url} onSave={v => updateField('linkedin_url', v)} />
                 <div className="col-span-2">
-                  <div className="text-xs font-medium mb-1" style={{ color: '#5A5A70' }}>Description</div>
+                  <div className="text-xs font-medium mb-1" style={{ color: '#8aaa98' }}>Description</div>
                   <textarea
                     className="w-full px-2 py-1.5 text-sm rounded-md outline-none resize-none"
-                    style={{ background: 'transparent', border: '1px solid transparent', color: '#F4F4F8' }}
+                    style={{ background: 'transparent', border: '1px solid transparent', color: '#191D25' }}
                     rows={3}
                     defaultValue={company.description ?? ''}
-                    onFocus={e => e.target.style.borderColor = '#2A2A38'}
+                    onFocus={e => e.target.style.borderColor = '#D4E8DC'}
                     onBlur={e => { e.target.style.borderColor = 'transparent'; updateField('description', e.target.value) }}
                     placeholder="Add a description..."
                   />
@@ -174,24 +174,24 @@ export default function CompanyDetailPage() {
             {tab === 'contacts' && (
               <div>
                 {contacts.length === 0 ? (
-                  <p className="text-sm" style={{ color: '#5A5A70' }}>No contacts linked</p>
+                  <p className="text-sm" style={{ color: '#8aaa98' }}>No contacts linked</p>
                 ) : (
-                  <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #2A2A38' }}>
+                  <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #D4E8DC' }}>
                     <table className="w-full border-collapse">
-                      <thead style={{ background: '#111118' }}>
+                      <thead style={{ background: '#F8FBF9' }}>
                         <tr>
                           {['Name', 'Email', 'Job Title', 'Status'].map(h => (
-                            <th key={h} className="text-left px-4 py-2.5" style={{ color: '#5A5A70', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #2A2A38' }}>{h}</th>
+                            <th key={h} className="text-left px-4 py-2.5" style={{ color: '#8aaa98', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #D4E8DC' }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
-                      <tbody style={{ background: '#0A0A0F' }}>
+                      <tbody style={{ background: '#FFFFFF' }}>
                         {contacts.map(c => (
                           <tr key={c.id} className="cursor-pointer hover:bg-white/5" onClick={() => router.push(`/contacts/${c.id}`)}>
-                            <td className="px-4 py-3 text-sm" style={{ color: '#F4F4F8', borderBottom: '1px solid #1A1A24' }}>{c.first_name} {c.last_name}</td>
-                            <td className="px-4 py-3 text-sm" style={{ color: '#9090A8', borderBottom: '1px solid #1A1A24' }}>{c.email ?? '—'}</td>
-                            <td className="px-4 py-3 text-sm" style={{ color: '#9090A8', borderBottom: '1px solid #1A1A24' }}>{c.job_title ?? '—'}</td>
-                            <td className="px-4 py-3" style={{ borderBottom: '1px solid #1A1A24' }}><StatusBadge type="contact" value={c.status} /></td>
+                            <td className="px-4 py-3 text-sm" style={{ color: '#191D25', borderBottom: '1px solid #EEF7F2' }}>{c.first_name} {c.last_name}</td>
+                            <td className="px-4 py-3 text-sm" style={{ color: '#638070', borderBottom: '1px solid #EEF7F2' }}>{c.email ?? '—'}</td>
+                            <td className="px-4 py-3 text-sm" style={{ color: '#638070', borderBottom: '1px solid #EEF7F2' }}>{c.job_title ?? '—'}</td>
+                            <td className="px-4 py-3" style={{ borderBottom: '1px solid #EEF7F2' }}><StatusBadge type="contact" value={c.status} /></td>
                           </tr>
                         ))}
                       </tbody>
@@ -204,24 +204,24 @@ export default function CompanyDetailPage() {
             {tab === 'deals' && (
               <div>
                 {deals.length === 0 ? (
-                  <p className="text-sm" style={{ color: '#5A5A70' }}>No deals linked</p>
+                  <p className="text-sm" style={{ color: '#8aaa98' }}>No deals linked</p>
                 ) : (
-                  <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #2A2A38' }}>
+                  <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #D4E8DC' }}>
                     <table className="w-full border-collapse">
-                      <thead style={{ background: '#111118' }}>
+                      <thead style={{ background: '#F8FBF9' }}>
                         <tr>
                           {['Deal', 'Value', 'Stage', 'Close Date'].map(h => (
-                            <th key={h} className="text-left px-4 py-2.5" style={{ color: '#5A5A70', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #2A2A38' }}>{h}</th>
+                            <th key={h} className="text-left px-4 py-2.5" style={{ color: '#8aaa98', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #D4E8DC' }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
-                      <tbody style={{ background: '#0A0A0F' }}>
+                      <tbody style={{ background: '#FFFFFF' }}>
                         {deals.map(d => (
                           <tr key={d.id} className="cursor-pointer hover:bg-white/5" onClick={() => router.push(`/deals/${d.id}`)}>
-                            <td className="px-4 py-3 text-sm font-medium" style={{ color: '#F4F4F8', borderBottom: '1px solid #1A1A24' }}>{d.name}</td>
-                            <td className="px-4 py-3 text-sm" style={{ color: '#10B981', borderBottom: '1px solid #1A1A24' }}>{formatCurrency(d.value)}</td>
-                            <td className="px-4 py-3" style={{ borderBottom: '1px solid #1A1A24' }}><StatusBadge type="deal" value={d.stage} /></td>
-                            <td className="px-4 py-3 text-sm" style={{ color: '#9090A8', borderBottom: '1px solid #1A1A24' }}>{formatDate(d.close_date)}</td>
+                            <td className="px-4 py-3 text-sm font-medium" style={{ color: '#191D25', borderBottom: '1px solid #EEF7F2' }}>{d.name}</td>
+                            <td className="px-4 py-3 text-sm" style={{ color: '#10B981', borderBottom: '1px solid #EEF7F2' }}>{formatCurrency(d.value)}</td>
+                            <td className="px-4 py-3" style={{ borderBottom: '1px solid #EEF7F2' }}><StatusBadge type="deal" value={d.stage} /></td>
+                            <td className="px-4 py-3 text-sm" style={{ color: '#638070', borderBottom: '1px solid #EEF7F2' }}>{formatDate(d.close_date)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -234,16 +234,16 @@ export default function CompanyDetailPage() {
 
           {/* Right column */}
           <div className="w-72 flex-shrink-0 space-y-4">
-            <div className="rounded-xl p-4 space-y-3" style={{ background: '#111118', border: '1px solid #2A2A38' }}>
-              <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#5A5A70' }}>Properties</h3>
+            <div className="rounded-xl p-4 space-y-3" style={{ background: '#F8FBF9', border: '1px solid #D4E8DC' }}>
+              <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8aaa98' }}>Properties</h3>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs" style={{ color: '#9090A8' }}>Status</span>
+                  <span className="text-xs" style={{ color: '#638070' }}>Status</span>
                   <select
                     value={company.status}
                     onChange={e => updateField('status', e.target.value)}
                     className="text-xs rounded px-2 py-1 outline-none"
-                    style={{ background: '#1A1A24', border: '1px solid #2A2A38', color: '#F4F4F8' }}
+                    style={{ background: '#EEF7F2', border: '1px solid #D4E8DC', color: '#191D25' }}
                   >
                     <option value="prospect">Prospect</option>
                     <option value="active">Active</option>
@@ -252,12 +252,12 @@ export default function CompanyDetailPage() {
                   </select>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-xs" style={{ color: '#9090A8' }}>Created</span>
-                  <span className="text-xs" style={{ color: '#F4F4F8' }}>{formatDate(company.created_at)}</span>
+                  <span className="text-xs" style={{ color: '#638070' }}>Created</span>
+                  <span className="text-xs" style={{ color: '#191D25' }}>{formatDate(company.created_at)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-xs" style={{ color: '#9090A8' }}>Updated</span>
-                  <span className="text-xs" style={{ color: '#F4F4F8' }}>{formatDate(company.updated_at)}</span>
+                  <span className="text-xs" style={{ color: '#638070' }}>Updated</span>
+                  <span className="text-xs" style={{ color: '#191D25' }}>{formatDate(company.updated_at)}</span>
                 </div>
               </div>
             </div>

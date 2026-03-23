@@ -84,8 +84,8 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
   }
 
   const inputClass = "w-full px-3 py-2 text-sm rounded-md outline-none"
-  const inputStyle = { background: '#1A1A24', border: '1px solid #2A2A38', color: '#F4F4F8' }
-  const labelStyle = { color: '#9090A8' }
+  const inputStyle = { background: '#EEF7F2', border: '1px solid #D4E8DC', color: '#191D25' }
+  const labelStyle = { color: '#638070' }
 
   const titles = { company: 'New Company', contact: 'New Contact', deal: 'New Deal' }
 
@@ -102,15 +102,15 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
       <div
         className="fixed right-0 top-0 h-full w-96 z-50 flex flex-col transform transition-transform duration-300"
         style={{
-          background: '#111118',
-          borderLeft: '1px solid #2A2A38',
+          background: '#F8FBF9',
+          borderLeft: '1px solid #D4E8DC',
           transform: open ? 'translateX(0)' : 'translateX(100%)',
         }}
       >
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #2A2A38' }}>
-          <h2 className="font-semibold text-sm" style={{ color: '#F4F4F8' }}>{titles[type]}</h2>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #D4E8DC' }}>
+          <h2 className="font-semibold text-sm" style={{ color: '#191D25' }}>{titles[type]}</h2>
           <button onClick={onClose} className="p-1 rounded-md transition-colors hover:bg-white/5">
-            <X size={16} style={{ color: '#9090A8' }} />
+            <X size={16} style={{ color: '#638070' }} />
           </button>
         </div>
 
@@ -214,13 +214,13 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
           )}
         </form>
 
-        <div className="px-6 py-4" style={{ borderTop: '1px solid #2A2A38' }}>
+        <div className="px-6 py-4" style={{ borderTop: '1px solid #D4E8DC' }}>
           <button
             type="submit"
             disabled={loading}
             onClick={handleSubmit as any}
             className="w-full py-2.5 rounded-md text-sm font-medium transition-all"
-            style={{ background: '#6366F1', color: 'white', opacity: loading ? 0.7 : 1 }}
+            style={{ background: '#1aaa5e', color: 'white', opacity: loading ? 0.7 : 1 }}
           >
             {loading ? 'Creating...' : `Create ${type.charAt(0).toUpperCase() + type.slice(1)}`}
           </button>
