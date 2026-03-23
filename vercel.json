@@ -1,0 +1,10 @@
+{
+  "name": "rp-crm",
+  "framework": "nextjs",
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://gfpyhleenbexsroheuig.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmcHlobGVlbmJleHNyb2hldWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MzU4NjAsImV4cCI6MjA4OTMxMTg2MH0.eicIcLH1GjdjZHmoFnqQBBF-fa74o1HMQ-TO4hiy6dc"
+  }
+}
