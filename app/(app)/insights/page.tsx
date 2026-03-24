@@ -260,7 +260,7 @@ export default function InsightsPage() {
         <div className="grid grid-cols-4 gap-4">
           <StatCard icon={Building2} label="Total Target Accounts" value="1,072" sub="Apparel, retail & luxury brands" badge="your DB" />
           <StatCard icon={MapPin} label="Priority European Accounts" value="234" sub="UK, IT, FR, ES, DE, NL + Nordics" color="#2563EB" badge="tier 1-2" />
-          <StatCard icon={Star} label="Luxury & Premium Segment" value="95" sub="Highest margin, \"Made in PT\" fit" color="#7C3AED" />
+          <StatCard icon={Star} label="Luxury & Premium Segment" value="95" sub='Highest margin, "Made in PT" fit' color="#7C3AED" />
           <StatCard icon={Leaf} label="Under CSRD Obligation" value="~380" sub="Must disclose Scope 3 by 2026" color="#059669" badge="new" />
         </div>
 
