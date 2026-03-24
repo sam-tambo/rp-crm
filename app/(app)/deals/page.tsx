@@ -15,7 +15,7 @@ const STAGES: { key: DealStage; label: string; bg: string; color: string }[] = [
   { key: 'qualification', label: 'Qualification', bg: '#EEF0FF', color: '#6366F1' },
   { key: 'proposal',      label: 'Proposal',      bg: '#FFF4E6', color: '#F97316' },
   { key: 'negotiation',   label: 'Negotiation',   bg: '#FFF9E6', color: '#EAB308' },
-  { key: 'closed_won',    label: 'Closed Won',    bg: '#EEF7F2', color: '#1aaa5e' },
+  { key: 'closed_won',    label: 'Closed Won',    bg: '#F0FDF4', color: '#059669' },
   { key: 'closed_lost',   label: 'Closed Lost',   bg: '#FFF1F1', color: '#EF4444' },
 ]
 
@@ -34,9 +34,9 @@ function StageBadge({ stage }: { stage: DealStage }) {
 function FilterSection({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div style={{ borderBottom: '1px solid #E8F0EB' }}>
+    <div style={{ borderBottom: '1px solid #EBEBF0' }}>
       <button className="w-full flex items-center justify-between px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-        style={{ color: '#8aaa98' }} onClick={() => setOpen(!open)}>
+        style={{ color: '#9CA3AF' }} onClick={() => setOpen(!open)}>
         {title}
         {open ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
       </button>
@@ -50,11 +50,11 @@ function FCheck({ label, checked, onChange, color }: { label: string; checked: b
   return (
     <label className="flex items-center gap-2 cursor-pointer py-0.5 group">
       <div className="w-3.5 h-3.5 rounded border flex items-center justify-center flex-shrink-0 transition-colors"
-        style={{ background: checked ? '#1aaa5e' : 'transparent', borderColor: checked ? '#1aaa5e' : '#D4E8DC' }}>
+        style={{ background: checked ? '#059669' : 'transparent', borderColor: checked ? '#059669' : '#E4E4EB' }}>
         {checked && <div className="w-2 h-2 rounded-sm bg-white" />}
       </div>
       <input type="checkbox" checked={checked} onChange={onChange} className="sr-only" />
-      <span className="text-xs group-hover:text-[#191D25] transition-colors" style={{ color: color ?? '#638070' }}>{label}</span>
+      <span className="text-xs group-hover:text-[#111118] transition-colors" style={{ color: color ?? '#6B7280' }}>{label}</span>
     </label>
   )
 }
@@ -132,29 +132,29 @@ export default function DealsPage() {
   const avgProb = activeDeals.length > 0 ? Math.round(activeDeals.reduce((s, d) => s + (d.probability ?? 0), 0) / activeDeals.length) : 0
 
   const SortIcon = ({ col }: { col: string }) => sortCol === col
-    ? <span style={{ color: '#1aaa5e' }}>{sortDir === 'asc' ? ' ↑' : ' ↓'}</span>
-    : <span style={{ color: '#D4E8DC' }}> ↕</span>
+    ? <span style={{ color: '#059669' }}>{sortDir === 'asc' ? ' ↑' : ' ↓'}</span>
+    : <span style={{ color: '#E4E4EB' }}> ↕</span>
 
   return (
-    <div className="flex flex-col h-full" style={{ background: '#FAFCFB' }}>
+    <div className="flex flex-col h-full" style={{ background: '#FAFAFA' }}>
       <TopBar
         title="Deals"
         breadcrumb={[{ label: 'Deals' }]}
         action={
           <div className="flex items-center gap-2">
-            <div className="flex rounded-md overflow-hidden" style={{ border: '1px solid #D4E8DC' }}>
+            <div className="flex rounded-md overflow-hidden" style={{ border: '1px solid #E4E4EB' }}>
               <button onClick={() => setView('kanban')} className="p-2 transition-colors"
-                style={{ background: view === 'kanban' ? '#EEF7F2' : 'transparent', color: view === 'kanban' ? '#191D25' : '#638070' }}>
+                style={{ background: view === 'kanban' ? '#F0FDF4' : 'transparent', color: view === 'kanban' ? '#111118' : '#6B7280' }}>
                 <LayoutGrid size={14} />
               </button>
               <button onClick={() => setView('list')} className="p-2 transition-colors"
-                style={{ background: view === 'list' ? '#EEF7F2' : 'transparent', color: view === 'list' ? '#191D25' : '#638070', borderLeft: '1px solid #D4E8DC' }}>
+                style={{ background: view === 'list' ? '#F0FDF4' : 'transparent', color: view === 'list' ? '#111118' : '#6B7280', borderLeft: '1px solid #E4E4EB' }}>
                 <List size={14} />
               </button>
             </div>
             <button onClick={() => openModal()}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90"
-              style={{ background: '#1aaa5e', color: 'white' }}>
+              style={{ background: '#059669', color: 'white' }}>
               <Plus size={14} /> New Deal
             </button>
           </div>
@@ -162,40 +162,40 @@ export default function DealsPage() {
       />
 
       {/* Stats bar */}
-      <div className="px-6 py-3 flex items-center gap-6" style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
+      <div className="px-6 py-3 flex items-center gap-6" style={{ background: '#FFFFFF', borderBottom: '1px solid #EBEBF0' }}>
         <div className="flex items-center gap-2">
-          <DollarSign size={14} style={{ color: '#9abaaa' }} />
-          <span className="text-sm font-semibold" style={{ color: '#191D25' }}>{formatCurrency(totalPipeline)}</span>
-          <span className="text-xs" style={{ color: '#8aaa98' }}>total pipeline</span>
+          <DollarSign size={14} style={{ color: '#9CA3AF' }} />
+          <span className="text-sm font-semibold" style={{ color: '#111118' }}>{formatCurrency(totalPipeline)}</span>
+          <span className="text-xs" style={{ color: '#9CA3AF' }}>total pipeline</span>
         </div>
-        <div className="w-px h-4" style={{ background: '#E8F0EB' }} />
+        <div className="w-px h-4" style={{ background: '#EBEBF0' }} />
         <div className="flex items-center gap-2">
-          <CheckCircle size={14} style={{ color: '#1aaa5e' }} />
-          <span className="text-sm font-semibold" style={{ color: '#191D25' }}>{formatCurrency(wonValue)}</span>
-          <span className="text-xs" style={{ color: '#8aaa98' }}>closed won ({wonDeals.length})</span>
+          <CheckCircle size={14} style={{ color: '#059669' }} />
+          <span className="text-sm font-semibold" style={{ color: '#111118' }}>{formatCurrency(wonValue)}</span>
+          <span className="text-xs" style={{ color: '#9CA3AF' }}>closed won ({wonDeals.length})</span>
         </div>
-        <div className="w-px h-4" style={{ background: '#E8F0EB' }} />
+        <div className="w-px h-4" style={{ background: '#EBEBF0' }} />
         <div className="flex items-center gap-2">
-          <Target size={14} style={{ color: '#9abaaa' }} />
-          <span className="text-sm font-semibold" style={{ color: '#191D25' }}>{avgProb}%</span>
-          <span className="text-xs" style={{ color: '#8aaa98' }}>avg probability</span>
+          <Target size={14} style={{ color: '#9CA3AF' }} />
+          <span className="text-sm font-semibold" style={{ color: '#111118' }}>{avgProb}%</span>
+          <span className="text-xs" style={{ color: '#9CA3AF' }}>avg probability</span>
         </div>
-        <div className="w-px h-4" style={{ background: '#E8F0EB' }} />
+        <div className="w-px h-4" style={{ background: '#EBEBF0' }} />
         <div className="flex items-center gap-2">
-          <TrendingUp size={14} style={{ color: '#9abaaa' }} />
-          <span className="text-sm font-semibold" style={{ color: '#191D25' }}>{deals.length}</span>
-          <span className="text-xs" style={{ color: '#8aaa98' }}>total deals</span>
+          <TrendingUp size={14} style={{ color: '#9CA3AF' }} />
+          <span className="text-sm font-semibold" style={{ color: '#111118' }}>{deals.length}</span>
+          <span className="text-xs" style={{ color: '#9CA3AF' }}>total deals</span>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
         {/* Filter sidebar — list view only */}
         {view === 'list' && sidebarOpen && (
-          <div className="w-52 flex-shrink-0 overflow-y-auto" style={{ background: '#FFFFFF', borderRight: '1px solid #E8F0EB' }}>
+          <div className="w-52 flex-shrink-0 overflow-y-auto" style={{ background: '#FFFFFF', borderRight: '1px solid #EBEBF0' }}>
             {/* Filter header */}
-            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #E8F0EB' }}>
-              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8aaa98' }}>
-                Filters {activeFilterCount > 0 && <span className="ml-1 px-1.5 py-0.5 rounded-full text-white" style={{ background: '#1aaa5e', fontSize: 10 }}>{activeFilterCount}</span>}
+            <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #EBEBF0' }}>
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#9CA3AF' }}>
+                Filters {activeFilterCount > 0 && <span className="ml-1 px-1.5 py-0.5 rounded-full text-white" style={{ background: '#059669', fontSize: 10 }}>{activeFilterCount}</span>}
               </span>
               {activeFilterCount > 0 && (
                 <button onClick={clearFilters} className="text-xs" style={{ color: '#EF4444' }}>Clear</button>
@@ -209,11 +209,11 @@ export default function DealsPage() {
             </FilterSection>
 
             <FilterSection title="Probability" defaultOpen={false}>
-              <div className="text-xs mb-1" style={{ color: '#8aaa98' }}>{filters.minProb}% – {filters.maxProb}%</div>
+              <div className="text-xs mb-1" style={{ color: '#9CA3AF' }}>{filters.minProb}% – {filters.maxProb}%</div>
               <input type="range" min={0} max={100} step={10} value={filters.minProb} onChange={e => setFilters(f => ({ ...f, minProb: +e.target.value }))}
-                className="w-full" style={{ accentColor: '#1aaa5e' }} />
+                className="w-full" style={{ accentColor: '#059669' }} />
               <input type="range" min={0} max={100} step={10} value={filters.maxProb} onChange={e => setFilters(f => ({ ...f, maxProb: +e.target.value }))}
-                className="w-full" style={{ accentColor: '#1aaa5e' }} />
+                className="w-full" style={{ accentColor: '#059669' }} />
             </FilterSection>
           </div>
         )}
@@ -223,7 +223,7 @@ export default function DealsPage() {
           {loading ? (
             <div className="flex items-center justify-center h-full">
               <div className="space-y-3 w-full max-w-lg">
-                {[1,2,3,4,5].map(i => <div key={i} className="h-12 rounded-xl animate-pulse" style={{ background: '#EEF7F2' }} />)}
+                {[1,2,3,4,5].map(i => <div key={i} className="h-12 rounded-xl animate-pulse" style={{ background: '#F0FDF4' }} />)}
               </div>
             </div>
           ) : view === 'kanban' ? (
@@ -235,7 +235,7 @@ export default function DealsPage() {
                 <div className="flex flex-wrap gap-2 mb-4">
                   {filters.stages.map(s => (
                     <span key={s} className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium"
-                      style={{ background: '#EEF7F2', color: '#1aaa5e', border: '1px solid #D4E8DC' }}>
+                      style={{ background: '#F0FDF4', color: '#059669', border: '1px solid #E4E4EB' }}>
                       {STAGES.find(x => x.key === s)?.label ?? s}
                       <button onClick={() => toggleStage(s)}><X size={10} /></button>
                     </span>
@@ -244,9 +244,9 @@ export default function DealsPage() {
               )}
 
               {/* Table */}
-              <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #E8F0EB' }}>
+              <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #EBEBF0' }}>
                 <table className="w-full border-collapse">
-                  <thead style={{ background: '#F8FBF9' }}>
+                  <thead style={{ background: '#F9F9FB' }}>
                     <tr>
                       {[
                         { col: 'name', label: 'Deal' },
@@ -258,8 +258,8 @@ export default function DealsPage() {
                         { col: 'close_date', label: 'Close Date' },
                       ].map(({ col, label }) => (
                         <th key={col}
-                          className="text-left px-4 py-3 cursor-pointer select-none hover:bg-[#EEF7F2] transition-colors"
-                          style={{ color: '#8aaa98', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E8F0EB' }}
+                          className="text-left px-4 py-3 cursor-pointer select-none hover:bg-[#F0FDF4] transition-colors"
+                          style={{ color: '#9CA3AF', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #EBEBF0' }}
                           onClick={() => ['name','value','probability','close_date'].includes(col) && handleSort(col)}>
                           {label}<SortIcon col={col} />
                         </th>
@@ -270,39 +270,39 @@ export default function DealsPage() {
                     {filteredDeals.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="text-center py-16">
-                          <TrendingUp size={28} style={{ color: '#D4E8DC', margin: '0 auto 8px' }} />
-                          <p className="text-sm" style={{ color: '#8aaa98' }}>No deals found</p>
+                          <TrendingUp size={28} style={{ color: '#E4E4EB', margin: '0 auto 8px' }} />
+                          <p className="text-sm" style={{ color: '#9CA3AF' }}>No deals found</p>
                         </td>
                       </tr>
                     ) : filteredDeals.map(deal => (
                       <tr key={deal.id}
-                        className="cursor-pointer group hover:bg-[#FAFCFB] transition-colors"
-                        style={{ borderBottom: '1px solid #F0F7F3' }}
+                        className="cursor-pointer group hover:bg-[#FAFAFA] transition-colors"
+                        style={{ borderBottom: '1px solid #F4F4F8' }}
                         onClick={() => router.push(`/deals/${deal.id}`)}>
                         <td className="px-4 py-3">
-                          <span className="text-sm font-medium group-hover:text-[#1aaa5e] transition-colors" style={{ color: '#191D25' }}>{deal.name}</span>
+                          <span className="text-sm font-medium group-hover:text-[#059669] transition-colors" style={{ color: '#111118' }}>{deal.name}</span>
                         </td>
                         <td className="px-4 py-3">
                           {(deal as any).company ? (
-                            <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-md" style={{ background: '#EEF7F2', color: '#1aaa5e', width: 'fit-content' }}>
+                            <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-md" style={{ background: '#F0FDF4', color: '#059669', width: 'fit-content' }}>
                               <Building2 size={10} /> {(deal as any).company.name}
                             </span>
-                          ) : <span className="text-sm" style={{ color: '#9abaaa' }}>—</span>}
+                          ) : <span className="text-sm" style={{ color: '#9CA3AF' }}>—</span>}
                         </td>
-                        <td className="px-4 py-3 text-sm" style={{ color: '#638070' }}>
+                        <td className="px-4 py-3 text-sm" style={{ color: '#6B7280' }}>
                           {(deal as any).contact ? `${(deal as any).contact.first_name} ${(deal as any).contact.last_name}` : '—'}
                         </td>
-                        <td className="px-4 py-3 text-sm font-semibold" style={{ color: '#1aaa5e' }}>{formatCurrency(deal.value)}</td>
+                        <td className="px-4 py-3 text-sm font-semibold" style={{ color: '#059669' }}>{formatCurrency(deal.value)}</td>
                         <td className="px-4 py-3"><StageBadge stage={deal.stage as DealStage} /></td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             <div className="h-1.5 w-14 rounded-full overflow-hidden flex-shrink-0" style={{ background: '#E5E7EB' }}>
-                              <div className="h-full rounded-full transition-all" style={{ width: `${deal.probability ?? 0}%`, background: (deal.probability ?? 0) >= 70 ? '#1aaa5e' : (deal.probability ?? 0) >= 40 ? '#F59E0B' : '#EF4444' }} />
+                              <div className="h-full rounded-full transition-all" style={{ width: `${deal.probability ?? 0}%`, background: (deal.probability ?? 0) >= 70 ? '#059669' : (deal.probability ?? 0) >= 40 ? '#F59E0B' : '#EF4444' }} />
                             </div>
-                            <span className="text-xs" style={{ color: '#638070' }}>{deal.probability ?? 0}%</span>
+                            <span className="text-xs" style={{ color: '#6B7280' }}>{deal.probability ?? 0}%</span>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-sm" style={{ color: '#638070' }}>{formatDate(deal.close_date)}</td>
+                        <td className="px-4 py-3 text-sm" style={{ color: '#6B7280' }}>{formatDate(deal.close_date)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -311,7 +311,7 @@ export default function DealsPage() {
 
               {filteredDeals.length > 0 && (
                 <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs" style={{ color: '#8aaa98' }}>{filteredDeals.length} deal{filteredDeals.length !== 1 ? 's' : ''}{activeFilterCount > 0 ? ' (filtered)' : ''}</span>
+                  <span className="text-xs" style={{ color: '#9CA3AF' }}>{filteredDeals.length} deal{filteredDeals.length !== 1 ? 's' : ''}{activeFilterCount > 0 ? ' (filtered)' : ''}</span>
                 </div>
               )}
             </>

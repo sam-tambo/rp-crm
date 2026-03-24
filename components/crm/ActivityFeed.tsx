@@ -49,14 +49,14 @@ export default function ActivityFeed({ activities, entityType, entityId, onRefre
   return (
     <div className="space-y-4">
       {/* Add Note */}
-      <div className="rounded-lg p-4" style={{ background: '#F8FBF9', border: '1px solid #D4E8DC' }}>
+      <div className="rounded-lg p-4" style={{ background: '#F9F9FB', border: '1px solid #E4E4EB' }}>
         <textarea
           value={note}
           onChange={e => setNote(e.target.value)}
           placeholder="Add a note..."
           rows={3}
           className="w-full bg-transparent text-sm resize-none outline-none"
-          style={{ color: '#191D25' }}
+          style={{ color: '#111118' }}
           onKeyDown={e => { if (e.key === 'Enter' && e.metaKey) addNote() }}
         />
         <div className="flex justify-end mt-2">
@@ -64,7 +64,7 @@ export default function ActivityFeed({ activities, entityType, entityId, onRefre
             onClick={addNote}
             disabled={!note.trim() || saving}
             className="px-4 py-1.5 rounded-md text-sm font-medium transition-all"
-            style={{ background: '#1aaa5e', color: 'white', opacity: (!note.trim() || saving) ? 0.5 : 1 }}
+            style={{ background: '#059669', color: 'white', opacity: (!note.trim() || saving) ? 0.5 : 1 }}
           >
             {saving ? 'Saving...' : 'Add Note'}
           </button>
@@ -73,7 +73,7 @@ export default function ActivityFeed({ activities, entityType, entityId, onRefre
 
       {/* Feed */}
       {activities.length === 0 ? (
-        <div className="text-center py-8" style={{ color: '#8aaa98' }}>
+        <div className="text-center py-8" style={{ color: '#9CA3AF' }}>
           <MessageSquare size={24} className="mx-auto mb-2 opacity-40" />
           <p className="text-sm">No activity yet</p>
         </div>
@@ -83,12 +83,12 @@ export default function ActivityFeed({ activities, entityType, entityId, onRefre
             const Icon = ACTIVITY_ICONS[activity.type] ?? MessageSquare
             return (
               <div key={activity.id} className="flex gap-3">
-                <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5" style={{ background: '#EEF7F2', border: '1px solid #D4E8DC' }}>
-                  <Icon size={13} style={{ color: '#638070' }} />
+                <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5" style={{ background: '#F0FDF4', border: '1px solid #E4E4EB' }}>
+                  <Icon size={13} style={{ color: '#6B7280' }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm" style={{ color: '#191D25' }}>{activity.content}</p>
-                  <p className="text-xs mt-0.5" style={{ color: '#8aaa98' }}>{formatRelativeTime(activity.created_at)}</p>
+                  <p className="text-sm" style={{ color: '#111118' }}>{activity.content}</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#9CA3AF' }}>{formatRelativeTime(activity.created_at)}</p>
                 </div>
               </div>
             )

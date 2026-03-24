@@ -50,6 +50,23 @@ const avatarColor = (name: string) => {
   return AVATAR_COLORS[h % AVATAR_COLORS.length]
 }
 
+function CompanyAvatar({ name, logoUrl, size = 32 }: { name: string; logoUrl: string | null; size?: number }) {
+  const [err, setErr] = useState(false)
+  const [bg, tx] = avatarColor(name)
+  if (logoUrl && !err) {
+    return (
+      <div style={{ width: size, height: size, borderRadius: 8, background: '#FFFFFF', border: '1px solid #E4E4EB', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
+        <img src={logoUrl} alt={name} onError={() => setErr(true)} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 3 }} />
+      </div>
+    )
+  }
+  return (
+    <div style={{ width: size, height: size, borderRadius: 8, background: bg, color: tx, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: Math.round(size * 0.4), fontWeight: 700, flexShrink: 0 }}>
+      {name.charAt(0).toUpperCase()}
+    </div>
+  )
+}
+
 function fitScore(c: Company) {
   let s = 0
   const hi = ['luxury goods','apparel','retail','fashion','textiles','jewelry']
@@ -60,7 +77,7 @@ function fitScore(c: Company) {
   s += r >= 1e9 ? 30 : r >= 1e8 ? 22 : r >= 1e7 ? 14 : r > 0 ? 6 : 0
   if (c.linkedin_url) s += 5; if (c.website) s += 5; if (c.description) s += 5
   if (s >= 70) return { label:'Excellent', score:s, color:'#065f46', bg:'#d1fae5' }
-  if (s >= 45) return { label:'Good', score:s, color:'#1aaa5e', bg:'#EEF7F2' }
+  if (s >= 45) return { label:'Good', score:s, color:'#059669', bg:'#F0FDF4' }
   if (s >= 25) return { label:'Fair', score:s, color:'#b45309', bg:'#fef3c7' }
   return { label:'Low', score:s, color:'#6b7280', bg:'#f9fafb' }
 }
@@ -71,9 +88,9 @@ interface Filters { industries: string[]; countries: string[]; empRange: string;
 
 function ColSec({ title, open, onToggle, children }: { title:string; open:boolean; onToggle:()=>void; children:React.ReactNode }) {
   return (
-    <div style={{ borderBottom:'1px solid #E9F2ED' }}>
-      <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-green-50 transition-colors">
-        <span className="text-xs font-semibold uppercase tracking-wide" style={{ color:'#638070' }}>{title}</span>
+    <div style={{ borderBottom:'1px solid #EBEBF0' }}>
+      <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors">
+        <span className="text-xs font-semibold uppercase tracking-wide" style={{ color:'#6B7280' }}>{title}</span>
         {open ? <ChevronDown size={11} style={{ color:'#9CA3AF' }}/> : <ChevronRight size={11} style={{ color:'#9CA3AF' }}/>}
       </button>
       {open && <div className="px-3 pb-3">{children}</div>}
@@ -83,10 +100,10 @@ function ColSec({ title, open, onToggle, children }: { title:string; open:boolea
 
 function FCheck({ label, count, checked, onChange }: { label:string; count?:number; checked:boolean; onChange:()=>void }) {
   return (
-    <label className="flex items-center gap-2 py-1 px-1.5 rounded cursor-pointer hover:bg-green-50 transition-colors">
+    <label className="flex items-center gap-2 py-1 px-1.5 rounded cursor-pointer hover:bg-gray-50 transition-colors">
       <input type="checkbox" checked={checked} onChange={onChange} className="accent-green-600 w-3 h-3 flex-shrink-0"/>
       <span className="flex-1 text-xs truncate" style={{ color:'#374151' }}>{label}</span>
-      {count !== undefined && <span className="text-xs px-1.5 rounded-full font-medium" style={{ background:'#EEF7F2', color:'#638070' }}>{count}</span>}
+      {count !== undefined && <span className="text-xs px-1.5 rounded-full font-medium" style={{ background:'#F0FDF4', color:'#6B7280' }}>{count}</span>}
     </label>
   )
 }
@@ -181,26 +198,26 @@ export default function CompaniesPage() {
   const hasFilters = filters.industries.length||filters.countries.length||filters.empRange||filters.revRange||filters.statuses.length
 
   const SIcon = ({ f }: { f:SF }) => sort.field===f
-    ? sort.dir==='asc' ? <ArrowUp size={10} style={{ color:'#1aaa5e', marginLeft:2 }}/> : <ArrowDown size={10} style={{ color:'#1aaa5e', marginLeft:2 }}/>
-    : <ArrowUpDown size={10} style={{ color:'#C1D9CB', marginLeft:2 }}/>
+    ? sort.dir==='asc' ? <ArrowUp size={10} style={{ color:'#059669', marginLeft:2 }}/> : <ArrowDown size={10} style={{ color:'#059669', marginLeft:2 }}/>
+    : <ArrowUpDown size={10} style={{ color:'#C8C8D8', marginLeft:2 }}/>
 
   const tabCount = { all:companies.length, prospect:companies.filter(c=>c.status==='prospect').length, active:companies.filter(c=>c.status==='active').length, partner:companies.filter(c=>c.status==='partner').length }
 
   return (
-    <div className="flex flex-col" style={{ height:'100%', background:'#F9FBFA' }}>
+    <div className="flex flex-col" style={{ height:'100%', background:'#F9F9FB' }}>
       {/* ── Top bar ─────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom:'1px solid #E0EDE6', background:'#fff', flexShrink:0 }}>
+      <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom:'1px solid #EBEBF0', background:'#fff', flexShrink:0 }}>
         <div className="flex items-center gap-4">
-          <h1 className="text-base font-semibold" style={{ color:'#111827' }}>Find companies</h1>
+          <h1 className="text-base font-semibold" style={{ color:'#111118' }}>Find companies</h1>
           {/* Tabs */}
-          <div className="flex items-center gap-0.5 rounded-lg p-0.5" style={{ background:'#F3F9F5' }}>
+          <div className="flex items-center gap-0.5 rounded-lg p-0.5" style={{ background:'#F4F4F8' }}>
             {(['all','prospect','active','partner'] as const).map(t => (
               <button key={t} onClick={() => { setActiveTab(t); setPage(1) }}
                 className="flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all"
-                style={activeTab===t ? { background:'#fff', color:'#111827', boxShadow:'0 1px 2px rgba(0,0,0,0.08)' } : { color:'#638070' }}>
+                style={activeTab===t ? { background:'#fff', color:'#111118', boxShadow:'0 1px 2px rgba(0,0,0,0.08)' } : { color:'#6B7280' }}>
                 {t.charAt(0).toUpperCase()+t.slice(1)}
                 <span className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
-                  style={activeTab===t ? { background:'#EEF7F2', color:'#1aaa5e' } : { background:'#E9F2ED', color:'#9CA3AF' }}>
+                  style={activeTab===t ? { background:'#F0FDF4', color:'#059669' } : { background:'#EBEBF0', color:'#9CA3AF' }}>
                   {tabCount[t].toLocaleString()}
                 </span>
               </button>
@@ -210,16 +227,16 @@ export default function CompaniesPage() {
         <div className="flex items-center gap-2">
           <button onClick={() => setFiltersOpen(v => !v)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-all"
-            style={filtersOpen ? { background:'#EEF7F2', color:'#1aaa5e', borderColor:'#B8DEC9' } : { background:'#fff', color:'#638070', borderColor:'#D4E8DC' }}>
+            style={filtersOpen ? { background:'#F0FDF4', color:'#059669', borderColor:'#D1FAE5' } : { background:'#fff', color:'#6B7280', borderColor:'#E4E4EB' }}>
             <SlidersHorizontal size={12}/>
             {filtersOpen ? 'Hide Filters' : 'Filters'}
-            {!!hasFilters && <span className="ml-0.5 px-1 rounded-full text-xs" style={{ background:'#1aaa5e', color:'#fff' }}>
+            {!!hasFilters && <span className="ml-0.5 px-1 rounded-full text-xs" style={{ background:'#059669', color:'#fff' }}>
               {Number(filters.industries.length)+Number(filters.countries.length)+(filters.empRange?1:0)+(filters.revRange?1:0)+Number(filters.statuses.length)}
             </span>}
           </button>
           <button onClick={() => setModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium"
-            style={{ background:'#1aaa5e', color:'#fff' }}>
+            style={{ background:'#059669', color:'#fff' }}>
             <Plus size={13}/> New Company
           </button>
         </div>
@@ -228,13 +245,13 @@ export default function CompaniesPage() {
       <div className="flex overflow-hidden" style={{ flex:1 }}>
         {/* ── Left filter panel ───────────────────────────────── */}
         {filtersOpen && (
-          <div style={{ width:240, flexShrink:0, background:'#fff', borderRight:'1px solid #E0EDE6', overflowY:'auto' }}>
+          <div style={{ width:240, flexShrink:0, background:'#fff', borderRight:'1px solid #EBEBF0', overflowY:'auto' }}>
             {/* Search */}
-            <div className="p-3" style={{ borderBottom:'1px solid #E9F2ED' }}>
+            <div className="p-3" style={{ borderBottom:'1px solid #EBEBF0' }}>
               <div className="relative">
                 <Search size={11} className="absolute left-2.5 top-1/2 -translate-y-1/2" style={{ color:'#9CA3AF' }}/>
                 <input className="w-full pl-7 pr-3 py-1.5 text-xs rounded-md outline-none"
-                  style={{ background:'#F8FBF9', border:'1px solid #D4E8DC', color:'#191D25' }}
+                  style={{ background:'#F9F9FB', border:'1px solid #E4E4EB', color:'#111118' }}
                   placeholder="Search companies..." value={search}
                   onChange={e => { setSearch(e.target.value); setPage(1) }}/>
               </div>
@@ -248,15 +265,15 @@ export default function CompaniesPage() {
 
             {/* Filter chips */}
             {(filters.industries.length > 0 || filters.countries.length > 0) && (
-              <div className="px-3 py-2 flex flex-wrap gap-1" style={{ borderBottom:'1px solid #E9F2ED' }}>
+              <div className="px-3 py-2 flex flex-wrap gap-1" style={{ borderBottom:'1px solid #EBEBF0' }}>
                 {filters.industries.map(i => (
-                  <span key={i} className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs" style={{ background:'#EEF7F2', color:'#1aaa5e' }}>
+                  <span key={i} className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs" style={{ background:'#F0FDF4', color:'#059669' }}>
                     {i.length>14?i.slice(0,12)+'…':i}
                     <button onClick={() => toggleInd(i)}><X size={9}/></button>
                   </span>
                 ))}
                 {filters.countries.map(c => (
-                  <span key={c} className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs" style={{ background:'#EEF7F2', color:'#1aaa5e' }}>
+                  <span key={c} className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs" style={{ background:'#F0FDF4', color:'#059669' }}>
                     {cflag(c)}{c.length>10?c.slice(0,8)+'…':c}
                     <button onClick={() => toggleCo(c)}><X size={9}/></button>
                   </span>
@@ -276,7 +293,7 @@ export default function CompaniesPage() {
             </ColSec>
             <ColSec title="Employee range" open={openSections.employees} onToggle={() => toggleSec('employees')}>
               {EMP_BUCKETS.map(b => (
-                <label key={b.v} className="flex items-center gap-2 py-1 px-1.5 rounded cursor-pointer hover:bg-green-50">
+                <label key={b.v} className="flex items-center gap-2 py-1 px-1.5 rounded cursor-pointer hover:bg-gray-50">
                   <input type="radio" name="emp" checked={filters.empRange===b.v} className="accent-green-600 w-3 h-3"
                     onChange={() => { setFilters(f => ({ ...f, empRange:f.empRange===b.v?'':b.v })); setPage(1) }}/>
                   <span className="text-xs" style={{ color:'#374151' }}>{b.l}</span>
@@ -285,7 +302,7 @@ export default function CompaniesPage() {
             </ColSec>
             <ColSec title="Revenue" open={openSections.revenue} onToggle={() => toggleSec('revenue')}>
               {REV_BUCKETS.map(b => (
-                <label key={b.v} className="flex items-center gap-2 py-1 px-1.5 rounded cursor-pointer hover:bg-green-50">
+                <label key={b.v} className="flex items-center gap-2 py-1 px-1.5 rounded cursor-pointer hover:bg-gray-50">
                   <input type="radio" name="rev" checked={filters.revRange===b.v} className="accent-green-600 w-3 h-3"
                     onChange={() => { setFilters(f => ({ ...f, revRange:f.revRange===b.v?'':b.v })); setPage(1) }}/>
                   <span className="text-xs" style={{ color:'#374151' }}>{b.l}</span>
@@ -305,7 +322,7 @@ export default function CompaniesPage() {
         {/* ── Main table ─────────────────────────────────────────── */}
         <div style={{ flex:1, overflow:'auto', display:'flex', flexDirection:'column' }}>
           {/* Sort/pagination bar */}
-          <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom:'1px solid #E9F2ED', background:'#F8FBF9', flexShrink:0 }}>
+          <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom:'1px solid #EBEBF0', background:'#F9F9FB', flexShrink:0 }}>
             <div className="flex items-center gap-2">
               {sort.field!=='score' && (
                 <span className="text-xs" style={{ color:'#9CA3AF' }}>
@@ -317,21 +334,21 @@ export default function CompaniesPage() {
               <span className="text-xs" style={{ color:'#9CA3AF' }}>
                 {total===0?'0':((page-1)*PER+1).toLocaleString()}–{Math.min(page*PER,total).toLocaleString()} of <strong style={{ color:'#374151' }}>{total.toLocaleString()}</strong>
               </span>
-              <button disabled={page===1} onClick={()=>setPage(p=>p-1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{ border:'1px solid #D4E8DC', color:'#638070' }}>‹</button>
-              <button disabled={page>=totalPages} onClick={()=>setPage(p=>p+1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{ border:'1px solid #D4E8DC', color:'#638070' }}>›</button>
+              <button disabled={page===1} onClick={()=>setPage(p=>p-1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{ border:'1px solid #E4E4EB', color:'#6B7280' }}>‹</button>
+              <button disabled={page>=totalPages} onClick={()=>setPage(p=>p+1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{ border:'1px solid #E4E4EB', color:'#6B7280' }}>›</button>
             </div>
           </div>
 
           {/* Bulk bar */}
           {selected.size>0 && (
-            <div className="flex items-center gap-3 px-4 py-2" style={{ background:'#EEF7F2', borderBottom:'1px solid #B8DEC9', flexShrink:0 }}>
-              <span className="text-xs font-semibold" style={{ color:'#1aaa5e' }}>{selected.size} selected</span>
-              <button onClick={()=>setSelected(new Set())} className="text-xs" style={{ color:'#638070', textDecoration:'underline' }}>Deselect</button>
+            <div className="flex items-center gap-3 px-4 py-2" style={{ background:'#F0FDF4', borderBottom:'1px solid #D1FAE5', flexShrink:0 }}>
+              <span className="text-xs font-semibold" style={{ color:'#059669' }}>{selected.size} selected</span>
+              <button onClick={()=>setSelected(new Set())} className="text-xs" style={{ color:'#6B7280', textDecoration:'underline' }}>Deselect</button>
               <div style={{ flex:1 }}/>
-              <button className="flex items-center gap-1 px-2 py-1 rounded text-xs" style={{ border:'1px solid #B8DEC9', color:'#374151', background:'#fff' }}>
+              <button className="flex items-center gap-1 px-2 py-1 rounded text-xs" style={{ border:'1px solid #D1FAE5', color:'#374151', background:'#fff' }}>
                 <Mail size={11}/> Email
               </button>
-              <button className="flex items-center gap-1 px-2 py-1 rounded text-xs" style={{ border:'1px solid #B8DEC9', color:'#374151', background:'#fff' }}>
+              <button className="flex items-center gap-1 px-2 py-1 rounded text-xs" style={{ border:'1px solid #D1FAE5', color:'#374151', background:'#fff' }}>
                 <Star size={11}/> Tag
               </button>
             </div>
@@ -340,52 +357,51 @@ export default function CompaniesPage() {
           {/* Table */}
           <table style={{ width:'100%', borderCollapse:'collapse', background:'#fff' }}>
             <thead>
-              <tr style={{ background:'#F3F9F5', borderBottom:'2px solid #D4E8DC' }}>
+              <tr style={{ background:'#F4F4F8', borderBottom:'2px solid #E4E4EB' }}>
                 <th style={{ width:40, padding:'9px 8px 9px 16px' }}>
                   <input type="checkbox" className="accent-green-600 w-3.5 h-3.5"
                     checked={selected.size===rows.length&&rows.length>0} onChange={()=>selected.size===rows.length?setSelected(new Set()):setSelected(new Set(rows.map(c=>c.id)))}/>
                 </th>
                 {([['name','Company','left','33%'],['country','Country','left','11%'],['industry','Industry','left','13%'],['employees','Employees','right','9%'],['revenue','Revenue','right','10%'],['score','Fit Score','center','9%']] as const).map(([f,l,a,w])=>(
                   <th key={f} style={{ width:w, padding:'9px 12px', textAlign:a, cursor:'pointer', userSelect:'none' }} onClick={()=>toggleSort(f as SF)}>
-                    <span className="inline-flex items-center text-xs font-semibold uppercase tracking-wide" style={{ color:sort.field===f?'#1aaa5e':'#8aaa98', justifyContent:a==='right'?'flex-end':a==='center'?'center':'flex-start' }}>
+                    <span className="inline-flex items-center text-xs font-semibold uppercase tracking-wide" style={{ color:sort.field===f?'#059669':'#9CA3AF', justifyContent:a==='right'?'flex-end':a==='center'?'center':'flex-start' }}>
                       {l}<SIcon f={f as SF}/>
                     </span>
                   </th>
                 ))}
-                <th style={{ width:'11%', padding:'9px 12px' }}><span className="text-xs font-semibold uppercase tracking-wide" style={{ color:'#8aaa98' }}>Actions</span></th>
+                <th style={{ width:'11%', padding:'9px 12px' }}><span className="text-xs font-semibold uppercase tracking-wide" style={{ color:'#9CA3AF' }}>Actions</span></th>
               </tr>
             </thead>
             <tbody>
               {loading ? Array.from({length:10}).map((_,i)=>(
-                <tr key={i} style={{ borderBottom:'1px solid #F0F7F3' }}>
-                  <td style={{ padding:'12px 8px 12px 16px' }}><div className="w-3.5 h-3.5 rounded animate-pulse" style={{ background:'#EEF7F2' }}/></td>
+                <tr key={i} style={{ borderBottom:'1px solid #F4F4F8' }}>
+                  <td style={{ padding:'12px 8px 12px 16px' }}><div className="w-3.5 h-3.5 rounded animate-pulse" style={{ background:'#F0FDF4' }}/></td>
                   <td style={{ padding:'12px' }}>
                     <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                      <div style={{ width:32, height:32, borderRadius:8, background:'#EEF7F2' }} className="animate-pulse flex-shrink-0"/>
-                      <div><div style={{ height:13, width:120, borderRadius:4, background:'#EEF7F2', marginBottom:4 }} className="animate-pulse"/><div style={{ height:10, width:80, borderRadius:4, background:'#F3F9F5' }} className="animate-pulse"/></div>
+                      <div style={{ width:32, height:32, borderRadius:8, background:'#F0FDF4' }} className="animate-pulse flex-shrink-0"/>
+                      <div><div style={{ height:13, width:120, borderRadius:4, background:'#F0FDF4', marginBottom:4 }} className="animate-pulse"/><div style={{ height:10, width:80, borderRadius:4, background:'#F4F4F8' }} className="animate-pulse"/></div>
                     </div>
                   </td>
                   {[80,90,50,60,55,80].map((w,j)=>(
                     <td key={j} style={{ padding:'12px', textAlign:j>=2?'right':j===4?'center':'left' }}>
-                      <div style={{ height:12, width:w, borderRadius:4, background:'#F3F9F5', marginLeft:j>=2?'auto':0 }} className="animate-pulse"/>
+                      <div style={{ height:12, width:w, borderRadius:4, background:'#F4F4F8', marginLeft:j>=2?'auto':0 }} className="animate-pulse"/>
                     </td>
                   ))}
                 </tr>
               )) : rows.length===0 ? (
                 <tr><td colSpan={8} style={{ padding:'60px 16px', textAlign:'center' }}>
-                  <Building2 size={32} style={{ margin:'0 auto 12px', color:'#C1D9CB', opacity:0.6 }}/>
+                  <Building2 size={32} style={{ margin:'0 auto 12px', color:'#C8C8D8', opacity:0.6 }}/>
                   <p style={{ color:'#374151', fontWeight:500, fontSize:14, marginBottom:4 }}>No companies found</p>
                   <p style={{ color:'#9CA3AF', fontSize:12, marginBottom:16 }}>Try adjusting your filters</p>
-                  <button onClick={clearAll} style={{ background:'#1aaa5e', color:'#fff', padding:'8px 20px', borderRadius:8, fontSize:13 }}>Clear filters</button>
+                  <button onClick={clearAll} style={{ background:'#059669', color:'#fff', padding:'8px 20px', borderRadius:8, fontSize:13 }}>Clear filters</button>
                 </td></tr>
               ) : rows.map(c => {
-                const [bgC, txC] = avatarColor(c.name)
                 const sc = fitScore(c)
                 const hov = hoveredId===c.id
                 const sel = selected.has(c.id)
                 return (
                   <tr key={c.id} onMouseEnter={()=>setHoveredId(c.id)} onMouseLeave={()=>setHoveredId(null)}
-                    style={{ borderBottom:'1px solid #F0F7F3', background: sel?'#F0FDF4':hov?'#FAFCFB':'#fff', transition:'background 0.1s', cursor:'pointer' }}>
+                    style={{ borderBottom:'1px solid #F4F4F8', background: sel?'#F0FDF4':hov?'#FAFAFA':'#fff', transition:'background 0.1s', cursor:'pointer' }}>
                     {/* Checkbox */}
                     <td style={{ padding:'10px 8px 10px 16px', width:40 }} onClick={e=>{e.stopPropagation();setSelected(s=>{const ns=new Set(s);ns.has(c.id)?ns.delete(c.id):ns.add(c.id);return ns})}}>
                       <input type="checkbox" checked={sel} onChange={()=>{}} className="accent-green-600 w-3.5 h-3.5"/>
@@ -393,12 +409,9 @@ export default function CompaniesPage() {
                     {/* Company */}
                     <td style={{ padding:'10px 12px' }} onClick={()=>router.push(`/companies/${c.id}`)}>
                       <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                        <div style={{ width:32, height:32, borderRadius:8, background:bgC, color:txC, display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, flexShrink:0, position:'relative', overflow:'hidden' }}>
-                          {c.name.charAt(0).toUpperCase()}
-                          {c.logo_url && <img src={c.logo_url} alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain', background:'#fff', padding:2 }} onError={e=>(e.currentTarget.style.display='none')} />}
-                        </div>
+                        <CompanyAvatar name={c.name} logoUrl={(c as any).logo_url ?? null} size={32} />
                         <div style={{ minWidth:0 }}>
-                          <div style={{ fontWeight:600, fontSize:13, color:'#111827', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{c.name}</div>
+                          <div style={{ fontWeight:600, fontSize:13, color:'#111118', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{c.name}</div>
                           {c.domain && <div style={{ fontSize:11, color:'#9CA3AF', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{c.domain}</div>}
                         </div>
                       </div>
@@ -412,7 +425,7 @@ export default function CompaniesPage() {
                     {/* Industry */}
                     <td style={{ padding:'10px 12px' }} onClick={()=>router.push(`/companies/${c.id}`)}>
                       {c.industry
-                        ? <span style={{ display:'inline-block', padding:'2px 8px', borderRadius:999, fontSize:11, fontWeight:500, background:'#EEF7F2', color:'#1aaa5e', whiteSpace:'nowrap', maxWidth:130, overflow:'hidden', textOverflow:'ellipsis' }}>
+                        ? <span style={{ display:'inline-block', padding:'2px 8px', borderRadius:999, fontSize:11, fontWeight:500, background:'#F0FDF4', color:'#059669', whiteSpace:'nowrap', maxWidth:130, overflow:'hidden', textOverflow:'ellipsis' }}>
                             {c.industry}
                           </span>
                         : <span style={{ color:'#D1D5DB' }}>—</span>}
@@ -456,14 +469,14 @@ export default function CompaniesPage() {
 
           {/* Footer pagination */}
           {!loading && total>0 && (
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 16px', borderTop:'1px solid #E9F2ED', background:'#F8FBF9', flexShrink:0 }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 16px', borderTop:'1px solid #EBEBF0', background:'#F9F9FB', flexShrink:0 }}>
               <span style={{ fontSize:12, color:'#9CA3AF' }}>
                 {((page-1)*PER+1).toLocaleString()}–{Math.min(page*PER,total).toLocaleString()} of {total.toLocaleString()} companies
               </span>
               <div style={{ display:'flex', gap:4 }}>
                 {[['«',1],['‹',page-1],['›',page+1],['»',totalPages]].map(([lbl,tgt])=>(
                   <button key={lbl as string} disabled={Number(tgt)<1||Number(tgt)>totalPages} onClick={()=>setPage(Number(tgt))}
-                    style={{ padding:'3px 8px', borderRadius:6, fontSize:12, border:'1px solid #D4E8DC', color:'#638070', background:'#fff', opacity:(Number(tgt)<1||Number(tgt)>totalPages)?0.35:1 }}>
+                    style={{ padding:'3px 8px', borderRadius:6, fontSize:12, border:'1px solid #E4E4EB', color:'#6B7280', background:'#fff', opacity:(Number(tgt)<1||Number(tgt)>totalPages)?0.35:1 }}>
                     {lbl}
                   </button>
                 ))}

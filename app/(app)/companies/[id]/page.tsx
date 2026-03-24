@@ -17,7 +17,7 @@ import { LinkedInIcon } from '@/components/ui/linkedin-icon'
 /* ── helpers ──────────────────────────────── */
 function avatarColor(name: string) {
   const palette = [
-    ['#E8F5EE','#1aaa5e'],['#EEF0FF','#6366F1'],['#FFF4E6','#F97316'],
+    ['#E8F5EE','#059669'],['#EEF0FF','#6366F1'],['#FFF4E6','#F97316'],
     ['#FCE8FF','#A855F7'],['#E8F0FF','#3B82F6'],['#FFF1F1','#EF4444'],
     ['#FFFBE6','#EAB308'],['#E8FFFC','#14B8A6'],
   ]
@@ -50,7 +50,7 @@ function fitScore(c: Company) {
   s += r >= 1e9 ? 30 : r >= 1e8 ? 22 : r >= 1e7 ? 14 : r > 0 ? 6 : 0
   if (c.linkedin_url) s += 5; if (c.website) s += 5; if (c.description) s += 5
   if (s >= 70) return { label: 'Excellent Fit', score: s, color: '#065f46', bg: '#d1fae5', dot: '#059669' }
-  if (s >= 45) return { label: 'Good Fit', score: s, color: '#1aaa5e', bg: '#EEF7F2', dot: '#1aaa5e' }
+  if (s >= 45) return { label: 'Good Fit', score: s, color: '#059669', bg: '#F0FDF4', dot: '#059669' }
   if (s >= 25) return { label: 'Fair Fit', score: s, color: '#b45309', bg: '#fef3c7', dot: '#d97706' }
   return { label: 'Low Fit', score: s, color: '#6b7280', bg: '#f3f4f6', dot: '#9ca3af' }
 }
@@ -63,7 +63,7 @@ function InlineEdit({ value, onSave, className = '', placeholder = 'Click to edi
   const [val, setVal] = useState(value ?? '')
   function commit() { setEditing(false); if (val !== (value ?? '')) onSave(val) }
   if (editing) {
-    const props = { autoFocus: true, value: val, onChange: (e: any) => setVal(e.target.value), onBlur: commit, onKeyDown: (e: any) => { if (e.key === 'Escape') { setVal(value ?? ''); setEditing(false) } if (!multiline && e.key === 'Enter') commit() }, style: { background: '#EEF7F2', border: '1px solid #1aaa5e', borderRadius: 6, padding: '4px 8px', outline: 'none', color: '#191D25', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', lineHeight: 'inherit', resize: 'none' as const } }
+    const props = { autoFocus: true, value: val, onChange: (e: any) => setVal(e.target.value), onBlur: commit, onKeyDown: (e: any) => { if (e.key === 'Escape') { setVal(value ?? ''); setEditing(false) } if (!multiline && e.key === 'Enter') commit() }, style: { background: '#F0FDF4', border: '1px solid #059669', borderRadius: 6, padding: '4px 8px', outline: 'none', color: '#111118', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', lineHeight: 'inherit', resize: 'none' as const } }
     return multiline ? <textarea {...props} rows={4} className={className} /> : <input {...props} className={className} />
   }
   return (
@@ -76,18 +76,18 @@ function InlineEdit({ value, onSave, className = '', placeholder = 'Click to edi
 /* ── Field row ───────────────────────────── */
 function PropRow({ icon, label, value, onSave, href }: { icon: React.ReactNode; label: string; value: string | null | undefined; onSave?: (v: string) => void; href?: string }) {
   return (
-    <div className="flex items-start gap-3 py-2.5" style={{ borderBottom: '1px solid #F0F7F3' }}>
-      <div className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#aac4b4' }}>{icon}</div>
+    <div className="flex items-start gap-3 py-2.5" style={{ borderBottom: '1px solid #F4F4F8' }}>
+      <div className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#A3A3B3' }}>{icon}</div>
       <div className="flex-1 min-w-0">
-        <div className="text-xs mb-0.5" style={{ color: '#9abaaa' }}>{label}</div>
+        <div className="text-xs mb-0.5" style={{ color: '#9CA3AF' }}>{label}</div>
         {onSave ? (
           <InlineEdit value={value ?? null} onSave={onSave} placeholder="—" className="text-sm block w-full" />
         ) : href && value ? (
-          <a href={href} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline flex items-center gap-1" style={{ color: '#1aaa5e' }}>
+          <a href={href} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline flex items-center gap-1" style={{ color: '#059669' }}>
             {value} <ExternalLink size={10} />
           </a>
         ) : (
-          <span className="text-sm" style={{ color: value ? '#191D25' : '#c0c0c0' }}>{value || '—'}</span>
+          <span className="text-sm" style={{ color: value ? '#111118' : '#c0c0c0' }}>{value || '—'}</span>
         )}
       </div>
     </div>
@@ -97,9 +97,9 @@ function PropRow({ icon, label, value, onSave, href }: { icon: React.ReactNode; 
 /* ── StatusBadge ─────────────────────────── */
 function SBadge({ value, type }: { value: string; type: 'company' | 'contact' | 'deal' }) {
   const maps: Record<string, Record<string, [string, string]>> = {
-    company: { prospect: ['#EEF0FF','#6366F1'], active: ['#EEF7F2','#1aaa5e'], partner: ['#E8F0FF','#3B82F6'], churned: ['#FFF1F1','#EF4444'] },
-    contact: { lead: ['#EEF0FF','#6366F1'], active: ['#EEF7F2','#1aaa5e'], customer: ['#E8F0FF','#3B82F6'], inactive: ['#F3F4F6','#9CA3AF'] },
-    deal: { prospecting: ['#F3F4F6','#6B7280'], qualification: ['#EEF0FF','#6366F1'], proposal: ['#FFF4E6','#F97316'], negotiation: ['#FFF9E6','#EAB308'], closed_won: ['#EEF7F2','#1aaa5e'], closed_lost: ['#FFF1F1','#EF4444'] },
+    company: { prospect: ['#EEF0FF','#6366F1'], active: ['#F0FDF4','#059669'], partner: ['#E8F0FF','#3B82F6'], churned: ['#FFF1F1','#EF4444'] },
+    contact: { lead: ['#EEF0FF','#6366F1'], active: ['#F0FDF4','#059669'], customer: ['#E8F0FF','#3B82F6'], inactive: ['#F3F4F6','#9CA3AF'] },
+    deal: { prospecting: ['#F3F4F6','#6B7280'], qualification: ['#EEF0FF','#6366F1'], proposal: ['#FFF4E6','#F97316'], negotiation: ['#FFF9E6','#EAB308'], closed_won: ['#F0FDF4','#059669'], closed_lost: ['#FFF1F1','#EF4444'] },
   }
   const [bg, color] = maps[type]?.[value] ?? ['#F3F4F6','#6B7280']
   return <span style={{ background: bg, color, borderRadius: 4, padding: '2px 8px', fontSize: 11, fontWeight: 500 }}>{value.replace('_', ' ')}</span>
@@ -110,7 +110,7 @@ function CompanyLogo({ name, logoUrl, bg, fg }: { name: string; logoUrl: string 
   const [err, setErr] = useState(false)
   if (logoUrl && !err) {
     return (
-      <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+      <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
         <img src={logoUrl} alt={name} onError={() => setErr(true)} className="w-full h-full object-contain p-1.5" />
       </div>
     )
@@ -178,8 +178,8 @@ function EditModal({ company, onClose, onSave }: {
     <>
       <div className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 z-50 w-[480px] flex flex-col shadow-2xl" style={{ background: '#FFFFFF' }}>
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #E8F0EB' }}>
-          <h2 className="text-base font-semibold" style={{ color: '#191D25' }}>Edit Company</h2>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #EBEBF0' }}>
+          <h2 className="text-base font-semibold" style={{ color: '#111118' }}>Edit Company</h2>
           <button onClick={onClose} className="p-1.5 rounded-md transition-colors hover:bg-gray-100">
             <X size={16} style={{ color: '#6B7280' }} />
           </button>
@@ -187,36 +187,36 @@ function EditModal({ company, onClose, onSave }: {
         <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
           {fields.map(({ key, label, required }) => (
             <div key={key}>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#638070' }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: '#6B7280' }}>
                 {label}{required && <span style={{ color: '#EF4444' }}> *</span>}
               </label>
               <input
                 value={form[key]}
                 onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
                 className="w-full text-sm px-3 py-2 rounded-lg outline-none transition-colors"
-                style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}
+                style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }}
               />
             </div>
           ))}
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: '#638070' }}>Description</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: '#6B7280' }}>Description</label>
             <textarea
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={4}
               className="w-full text-sm px-3 py-2 rounded-lg outline-none transition-colors resize-none"
-              style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}
+              style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }}
             />
           </div>
         </div>
-        <div className="px-6 py-4 flex gap-3" style={{ borderTop: '1px solid #E8F0EB' }}>
+        <div className="px-6 py-4 flex gap-3" style={{ borderTop: '1px solid #EBEBF0' }}>
           <button onClick={onClose} className="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50"
-            style={{ border: '1px solid #D4E8DC', color: '#638070' }}>
+            style={{ border: '1px solid #E4E4EB', color: '#6B7280' }}>
             Cancel
           </button>
           <button onClick={handleSave} disabled={saving || !form.name.trim()}
             className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-            style={{ background: (saving || !form.name.trim()) ? '#9ca3af' : '#1aaa5e', cursor: (saving || !form.name.trim()) ? 'not-allowed' : 'pointer' }}>
+            style={{ background: (saving || !form.name.trim()) ? '#9ca3af' : '#059669', cursor: (saving || !form.name.trim()) ? 'not-allowed' : 'pointer' }}>
             {saving ? 'Saving…' : 'Save Changes'}
           </button>
         </div>
@@ -267,7 +267,7 @@ export default function CompanyDetailPage() {
       <TopBar title="…" breadcrumb={[{ label: 'Companies', href: '/companies' }, { label: '…' }]} />
       <div className="flex-1 flex items-center justify-center">
         <div className="space-y-3 w-full max-w-3xl px-8">
-          {[280, 200, 160].map(w => <div key={w} className="h-4 rounded animate-pulse" style={{ background: '#EEF7F2', width: w }} />)}
+          {[280, 200, 160].map(w => <div key={w} className="h-4 rounded animate-pulse" style={{ background: '#F0FDF4', width: w }} />)}
         </div>
       </div>
     </div>
@@ -277,9 +277,9 @@ export default function CompanyDetailPage() {
     <div className="flex flex-col h-full">
       <TopBar title="Not found" />
       <div className="flex-1 flex flex-col items-center justify-center gap-3">
-        <Building2 size={32} style={{ color: '#D4E8DC' }} />
-        <p style={{ color: '#638070' }}>Company not found</p>
-        <button onClick={() => router.push('/companies')} style={{ color: '#1aaa5e', fontSize: 14 }}>← Back to Companies</button>
+        <Building2 size={32} style={{ color: '#E4E4EB' }} />
+        <p style={{ color: '#6B7280' }}>Company not found</p>
+        <button onClick={() => router.push('/companies')} style={{ color: '#059669', fontSize: 14 }}>← Back to Companies</button>
       </div>
     </div>
   )
@@ -296,12 +296,12 @@ export default function CompanyDetailPage() {
   ]
 
   return (
-    <div className="flex flex-col h-full" style={{ background: '#FAFCFB' }}>
+    <div className="flex flex-col h-full" style={{ background: '#FAFAFA' }}>
       <TopBar
         title={company.name}
         breadcrumb={[{ label: 'Companies', href: '/companies' }, { label: company.name }]}
         action={
-          <button onClick={() => router.push('/companies')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors hover:bg-black/5" style={{ color: '#638070' }}>
+          <button onClick={() => router.push('/companies')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors hover:bg-black/5" style={{ color: '#6B7280' }}>
             <ArrowLeft size={14} /> Companies
           </button>
         }
@@ -309,7 +309,7 @@ export default function CompanyDetailPage() {
 
       <div className="flex-1 overflow-y-auto">
         {/* ── Hero header ── */}
-        <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
+        <div style={{ background: '#FFFFFF', borderBottom: '1px solid #EBEBF0' }}>
           <div className="max-w-6xl mx-auto px-8 py-6">
             <div className="flex items-start gap-5">
               {/* Avatar / Logo */}
@@ -317,7 +317,7 @@ export default function CompanyDetailPage() {
 
               {/* Name + meta */}
               <div className="flex-1 min-w-0">
-                <h1 className="text-2xl font-semibold mb-1 leading-tight" style={{ color: '#191D25' }}>
+                <h1 className="text-2xl font-semibold mb-1 leading-tight" style={{ color: '#111118' }}>
                   <InlineEdit value={company.name} onSave={v => updateField('name', v)} className="block" />
                 </h1>
 
@@ -326,7 +326,7 @@ export default function CompanyDetailPage() {
                   {company.domain && (
                     <a href={`https://${company.domain}`} target="_blank" rel="noopener noreferrer"
                       className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs hover:opacity-80 transition-opacity"
-                      style={{ background: '#EEF7F2', color: '#1aaa5e', border: '1px solid #D4E8DC' }}>
+                      style={{ background: '#F0FDF4', color: '#059669', border: '1px solid #E4E4EB' }}>
                       <Globe size={10} /> {company.domain}
                     </a>
                   )}
@@ -357,14 +357,14 @@ export default function CompanyDetailPage() {
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
                   onClick={() => setEditOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#EEF7F2]"
-                  style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#1aaa5e' }}>
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#F0FDF4]"
+                  style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#059669' }}>
                   <Pencil size={12} /> Edit
                 </button>
                 {company.website && (
                   <a href={company.website.startsWith('http') ? company.website : `https://${company.website}`} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#EEF7F2]"
-                    style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#1aaa5e' }}>
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#F0FDF4]"
+                    style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#059669' }}>
                     <Globe size={12} /> Website
                   </a>
                 )}
@@ -380,25 +380,25 @@ export default function CompanyDetailPage() {
 
             {/* Stats row */}
             {(deals.length > 0 || contacts.length > 0) && (
-              <div className="flex gap-6 mt-5 pt-5" style={{ borderTop: '1px solid #F0F7F3' }}>
+              <div className="flex gap-6 mt-5 pt-5" style={{ borderTop: '1px solid #F4F4F8' }}>
                 {contacts.length > 0 && (
                   <div className="flex items-center gap-2">
-                    <Users size={14} style={{ color: '#9abaaa' }} />
-                    <span className="text-sm font-medium" style={{ color: '#191D25' }}>{contacts.length}</span>
-                    <span className="text-sm" style={{ color: '#8aaa98' }}>contact{contacts.length !== 1 ? 's' : ''}</span>
+                    <Users size={14} style={{ color: '#9CA3AF' }} />
+                    <span className="text-sm font-medium" style={{ color: '#111118' }}>{contacts.length}</span>
+                    <span className="text-sm" style={{ color: '#9CA3AF' }}>contact{contacts.length !== 1 ? 's' : ''}</span>
                   </div>
                 )}
                 {deals.length > 0 && (
                   <>
                     <div className="flex items-center gap-2">
-                      <BarChart3 size={14} style={{ color: '#9abaaa' }} />
-                      <span className="text-sm font-medium" style={{ color: '#191D25' }}>{deals.length}</span>
-                      <span className="text-sm" style={{ color: '#8aaa98' }}>deal{deals.length !== 1 ? 's' : ''}</span>
+                      <BarChart3 size={14} style={{ color: '#9CA3AF' }} />
+                      <span className="text-sm font-medium" style={{ color: '#111118' }}>{deals.length}</span>
+                      <span className="text-sm" style={{ color: '#9CA3AF' }}>deal{deals.length !== 1 ? 's' : ''}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <DollarSign size={14} style={{ color: '#9abaaa' }} />
-                      <span className="text-sm font-medium" style={{ color: '#191D25' }}>{formatCurrency(totalDealValue)}</span>
-                      <span className="text-sm" style={{ color: '#8aaa98' }}>pipeline</span>
+                      <DollarSign size={14} style={{ color: '#9CA3AF' }} />
+                      <span className="text-sm font-medium" style={{ color: '#111118' }}>{formatCurrency(totalDealValue)}</span>
+                      <span className="text-sm" style={{ color: '#9CA3AF' }}>pipeline</span>
                     </div>
                   </>
                 )}
@@ -408,18 +408,18 @@ export default function CompanyDetailPage() {
         </div>
 
         {/* ── Tab bar ── */}
-        <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
+        <div style={{ background: '#FFFFFF', borderBottom: '1px solid #EBEBF0' }}>
           <div className="max-w-6xl mx-auto px-8 flex gap-0">
             {tabItems.map(({ key, label, count }) => (
               <button
                 key={key}
                 onClick={() => setTab(key)}
                 className="flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors relative"
-                style={{ color: tab === key ? '#1aaa5e' : '#638070', borderBottom: tab === key ? '2px solid #1aaa5e' : '2px solid transparent', marginBottom: -1 }}
+                style={{ color: tab === key ? '#059669' : '#6B7280', borderBottom: tab === key ? '2px solid #059669' : '2px solid transparent', marginBottom: -1 }}
               >
                 {label}
                 {count !== undefined && count > 0 && (
-                  <span className="text-xs rounded-full px-1.5 py-0.5" style={{ background: tab === key ? '#EEF7F2' : '#F3F4F6', color: tab === key ? '#1aaa5e' : '#9CA3AF', minWidth: 18, textAlign: 'center' }}>
+                  <span className="text-xs rounded-full px-1.5 py-0.5" style={{ background: tab === key ? '#F0FDF4' : '#F3F4F6', color: tab === key ? '#059669' : '#9CA3AF', minWidth: 18, textAlign: 'center' }}>
                     {count}
                   </span>
                 )}
@@ -438,8 +438,8 @@ export default function CompanyDetailPage() {
               {tab === 'overview' && (
                 <div className="space-y-5">
                   {/* Description */}
-                  <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>About</h3>
+                  <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>About</h3>
                     <InlineEdit
                       value={company.description}
                       onSave={v => updateField('description', v)}
@@ -450,8 +450,8 @@ export default function CompanyDetailPage() {
                   </div>
 
                   {/* Details grid */}
-                  <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#8aaa98' }}>Details</h3>
+                  <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#9CA3AF' }}>Details</h3>
                     <div className="grid grid-cols-2 gap-x-8">
                       <PropRow icon={<Globe size={14} />} label="Domain" value={company.domain} onSave={v => updateField('domain', v)} />
                       <PropRow icon={<Tag size={14} />} label="Industry" value={company.industry} onSave={v => updateField('industry', v)} />
@@ -467,7 +467,7 @@ export default function CompanyDetailPage() {
 
               {/* Activity tab */}
               {tab === 'activity' && (
-                <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+                <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
                   <div className="p-5">
                     <ActivityFeed activities={activities} entityType="company" entityId={id} onRefresh={fetchAll} />
                   </div>
@@ -476,18 +476,18 @@ export default function CompanyDetailPage() {
 
               {/* Contacts/People tab */}
               {tab === 'contacts' && (
-                <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+                <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
                   {contacts.length === 0 ? (
                     <div className="p-12 flex flex-col items-center gap-3">
-                      <Users size={28} style={{ color: '#D4E8DC' }} />
-                      <p className="text-sm" style={{ color: '#8aaa98' }}>No contacts linked to this company</p>
+                      <Users size={28} style={{ color: '#E4E4EB' }} />
+                      <p className="text-sm" style={{ color: '#9CA3AF' }}>No contacts linked to this company</p>
                     </div>
                   ) : (
                     <table className="w-full border-collapse">
-                      <thead style={{ background: '#F8FBF9' }}>
+                      <thead style={{ background: '#F9F9FB' }}>
                         <tr>
                           {['Name & Role', 'Seniority', 'Email', 'Location', 'Links'].map(h => (
-                            <th key={h} className="text-left px-5 py-3" style={{ color: '#8aaa98', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E8F0EB' }}>{h}</th>
+                            <th key={h} className="text-left px-5 py-3" style={{ color: '#9CA3AF', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #EBEBF0' }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -502,8 +502,8 @@ export default function CompanyDetailPage() {
                           const sen = (c as any).seniority as string | null
                           const [sBg,sTx] = sen && senColors[sen] ? senColors[sen] : ['#F3F4F6','#6B7280']
                           return (
-                            <tr key={c.id} className="cursor-pointer group hover:bg-[#FAFCFB]"
-                              style={{ borderBottom: '1px solid #F0F7F3', transition: 'background 0.1s' }}
+                            <tr key={c.id} className="cursor-pointer group hover:bg-[#FAFAFA]"
+                              style={{ borderBottom: '1px solid #F4F4F8', transition: 'background 0.1s' }}
                               onClick={() => router.push(`/contacts/${c.id}`)}>
                               <td className="px-5 py-3">
                                 <div className="flex items-center gap-3">
@@ -511,8 +511,8 @@ export default function CompanyDetailPage() {
                                     {c.first_name.charAt(0)}{c.last_name.charAt(0)}
                                   </div>
                                   <div>
-                                    <div className="text-sm font-semibold group-hover:text-[#1aaa5e] transition-colors" style={{ color: '#191D25' }}>{c.first_name} {c.last_name}</div>
-                                    <div className="text-xs" style={{ color: '#9abaaa' }}>{c.job_title ?? '—'}</div>
+                                    <div className="text-sm font-semibold group-hover:text-[#059669] transition-colors" style={{ color: '#111118' }}>{c.first_name} {c.last_name}</div>
+                                    <div className="text-xs" style={{ color: '#9CA3AF' }}>{c.job_title ?? '—'}</div>
                                   </div>
                                 </div>
                               </td>
@@ -524,7 +524,7 @@ export default function CompanyDetailPage() {
                               </td>
                               <td className="px-5 py-3">
                                 {c.email
-                                  ? <a href={`mailto:${c.email}`} onClick={e=>e.stopPropagation()} className="text-xs hover:underline" style={{ color:'#1aaa5e' }}>{c.email}</a>
+                                  ? <a href={`mailto:${c.email}`} onClick={e=>e.stopPropagation()} className="text-xs hover:underline" style={{ color:'#059669' }}>{c.email}</a>
                                   : <span className="text-xs" style={{ color:'#D1D5DB' }}>—</span>
                                 }
                               </td>
@@ -551,37 +551,37 @@ export default function CompanyDetailPage() {
 
               {/* Deals tab */}
               {tab === 'deals' && (
-                <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+                <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
                   {deals.length === 0 ? (
                     <div className="p-12 flex flex-col items-center gap-3">
-                      <TrendingUp size={28} style={{ color: '#D4E8DC' }} />
-                      <p className="text-sm" style={{ color: '#8aaa98' }}>No deals linked to this company</p>
+                      <TrendingUp size={28} style={{ color: '#E4E4EB' }} />
+                      <p className="text-sm" style={{ color: '#9CA3AF' }}>No deals linked to this company</p>
                     </div>
                   ) : (
                     <table className="w-full border-collapse">
-                      <thead style={{ background: '#F8FBF9' }}>
+                      <thead style={{ background: '#F9F9FB' }}>
                         <tr>
                           {['Deal', 'Value', 'Stage', 'Probability', 'Close Date'].map(h => (
-                            <th key={h} className="text-left px-5 py-3" style={{ color: '#8aaa98', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E8F0EB' }}>{h}</th>
+                            <th key={h} className="text-left px-5 py-3" style={{ color: '#9CA3AF', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #EBEBF0' }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
                         {deals.map(d => (
-                          <tr key={d.id} className="cursor-pointer hover:bg-[#FAFCFB] group" style={{ borderBottom: '1px solid #F0F7F3' }}
+                          <tr key={d.id} className="cursor-pointer hover:bg-[#FAFAFA] group" style={{ borderBottom: '1px solid #F4F4F8' }}
                             onClick={() => router.push(`/deals/${d.id}`)}>
-                            <td className="px-5 py-3 text-sm font-medium group-hover:text-[#1aaa5e] transition-colors" style={{ color: '#191D25' }}>{d.name}</td>
-                            <td className="px-5 py-3 text-sm font-medium" style={{ color: '#1aaa5e' }}>{formatCurrency(d.value)}</td>
+                            <td className="px-5 py-3 text-sm font-medium group-hover:text-[#059669] transition-colors" style={{ color: '#111118' }}>{d.name}</td>
+                            <td className="px-5 py-3 text-sm font-medium" style={{ color: '#059669' }}>{formatCurrency(d.value)}</td>
                             <td className="px-5 py-3"><SBadge value={d.stage} type="deal" /></td>
                             <td className="px-5 py-3">
                               <div className="flex items-center gap-2">
                                 <div className="h-1.5 w-16 rounded-full overflow-hidden" style={{ background: '#E5E7EB' }}>
-                                  <div className="h-full rounded-full" style={{ width: `${d.probability ?? 0}%`, background: d.probability >= 70 ? '#1aaa5e' : d.probability >= 40 ? '#F59E0B' : '#EF4444' }} />
+                                  <div className="h-full rounded-full" style={{ width: `${d.probability ?? 0}%`, background: d.probability >= 70 ? '#059669' : d.probability >= 40 ? '#F59E0B' : '#EF4444' }} />
                                 </div>
-                                <span className="text-xs" style={{ color: '#638070' }}>{d.probability ?? 0}%</span>
+                                <span className="text-xs" style={{ color: '#6B7280' }}>{d.probability ?? 0}%</span>
                               </div>
                             </td>
-                            <td className="px-5 py-3 text-sm" style={{ color: '#638070' }}>{formatDate(d.close_date)}</td>
+                            <td className="px-5 py-3 text-sm" style={{ color: '#6B7280' }}>{formatDate(d.close_date)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -594,13 +594,13 @@ export default function CompanyDetailPage() {
             {/* Right sidebar */}
             <div className="w-64 flex-shrink-0 space-y-4">
               {/* Status */}
-              <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
-                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>Status</h3>
+              <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>Status</h3>
                 <select
                   value={company.status}
                   onChange={e => updateField('status', e.target.value)}
                   className="w-full text-sm rounded-lg px-3 py-2 outline-none cursor-pointer"
-                  style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}
+                  style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }}
                 >
                   <option value="prospect">Prospect</option>
                   <option value="active">Active</option>
@@ -610,41 +610,41 @@ export default function CompanyDetailPage() {
               </div>
 
               {/* Fit score */}
-              <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
-                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>ICP Fit Score</h3>
+              <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>ICP Fit Score</h3>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold" style={{ color: fit.color }}>{fit.label}</span>
                   <span className="text-lg font-bold" style={{ color: fit.color }}>{fit.score}</span>
                 </div>
-                <div className="h-2 rounded-full overflow-hidden" style={{ background: '#F0F7F3' }}>
+                <div className="h-2 rounded-full overflow-hidden" style={{ background: '#F4F4F8' }}>
                   <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(fit.score, 100)}%`, background: fit.dot }} />
                 </div>
-                <p className="text-xs mt-2" style={{ color: '#9abaaa' }}>Based on industry, size & data completeness</p>
+                <p className="text-xs mt-2" style={{ color: '#9CA3AF' }}>Based on industry, size & data completeness</p>
               </div>
 
               {/* Record info */}
-              <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
-                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>Record Info</h3>
+              <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>Record Info</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-xs" style={{ color: '#8aaa98' }}>Created</span>
-                    <span className="text-xs" style={{ color: '#191D25' }}>{formatDate(company.created_at)}</span>
+                    <span className="text-xs" style={{ color: '#9CA3AF' }}>Created</span>
+                    <span className="text-xs" style={{ color: '#111118' }}>{formatDate(company.created_at)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-xs" style={{ color: '#8aaa98' }}>Updated</span>
-                    <span className="text-xs" style={{ color: '#191D25' }}>{formatDate(company.updated_at)}</span>
+                    <span className="text-xs" style={{ color: '#9CA3AF' }}>Updated</span>
+                    <span className="text-xs" style={{ color: '#111118' }}>{formatDate(company.updated_at)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Quick links */}
               {(company.website || company.linkedin_url) && (
-                <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
-                  <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>Links</h3>
+                <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
+                  <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>Links</h3>
                   <div className="space-y-2">
                     {company.website && (
                       <a href={company.website.startsWith('http') ? company.website : `https://${company.website}`} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-xs hover:opacity-80 transition-opacity" style={{ color: '#1aaa5e' }}>
+                        className="flex items-center gap-2 text-xs hover:opacity-80 transition-opacity" style={{ color: '#059669' }}>
                         <Globe size={12} /> {company.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
                       </a>
                     )}

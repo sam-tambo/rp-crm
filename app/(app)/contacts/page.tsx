@@ -35,9 +35,9 @@ const seniorityColor = (s: string | null): [string, string] =>
 
 function ColSec({ title, open, onToggle, children }: { title:string; open:boolean; onToggle:()=>void; children:React.ReactNode }) {
   return (
-    <div style={{ borderBottom:'1px solid #E9F2ED' }}>
+    <div style={{ borderBottom:'1px solid #EBEBF0' }}>
       <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-green-50 transition-colors">
-        <span className="text-xs font-semibold uppercase tracking-wide" style={{ color:'#638070' }}>{title}</span>
+        <span className="text-xs font-semibold uppercase tracking-wide" style={{ color:'#6B7280' }}>{title}</span>
         {open ? <ChevronDown size={11} style={{ color:'#9CA3AF' }}/> : <ChevronRight size={11} style={{ color:'#9CA3AF' }}/>}
       </button>
       {open && <div className="px-3 pb-3">{children}</div>}
@@ -49,7 +49,7 @@ function FCheck({ label, count, checked, onChange }: { label:string; count?:numb
     <label className="flex items-center gap-2 py-1 px-1.5 rounded cursor-pointer hover:bg-green-50 transition-colors">
       <input type="checkbox" checked={checked} onChange={onChange} className="accent-green-600 w-3 h-3 flex-shrink-0"/>
       <span className="flex-1 text-xs truncate" style={{ color:'#374151' }}>{label}</span>
-      {count !== undefined && <span className="text-xs px-1.5 rounded-full font-medium" style={{ background:'#EEF7F2', color:'#638070' }}>{count}</span>}
+      {count !== undefined && <span className="text-xs px-1.5 rounded-full font-medium" style={{ background:'#F0FDF4', color:'#6B7280' }}>{count}</span>}
     </label>
   )
 }
@@ -122,8 +122,8 @@ export default function ContactsPage() {
   const hasFilters = filters.seniorities.length||filters.companies.length||filters.countries.length
 
   const SIcon = ({f}:{f:SF}) => sort.field===f
-    ? sort.dir==='asc' ? <ArrowUp size={10} style={{color:'#1aaa5e',marginLeft:2}}/> : <ArrowDown size={10} style={{color:'#1aaa5e',marginLeft:2}}/>
-    : <ArrowUpDown size={10} style={{color:'#C1D9CB',marginLeft:2}}/>
+    ? sort.dir==='asc' ? <ArrowUp size={10} style={{color:'#059669',marginLeft:2}}/> : <ArrowDown size={10} style={{color:'#059669',marginLeft:2}}/>
+    : <ArrowUpDown size={10} style={{color:'#C8C8D8',marginLeft:2}}/>
 
   function CompanyChip({co}:{co:any}) {
     const [err,setErr] = useState(false)
@@ -131,7 +131,7 @@ export default function ContactsPage() {
     return (
       <button onClick={e=>{e.stopPropagation();router.push(`/companies/${co.id}`)}}
         className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-green-50 transition-colors"
-        style={{fontSize:12,color:'#1aaa5e',fontWeight:500,maxWidth:160}}>
+        style={{fontSize:12,color:'#059669',fontWeight:500,maxWidth:160}}>
         {co.logo_url && !err
           ? <img src={co.logo_url} alt="" onError={()=>setErr(true)} style={{width:16,height:16,borderRadius:3,objectFit:'contain',background:'#fff',border:'1px solid #E5E7EB',flexShrink:0}}/>
           : <Building2 size={11} style={{flexShrink:0}}/>
@@ -144,24 +144,24 @@ export default function ContactsPage() {
   }
 
   return (
-    <div className="flex flex-col" style={{height:'100%',background:'#F9FBFA'}}>
+    <div className="flex flex-col" style={{height:'100%',background:'#F9F9FB'}}>
       {/* Top bar */}
-      <div className="flex items-center justify-between px-5 py-3" style={{borderBottom:'1px solid #E0EDE6',background:'#fff',flexShrink:0}}>
+      <div className="flex items-center justify-between px-5 py-3" style={{borderBottom:'1px solid #EBEBF0',background:'#fff',flexShrink:0}}>
         <div className="flex items-center gap-4">
-          <h1 className="text-base font-semibold" style={{color:'#111827'}}>Contacts</h1>
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{background:'#EEF7F2',color:'#1aaa5e',fontWeight:600}}>
+          <h1 className="text-base font-semibold" style={{color:'#111118'}}>Contacts</h1>
+          <span className="text-xs px-2 py-0.5 rounded-full" style={{background:'#F0FDF4',color:'#059669',fontWeight:600}}>
             {contacts.length.toLocaleString()} total
           </span>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={()=>setFiltersOpen(v=>!v)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-all"
-            style={filtersOpen?{background:'#EEF7F2',color:'#1aaa5e',borderColor:'#B8DEC9'}:{background:'#fff',color:'#638070',borderColor:'#D4E8DC'}}>
+            style={filtersOpen?{background:'#F0FDF4',color:'#059669',borderColor:'#D1FAE5'}:{background:'#fff',color:'#6B7280',borderColor:'#E4E4EB'}}>
             <SlidersHorizontal size={12}/> {filtersOpen?'Hide Filters':'Filters'}
           </button>
           <button onClick={()=>setModalOpen(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium"
-            style={{background:'#1aaa5e',color:'#fff'}}>
+            style={{background:'#059669',color:'#fff'}}>
             <Plus size={13}/> New Contact
           </button>
         </div>
@@ -170,12 +170,12 @@ export default function ContactsPage() {
       <div className="flex overflow-hidden" style={{flex:1}}>
         {/* Filter panel */}
         {filtersOpen && (
-          <div style={{width:224,flexShrink:0,background:'#fff',borderRight:'1px solid #E0EDE6',overflowY:'auto'}}>
-            <div className="p-3" style={{borderBottom:'1px solid #E9F2ED'}}>
+          <div style={{width:224,flexShrink:0,background:'#fff',borderRight:'1px solid #EBEBF0',overflowY:'auto'}}>
+            <div className="p-3" style={{borderBottom:'1px solid #EBEBF0'}}>
               <div className="relative">
                 <Search size={11} className="absolute left-2.5 top-1/2 -translate-y-1/2" style={{color:'#9CA3AF'}}/>
                 <input className="w-full pl-7 pr-3 py-1.5 text-xs rounded-md outline-none"
-                  style={{background:'#F8FBF9',border:'1px solid #D4E8DC',color:'#191D25'}}
+                  style={{background:'#F9F9FB',border:'1px solid #E4E4EB',color:'#111118'}}
                   placeholder="Search contacts…" value={search}
                   onChange={e=>{setSearch(e.target.value);setPage(1)}}/>
               </div>
@@ -201,19 +201,19 @@ export default function ContactsPage() {
 
         {/* Main table */}
         <div style={{flex:1,overflow:'auto',display:'flex',flexDirection:'column'}}>
-          <div className="flex items-center justify-between px-4 py-2" style={{borderBottom:'1px solid #E9F2ED',background:'#F8FBF9',flexShrink:0}}>
+          <div className="flex items-center justify-between px-4 py-2" style={{borderBottom:'1px solid #EBEBF0',background:'#F9F9FB',flexShrink:0}}>
             <span className="text-xs" style={{color:'#9CA3AF'}}>
               {total===0?'0':((page-1)*PER+1).toLocaleString()}–{Math.min(page*PER,total).toLocaleString()} of <strong style={{color:'#374151'}}>{total.toLocaleString()}</strong>
             </span>
             <div style={{display:'flex',gap:4}}>
-              <button disabled={page===1} onClick={()=>setPage(p=>p-1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{border:'1px solid #D4E8DC',color:'#638070'}}>‹</button>
-              <button disabled={page>=totalPages} onClick={()=>setPage(p=>p+1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{border:'1px solid #D4E8DC',color:'#638070'}}>›</button>
+              <button disabled={page===1} onClick={()=>setPage(p=>p-1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{border:'1px solid #E4E4EB',color:'#6B7280'}}>‹</button>
+              <button disabled={page>=totalPages} onClick={()=>setPage(p=>p+1)} className="px-2 py-0.5 rounded text-xs disabled:opacity-30" style={{border:'1px solid #E4E4EB',color:'#6B7280'}}>›</button>
             </div>
           </div>
 
           <table style={{width:'100%',borderCollapse:'collapse',background:'#fff'}}>
             <thead>
-              <tr style={{background:'#F3F9F5',borderBottom:'2px solid #D4E8DC'}}>
+              <tr style={{background:'#F4F4F8',borderBottom:'2px solid #E4E4EB'}}>
                 <th style={{width:40,padding:'9px 8px 9px 16px'}}>
                   <input type="checkbox" className="accent-green-600 w-3.5 h-3.5"
                     checked={selected.size===rows.length&&rows.length>0}
@@ -221,32 +221,32 @@ export default function ContactsPage() {
                 </th>
                 {([['name','Name','28%'],['title','Job Title','20%'],['company','Company','18%'],['seniority','Seniority','10%'],['country','Location','13%']] as const).map(([f,l,w])=>(
                   <th key={f} style={{width:w,padding:'9px 12px',textAlign:'left',cursor:'pointer',userSelect:'none'}} onClick={()=>toggleSort(f)}>
-                    <span className="inline-flex items-center text-xs font-semibold uppercase tracking-wide" style={{color:sort.field===f?'#1aaa5e':'#8aaa98'}}>
+                    <span className="inline-flex items-center text-xs font-semibold uppercase tracking-wide" style={{color:sort.field===f?'#059669':'#9CA3AF'}}>
                       {l}<SIcon f={f}/>
                     </span>
                   </th>
                 ))}
-                <th style={{width:'8%',padding:'9px 12px'}}><span className="text-xs font-semibold uppercase tracking-wide" style={{color:'#8aaa98'}}>Links</span></th>
+                <th style={{width:'8%',padding:'9px 12px'}}><span className="text-xs font-semibold uppercase tracking-wide" style={{color:'#9CA3AF'}}>Links</span></th>
               </tr>
             </thead>
             <tbody>
               {loading ? Array.from({length:8}).map((_,i)=>(
-                <tr key={i} style={{borderBottom:'1px solid #F0F7F3'}}>
-                  <td style={{padding:'12px 8px 12px 16px'}}><div className="w-3.5 h-3.5 rounded animate-pulse" style={{background:'#EEF7F2'}}/></td>
+                <tr key={i} style={{borderBottom:'1px solid #F4F4F8'}}>
+                  <td style={{padding:'12px 8px 12px 16px'}}><div className="w-3.5 h-3.5 rounded animate-pulse" style={{background:'#F0FDF4'}}/></td>
                   <td style={{padding:'12px'}}>
                     <div style={{display:'flex',alignItems:'center',gap:10}}>
-                      <div style={{width:34,height:34,borderRadius:999,background:'#EEF7F2'}} className="animate-pulse flex-shrink-0"/>
-                      <div><div style={{height:13,width:110,borderRadius:4,background:'#EEF7F2',marginBottom:4}} className="animate-pulse"/><div style={{height:10,width:80,borderRadius:4,background:'#F3F9F5'}} className="animate-pulse"/></div>
+                      <div style={{width:34,height:34,borderRadius:999,background:'#F0FDF4'}} className="animate-pulse flex-shrink-0"/>
+                      <div><div style={{height:13,width:110,borderRadius:4,background:'#F0FDF4',marginBottom:4}} className="animate-pulse"/><div style={{height:10,width:80,borderRadius:4,background:'#F4F4F8'}} className="animate-pulse"/></div>
                     </div>
                   </td>
-                  {[90,80,60,55,70].map((w,j)=><td key={j} style={{padding:'12px'}}><div style={{height:12,width:w,borderRadius:4,background:'#F3F9F5'}} className="animate-pulse"/></td>)}
+                  {[90,80,60,55,70].map((w,j)=><td key={j} style={{padding:'12px'}}><div style={{height:12,width:w,borderRadius:4,background:'#F4F4F8'}} className="animate-pulse"/></td>)}
                 </tr>
               )) : rows.length===0 ? (
                 <tr><td colSpan={7} style={{padding:'60px 16px',textAlign:'center'}}>
-                  <Users size={32} style={{margin:'0 auto 12px',color:'#C1D9CB',opacity:0.6}}/>
+                  <Users size={32} style={{margin:'0 auto 12px',color:'#C8C8D8',opacity:0.6}}/>
                   <p style={{color:'#374151',fontWeight:500,fontSize:14,marginBottom:4}}>No contacts found</p>
                   <p style={{color:'#9CA3AF',fontSize:12,marginBottom:16}}>Try adjusting your search or filters</p>
-                  {!hasFilters&&!search&&<button onClick={()=>setModalOpen(true)} style={{background:'#1aaa5e',color:'#fff',padding:'8px 20px',borderRadius:8,fontSize:13}}>Add first contact</button>}
+                  {!hasFilters&&!search&&<button onClick={()=>setModalOpen(true)} style={{background:'#059669',color:'#fff',padding:'8px 20px',borderRadius:8,fontSize:13}}>Add first contact</button>}
                 </td></tr>
               ) : rows.map(contact => {
                 const [bgC,txC] = avatarColor(contact.first_name+contact.last_name)
@@ -256,7 +256,7 @@ export default function ContactsPage() {
                 const co = (contact as any).company
                 return (
                   <tr key={contact.id} onMouseEnter={()=>setHoveredId(contact.id)} onMouseLeave={()=>setHoveredId(null)}
-                    style={{borderBottom:'1px solid #F0F7F3',background:sel?'#F0FDF4':hov?'#FAFCFB':'#fff',transition:'background 0.1s',cursor:'pointer'}}>
+                    style={{borderBottom:'1px solid #F4F4F8',background:sel?'#F0FDF4':hov?'#FAFAFA':'#fff',transition:'background 0.1s',cursor:'pointer'}}>
                     <td style={{padding:'10px 8px 10px 16px',width:40}} onClick={e=>{e.stopPropagation();setSelected(s=>{const ns=new Set(s);ns.has(contact.id)?ns.delete(contact.id):ns.add(contact.id);return ns})}}>
                       <input type="checkbox" checked={sel} onChange={()=>{}} className="accent-green-600 w-3.5 h-3.5"/>
                     </td>
@@ -266,7 +266,7 @@ export default function ContactsPage() {
                           {contact.first_name.charAt(0)}{contact.last_name.charAt(0)}
                         </div>
                         <div style={{minWidth:0}}>
-                          <div style={{fontWeight:600,fontSize:13,color:'#111827',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
+                          <div style={{fontWeight:600,fontSize:13,color:'#111118',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>
                             {contact.first_name} {contact.last_name}
                           </div>
                           {contact.email
@@ -311,12 +311,12 @@ export default function ContactsPage() {
           </table>
 
           {!loading&&total>0&&(
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 16px',borderTop:'1px solid #E9F2ED',background:'#F8FBF9',flexShrink:0}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 16px',borderTop:'1px solid #EBEBF0',background:'#F9F9FB',flexShrink:0}}>
               <span style={{fontSize:12,color:'#9CA3AF'}}>{((page-1)*PER+1).toLocaleString()}–{Math.min(page*PER,total).toLocaleString()} of {total.toLocaleString()} contacts</span>
               <div style={{display:'flex',gap:4}}>
                 {([['«',1],['‹',page-1],['›',page+1],['»',totalPages]] as [string,number][]).map(([lbl,tgt])=>(
                   <button key={lbl} disabled={tgt<1||tgt>totalPages} onClick={()=>setPage(tgt)}
-                    style={{padding:'3px 8px',borderRadius:6,fontSize:12,border:'1px solid #D4E8DC',color:'#638070',background:'#fff',opacity:(tgt<1||tgt>totalPages)?0.35:1}}>
+                    style={{padding:'3px 8px',borderRadius:6,fontSize:12,border:'1px solid #E4E4EB',color:'#6B7280',background:'#fff',opacity:(tgt<1||tgt>totalPages)?0.35:1}}>
                     {lbl}
                   </button>
                 ))}
