@@ -124,8 +124,8 @@ const SUSTAINABILITY_SIGNALS = [
 // ── Certifications Pocargil should pursue/promote ─────────────────────────
 const CERTIFICATIONS = [
   { cert: 'GOTS', full: 'Global Organic Textile Standard', demand: 95, tier: 'Essential', desc: 'Organic cotton/wool supply chain. Required by H&M, Patagonia, Inditex sustainable lines.' },
-  { cert: 'OEKO-TEX 100', full: 'Standard 100 by OEKO-TEX', demand: 92, tier: 'Essential', desc: 'Chemical safety certification. Non-negotiable for children\'s wear and most premium brands.' },
-  { cert: 'bluesign', full: 'bluesign System Partner', demand: 78, tier: 'High Value', desc: 'Chemical & resource management. Patagonia, Arc\'teryx, Nike require it from key suppliers.' },
+  { cert: 'OEKO-TEX 100', full: 'Standard 100 by OEKO-TEX', demand: 92, tier: 'Essential', desc: 'Chemical safety certification. Non-negotiable for children's wear and most premium brands.' },
+  { cert: 'bluesign', full: 'bluesign System Partner', demand: 78, tier: 'High Value', desc: 'Chemical & resource management. Patagonia, Arc'teryx, Nike require it from key suppliers.' },
   { cert: 'SA8000', full: 'Social Accountability 8000', demand: 65, tier: 'High Value', desc: 'Labour rights certification. US & UK brands require it post-Rana Plaza for supply chain audits.' },
   { cert: 'GRS', full: 'Global Recycled Standard', demand: 74, tier: 'Growing Fast', desc: 'Recycled content traceability. Mandatory for brands with recycled material targets by 2025.' },
   { cert: 'BCI', full: 'Better Cotton Initiative', demand: 60, tier: 'Table Stakes', desc: 'Responsible cotton sourcing. H&M, Zara, M&S all mandate BCI cotton from suppliers.' },
@@ -137,7 +137,7 @@ const BD_INSIGHTS = [
     icon: '🔄',
     title: 'The Nearshoring Supercycle Is Here',
     type: 'megatrend',
-    body: 'McKinsey\'s 2024 State of Fashion report found 63% of fashion executives plan to increase nearshore sourcing in the next 3 years. Post-COVID supply chain disruptions + Red Sea shipping crisis (2024) added 2–4 weeks to Asia routes and pushed freight costs up 400%. Portugal\'s 2–3 week lead time vs. 10–14 weeks from Asia is now a commercially decisive advantage, not just a nice-to-have.',
+    body: 'McKinsey's 2024 State of Fashion report found 63% of fashion executives plan to increase nearshore sourcing in the next 3 years. Post-COVID supply chain disruptions + Red Sea shipping crisis (2024) added 2–4 weeks to Asia routes and pushed freight costs up 400%. Portugal's 2–3 week lead time vs. 10–14 weeks from Asia is now a commercially decisive advantage, not just a nice-to-have.',
     action: 'Frame every outreach around "lead time ROI" — quantify the cash flow benefit of 8 fewer weeks of inventory in transit.',
   },
   {
@@ -191,8 +191,8 @@ const TRADE_SHOWS = [
   { show: 'Première Vision', city: 'Paris', date: 'Feb & Sep', focus: 'Premium fabrics & materials', relevance: 'Top-tier', why: 'Where Chanel, Hermès, and their sourcing teams scout new fabric suppliers. Essential for luxury segment.' },
   { show: 'Texworld Paris', city: 'Paris', date: 'Feb & Sep', focus: 'Mid-market apparel fabrics', relevance: 'High', why: 'H&M, Inditex, PVH send sourcing teams. Best place to meet UK/EU buying directors in one trip.' },
   { show: 'Munich Fabric Start', city: 'Munich', date: 'Jan & Aug', focus: 'Performance & sustainable fabrics', relevance: 'High', why: 'Strong outdoor/sportswear attendance (Adidas, Puma, Jack Wolfskin). Growing sustainability focus.' },
-  { show: 'Kingpins Amsterdam', city: 'Amsterdam', date: 'Apr & Oct', focus: 'Denim & responsible sourcing', relevance: 'Medium', why: 'Key for denim-focused brands. Levi\'s, G-Star, Nudie Jeans sourcing present.' },
-  { show: 'Modtissimo', city: 'Porto', date: 'Feb & Sep', focus: 'Portuguese textiles showcase', relevance: 'BD Tool', why: 'Portugal\'s flagship textile fair. Buyers visit specifically looking for Portuguese suppliers — highest conversion.' },
+  { show: 'Kingpins Amsterdam', city: 'Amsterdam', date: 'Apr & Oct', focus: 'Denim & responsible sourcing', relevance: 'Medium', why: 'Key for denim-focused brands. Levi's, G-Star, Nudie Jeans sourcing present.' },
+  { show: 'Modtissimo', city: 'Porto', date: 'Feb & Sep', focus: 'Portuguese textiles showcase', relevance: 'BD Tool', why: 'Portugal's flagship textile fair. Buyers visit specifically looking for Portuguese suppliers — highest conversion.' },
 ]
 
 function StatCard({ icon: Icon, label, value, sub, color = '#059669', badge }: { icon: any; label: string; value: string; sub: string; color?: string; badge?: string }) {
@@ -458,7 +458,7 @@ export default function InsightsPage() {
               </div>
               <div className="rounded-xl p-4" style={{ background: '#F4F4F8', border: '1px solid #EBEBF0' }}>
                 <p className="text-xs" style={{ color: '#6B7280' }}>
-                  <strong style={{ color: '#111118' }}>Certification stack recommendation:</strong> Prioritize GOTS + OEKO-TEX 100 as table-stakes (required by ~90% of EU target accounts). Add GRS for recycled content by 2026 (EU Ecodesign mandate). Pursue bluesign for sportswear/outdoor segment entry (Adidas, Puma, Arc\'teryx). SA8000 opens US enterprise accounts requiring labour rights audits.
+                  <strong style={{ color: '#111118' }}>Certification stack recommendation:</strong> Prioritize GOTS + OEKO-TEX 100 as table-stakes (required by ~90% of EU target accounts). Add GRS for recycled content by 2026 (EU Ecodesign mandate). Pursue bluesign for sportswear/outdoor segment entry (Adidas, Puma, Arc'teryx). SA8000 opens US enterprise accounts requiring labour rights audits.
                 </p>
               </div>
             </div>
