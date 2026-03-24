@@ -134,46 +134,46 @@ const CERTIFICATIONS = [
 // ── Strategic insights for Pocargil BD ────────────────────────────────────
 const BD_INSIGHTS = [
   {
+    icon: '🏆',
+    title: 'Inditex Supplier Credential Is Your Strongest Opening Line',
+    type: 'proof_point',
+    body: "Inditex runs one of the most rigorous supplier qualification processes in global fashion — covering quality control, on-time delivery rates, labour standards, and environmental compliance. Being an approved Inditex supplier answers the three questions every new buyer asks before engaging a manufacturer: can they deliver at scale? can they deliver on time? do they meet our compliance bar? When Pocargil leads with this reference, it skips the qualification stage and opens the commercial conversation directly.",
+    action: "Open every first outreach with the Inditex reference. It is not name-dropping — it is passing the supplier screen before the buyer even asks.",
+  },
+  {
     icon: '🔄',
-    title: 'The Nearshoring Supercycle Is Here',
+    title: "Pocargil's Lead Times Are a Commercial Advantage Buyers Can Quantify",
     type: 'megatrend',
-    body: 'McKinsey's 2024 State of Fashion report found 63% of fashion executives plan to increase nearshore sourcing in the next 3 years. Post-COVID supply chain disruptions + Red Sea shipping crisis (2024) added 2–4 weeks to Asia routes and pushed freight costs up 400%. Portugal's 2–3 week lead time vs. 10–14 weeks from Asia is now a commercially decisive advantage, not just a nice-to-have.',
-    action: 'Frame every outreach around "lead time ROI" — quantify the cash flow benefit of 8 fewer weeks of inventory in transit.',
+    body: "McKinsey's 2024 State of Fashion report found 63% of fashion executives plan to increase nearshore sourcing in the next 3 years. The Red Sea shipping crisis (2024) added 2–4 weeks to Asia routes and pushed freight costs up 400%. Pocargil delivers in 2–3 weeks vs. 10–14 from Asia — that is 8–12 fewer weeks of working capital tied up in inventory per order cycle. For a brand placing €2M in orders, nearshoring to Pocargil can free €300–500K in cash flow annually.",
+    action: "In outreach, quantify the cash flow benefit of Pocargil's lead time for the specific buyer's order volume. Numbers land harder than positioning.",
   },
   {
     icon: '🇵🇹',
-    title: '"Made in Portugal" Is a Selling Point in Luxury',
+    title: '"Made in Portugal" Commands a Price Premium in Luxury',
     type: 'positioning',
-    body: 'Portugal is the 4th largest textile exporter in the EU. LVMH, Kering, and Richemont already source from Portuguese manufacturers for their premium lines. Hugo Boss has a production facility in Porto. Brands increasingly use "Made in Portugal" as a quality signal — especially for knitwear, technical fabrics, and seamless construction. This is an asset Pocargil should lead with in all luxury segment outreach.',
-    action: 'Build a "Made in Portugal" portfolio page with brand logos (with permission) to establish social proof in BD decks.',
+    body: "Portugal is the 4th largest textile exporter in the EU. LVMH, Kering, and Richemont already source from Portuguese manufacturers for premium lines. Hugo Boss manufactures in Porto. Brands use 'Made in Portugal' as a quality signal — particularly for knitwear, technical fabrics, and seamless construction. Pocargil's Portuguese origin is not just a label: it is a margin argument. Luxury and premium brands pay more for proven European origin because their end customers pay more for it.",
+    action: "In luxury segment outreach, lead with provenance and quality — not price. Portuguese origin supports a higher price point from the first meeting.",
   },
   {
     icon: '🌱',
-    title: 'Sustainability Compliance = Mandatory Supplier Qualification',
+    title: 'Pocargil Is a Regulatory Risk Reduction for Every Buyer',
     type: 'opportunity',
-    body: 'EU CSRD and CS3D are forcing brands to audit Tier 1 and Tier 2 suppliers by 2026. Brands without certified European suppliers will face regulatory exposure. A Pocargil with GOTS, OEKO-TEX and bluesign certifications becomes a compliance asset for buyers — not just a cost line. The sustainability certification stack is becoming a supplier selection filter, not a differentiator.',
-    action: 'Audit current certifications and identify which to add in 2025. Lead qualification by asking "What are your scope 3 emission reduction targets?"',
+    body: "EU CSRD and CS3D are forcing brands to audit Tier 1 and Tier 2 suppliers by 2026. Brands sourcing from Asia face months of auditing, certification gaps, and disclosure risk. Pocargil — operating under EU labour law, within EU environmental regulation, with a short and traceable supply chain — dramatically reduces that compliance burden. Every client that sources from Pocargil immediately shortens their Scope 3 audit chain and strengthens their CSRD disclosure score. This is procurement risk management, not marketing.",
+    action: "Ask every qualified buyer: 'What is your current Scope 3 supplier audit coverage?' Pocargil is the answer to the gap they will likely admit to.",
   },
   {
     icon: '⚡',
-    title: 'Fast Fashion Is Fracturing Into "Responsible Fast"',
+    title: "The 'Responsible Fast' Segment Is Where Pocargil Wins Outright",
     type: 'insight',
-    body: 'The traditional fast fashion model (Zara, H&M, Shein) is bifurcating: a race to the bottom on price (increasingly won by Shein) and a "responsible fast" segment that wants 4–6 week turnaround but with European origin and sustainability credentials. Pocargil can win the second segment. Brands like Cos, & Other Stories, Arket, Mango, Reserved (Poland) are exactly in this sweet spot.',
-    action: 'Target the "premium casualwear" segment specifically — Cos, Arket, Mango, Reserved. These brands pay more and move faster than luxury.',
-  },
-  {
-    icon: '🔗',
-    title: 'Your 40 Contacts Are Buying Directors — Use Them',
-    type: 'bd_signal',
-    body: 'The 40 imported contacts include VP-level Sourcing, Procurement Directors, and Head of Supply Chain roles at Adidas, H&M, Inditex, PVH Corp, Tapestry, and others. These are exactly the roles that approve supplier lists. The typical buying decision cycle in apparel sourcing is 6–9 months. Starting outreach now targeting SS27 collection would be ideal timing (brands are currently finalizing SS27 supplier panels).',
-    action: 'Prioritize outreach to the 12 contacts in UK + France + Italy companies. Reference their sustainability commitments directly in opening messages.',
+    body: "The fast fashion market is splitting in two: a race to the bottom on price (being won by Shein) and a 'responsible fast' segment that demands 4–6 week turnaround with European origin and sustainability credentials. Pocargil is purpose-built for the second segment. Brands like Cos, Arket, Mango, and Reserved cannot use Shein-style sourcing — they need quality, speed, and traceability. Pocargil's Inditex pedigree + Portuguese origin + short lead times is the combination this segment is actively looking for.",
+    action: "Target the premium casualwear segment first — Cos, Arket, Mango, Reserved. These brands pay better margins and move faster than luxury.",
   },
   {
     icon: '🏭',
-    title: 'The China+1 Opportunity in North America',
+    title: "US Brands With EU Retail Arms Need What Pocargil Already Provides",
     type: 'strategy',
-    body: 'US tariffs on Chinese goods (currently 145%+) are forcing US brands to urgently diversify supply chains. While most US brands first look to Vietnam, Mexico, or Bangladesh, EU-targeting US brands (PVH, Tapestry, Ralph Lauren) need EU-origin goods for their European retail operations. These brands cannot use Vietnam-origin goods for EU sales and avoid EU tariffs. Portugal = competitive advantage for their EU business unit.',
-    action: 'For US accounts, identify which have significant European retail (check their annual reports). Pitch Pocargil as their EU-origin supplier solution.',
+    body: "US tariffs on Chinese goods (currently 145%+) are forcing US brands to diversify urgently. But US brands with significant EU retail operations face an additional problem: Vietnam or Bangladesh origin goods still attract EU import duties. They need a European manufacturer for their EU business — and Pocargil is exactly that. PVH (Calvin Klein, Tommy Hilfiger), Tapestry (Coach), and Capri Holdings all have major EU retail. Their EU sourcing teams are actively qualifying European suppliers to avoid this tariff double-hit.",
+    action: "For US accounts in the database, identify which have >30% EU revenue in their annual reports. These are the ones where Pocargil solves an active problem, not just a preference.",
   },
 ]
 
@@ -244,7 +244,7 @@ export default function InsightsPage() {
               </span>
             </div>
             <p className="text-sm ml-11" style={{ color: '#6B7280' }}>
-              Supplier business development intelligence for Pocargil — identifying sourcing opportunities, regulatory tailwinds, and priority outreach targets across the global apparel & fashion database.
+              Manufacturing BD intelligence for Pocargil — where quality, on-time delivery, and an Inditex supplier credential open doors across 1,072 global apparel & fashion accounts.
             </p>
           </div>
           <div className="text-xs text-right" style={{ color: '#9CA3AF' }}>
@@ -372,8 +372,8 @@ export default function InsightsPage() {
                     <span className="text-2xl flex-shrink-0">{ins.icon}</span>
                     <div>
                       <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wide mr-2" style={{
-                        background: ins.type === 'megatrend' ? '#ECFDF5' : ins.type === 'positioning' ? '#EFF6FF' : ins.type === 'opportunity' ? '#F0FDF4' : ins.type === 'bd_signal' ? '#FEF3C7' : '#F5F3FF',
-                        color: ins.type === 'megatrend' ? '#059669' : ins.type === 'positioning' ? '#2563EB' : ins.type === 'opportunity' ? '#16A34A' : ins.type === 'bd_signal' ? '#D97706' : '#7C3AED',
+                        background: ins.type === 'proof_point' ? '#FEF3C7' : ins.type === 'megatrend' ? '#ECFDF5' : ins.type === 'positioning' ? '#EFF6FF' : ins.type === 'opportunity' ? '#F0FDF4' : ins.type === 'insight' ? '#F5F3FF' : '#F4F4F8',
+                        color: ins.type === 'proof_point' ? '#B45309' : ins.type === 'megatrend' ? '#059669' : ins.type === 'positioning' ? '#2563EB' : ins.type === 'opportunity' ? '#16A34A' : ins.type === 'insight' ? '#7C3AED' : '#6B7280',
                       }}>{ins.type.replace('_', ' ')}</span>
                       <span className="text-sm font-semibold" style={{ color: '#111118' }}>{ins.title}</span>
                     </div>
@@ -535,9 +535,9 @@ export default function InsightsPage() {
               <Zap size={18} style={{ color: 'white' }} />
             </div>
             <div className="flex-1">
-              <div className="text-base font-bold mb-1" style={{ color: '#F4F4F8' }}>Start With Your 40 Contacts</div>
+              <div className="text-base font-bold mb-1" style={{ color: '#F4F4F8' }}>Your Inditex Reference + 40 Warm Contacts = Your Pipeline</div>
               <p className="text-sm leading-relaxed" style={{ color: '#6B6B80' }}>
-                You already have VP and Director-level sourcing contacts at Adidas, H&M, PVH, Tapestry, and Inditex-adjacent brands. These are the people who approve supplier lists. The next step is a personalized outreach campaign referencing each brand's published sustainability commitments, lead time pain points, or their European sourcing strategy. Revenue Precision can build and deploy that campaign.
+                You already supply the world's largest fashion retailer — and you already have VP and Director-level sourcing contacts at Adidas, H&M, PVH, Tapestry, and more. These are the people who approve supplier lists. Pocargil's Inditex credential is the opening line; your quality, lead times, and EU compliance are the close. Brands are currently finalising SS27 supplier panels — the timing for outreach is now.
               </p>
             </div>
             <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold flex-shrink-0 transition-colors hover:opacity-90" style={{ background: '#059669', color: '#FFFFFF' }}>
