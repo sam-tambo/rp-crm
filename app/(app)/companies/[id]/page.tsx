@@ -105,6 +105,126 @@ function SBadge({ value, type }: { value: string; type: 'company' | 'contact' | 
   return <span style={{ background: bg, color, borderRadius: 4, padding: '2px 8px', fontSize: 11, fontWeight: 500 }}>{value.replace('_', ' ')}</span>
 }
 
+/* ── CompanyLogo ─────────────────────────── */
+function CompanyLogo({ name, logoUrl, bg, fg }: { name: string; logoUrl: string | null; bg: string; fg: string }) {
+  const [err, setErr] = useState(false)
+  if (logoUrl && !err) {
+    return (
+      <div className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+        <img src={logoUrl} alt={name} onError={() => setErr(true)} className="w-full h-full object-contain p-1.5" />
+      </div>
+    )
+  }
+  return (
+    <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold flex-shrink-0" style={{ background: bg, color: fg }}>
+      {name.charAt(0).toUpperCase()}
+    </div>
+  )
+}
+
+/* ── EditModal ───────────────────────────── */
+function EditModal({ company, onClose, onSave }: {
+  company: Company
+  onClose: () => void
+  onSave: (updates: Partial<Company>) => Promise<void>
+}) {
+  const [form, setForm] = useState({
+    name: company.name ?? '',
+    domain: company.domain ?? '',
+    industry: company.industry ?? '',
+    employee_count: company.employee_count?.toString() ?? '',
+    annual_revenue: company.annual_revenue?.toString() ?? '',
+    country: company.country ?? '',
+    website: company.website ?? '',
+    linkedin_url: company.linkedin_url ?? '',
+    logo_url: company.logo_url ?? '',
+    description: company.description ?? '',
+  })
+  const [saving, setSaving] = useState(false)
+
+  async function handleSave() {
+    if (!form.name.trim()) return
+    setSaving(true)
+    const updates: Partial<Company> = {
+      name: form.name.trim(),
+      domain: form.domain.trim() || null,
+      industry: form.industry.trim() || null,
+      employee_count: form.employee_count ? (parseInt(form.employee_count.replace(/[^0-9]/g, '')) || null) : null,
+      annual_revenue: form.annual_revenue ? (parseFloat(form.annual_revenue.replace(/[^0-9.]/g, '')) || null) : null,
+      country: form.country.trim() || null,
+      website: form.website.trim() || null,
+      linkedin_url: form.linkedin_url.trim() || null,
+      logo_url: form.logo_url.trim() || null,
+      description: form.description.trim() || null,
+    }
+    await onSave(updates)
+    setSaving(false)
+    onClose()
+  }
+
+  const fields: { key: keyof typeof form; label: string; required?: boolean }[] = [
+    { key: 'name', label: 'Company Name', required: true },
+    { key: 'domain', label: 'Domain' },
+    { key: 'industry', label: 'Industry' },
+    { key: 'country', label: 'Country' },
+    { key: 'website', label: 'Website URL' },
+    { key: 'linkedin_url', label: 'LinkedIn URL' },
+    { key: 'logo_url', label: 'Logo URL' },
+    { key: 'employee_count', label: 'Employees' },
+    { key: 'annual_revenue', label: 'Annual Revenue (USD)' },
+  ]
+
+  return (
+    <>
+      <div className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+      <div className="fixed inset-y-0 right-0 z-50 w-[480px] flex flex-col shadow-2xl" style={{ background: '#FFFFFF' }}>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #E8F0EB' }}>
+          <h2 className="text-base font-semibold" style={{ color: '#191D25' }}>Edit Company</h2>
+          <button onClick={onClose} className="p-1.5 rounded-md transition-colors hover:bg-gray-100">
+            <X size={16} style={{ color: '#6B7280' }} />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+          {fields.map(({ key, label, required }) => (
+            <div key={key}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: '#638070' }}>
+                {label}{required && <span style={{ color: '#EF4444' }}> *</span>}
+              </label>
+              <input
+                value={form[key]}
+                onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+                className="w-full text-sm px-3 py-2 rounded-lg outline-none transition-colors"
+                style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}
+              />
+            </div>
+          ))}
+          <div>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: '#638070' }}>Description</label>
+            <textarea
+              value={form.description}
+              onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+              rows={4}
+              className="w-full text-sm px-3 py-2 rounded-lg outline-none transition-colors resize-none"
+              style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}
+            />
+          </div>
+        </div>
+        <div className="px-6 py-4 flex gap-3" style={{ borderTop: '1px solid #E8F0EB' }}>
+          <button onClick={onClose} className="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-50"
+            style={{ border: '1px solid #D4E8DC', color: '#638070' }}>
+            Cancel
+          </button>
+          <button onClick={handleSave} disabled={saving || !form.name.trim()}
+            className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+            style={{ background: (saving || !form.name.trim()) ? '#9ca3af' : '#1aaa5e', cursor: (saving || !form.name.trim()) ? 'not-allowed' : 'pointer' }}>
+            {saving ? 'Saving…' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+    </>
+  )
+}
+
 /* ── Main page ───────────────────────────── */
 export default function CompanyDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -115,6 +235,7 @@ export default function CompanyDetailPage() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [tab, setTab] = useState<'overview' | 'activity' | 'contacts' | 'deals'>('overview')
   const [loading, setLoading] = useState(true)
+  const [editOpen, setEditOpen] = useState(false)
   const supabase = createClient()
 
   const fetchAll = useCallback(async () => {
@@ -191,10 +312,8 @@ export default function CompanyDetailPage() {
         <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
           <div className="max-w-6xl mx-auto px-8 py-6">
             <div className="flex items-start gap-5">
-              {/* Avatar */}
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold flex-shrink-0" style={{ background: avatarBg, color: avatarFg }}>
-                {company.name.charAt(0).toUpperCase()}
-              </div>
+              {/* Avatar / Logo */}
+              <CompanyLogo name={company.name} logoUrl={company.logo_url} bg={avatarBg} fg={avatarFg} />
 
               {/* Name + meta */}
               <div className="flex-1 min-w-0">
@@ -236,6 +355,12 @@ export default function CompanyDetailPage() {
 
               {/* Action buttons */}
               <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => setEditOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#EEF7F2]"
+                  style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#1aaa5e' }}>
+                  <Pencil size={12} /> Edit
+                </button>
                 {company.website && (
                   <a href={company.website.startsWith('http') ? company.website : `https://${company.website}`} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#EEF7F2]"
@@ -536,6 +661,19 @@ export default function CompanyDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Edit modal */}
+      {editOpen && (
+        <EditModal
+          company={company}
+          onClose={() => setEditOpen(false)}
+          onSave={async (updates) => {
+            const { error } = await supabase.from('companies').update(updates).eq('id', id)
+            if (error) { toast.error('Failed to save changes') }
+            else { toast.success('Company updated'); setCompany(prev => prev ? { ...prev, ...updates } : prev) }
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -14,6 +14,7 @@ export interface Company {
   country: string | null
   website: string | null
   linkedin_url: string | null
+  logo_url: string | null
   description: string | null
   status: CompanyStatus
   owner_id: string | null
