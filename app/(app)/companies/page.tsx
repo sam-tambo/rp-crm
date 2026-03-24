@@ -393,8 +393,9 @@ export default function CompaniesPage() {
                     {/* Company */}
                     <td style={{ padding:'10px 12px' }} onClick={()=>router.push(`/companies/${c.id}`)}>
                       <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                        <div style={{ width:32, height:32, borderRadius:8, background:bgC, color:txC, display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, flexShrink:0 }}>
+                        <div style={{ width:32, height:32, borderRadius:8, background:bgC, color:txC, display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, flexShrink:0, position:'relative', overflow:'hidden' }}>
                           {c.name.charAt(0).toUpperCase()}
+                          {c.logo_url && <img src={c.logo_url} alt="" style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain', background:'#fff', padding:2 }} onError={e=>(e.currentTarget.style.display='none')} />}
                         </div>
                         <div style={{ minWidth:0 }}>
                           <div style={{ fontWeight:600, fontSize:13, color:'#111827', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{c.name}</div>
