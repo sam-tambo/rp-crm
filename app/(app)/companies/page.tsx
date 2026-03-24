@@ -3,12 +3,13 @@ import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Plus, Search, Building2, ChevronDown, ChevronRight,
-  Globe, Linkedin, Mail, SlidersHorizontal, X,
+  Globe, Mail, SlidersHorizontal, X,
   ArrowUpDown, ArrowUp, ArrowDown, Star, ExternalLink
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Company } from '@/lib/types'
 import QuickCreateModal from '@/components/crm/QuickCreateModal'
+import { LinkedInIcon } from '@/components/ui/linkedin-icon'
 
 const fmt = (n: number | null) => {
   if (!n) return '—'
@@ -434,7 +435,7 @@ export default function CompaniesPage() {
                       <div style={{ display:'flex', alignItems:'center', gap:4, opacity:hov?1:0, transition:'opacity 0.15s' }}>
                         {c.linkedin_url && <a href={c.linkedin_url} target="_blank" rel="noopener" onClick={e=>e.stopPropagation()}
                           style={{ padding:5, borderRadius:6, display:'flex' }} className="hover:bg-blue-50" title="LinkedIn">
-                          <Linkedin size={13} style={{ color:'#0A66C2' }}/>
+                          <LinkedInIcon size={13} style={{ color:'#0A66C2' }}/>
                         </a>}
                         {c.website && <a href={c.website} target="_blank" rel="noopener" onClick={e=>e.stopPropagation()}
                           style={{ padding:5, borderRadius:6, display:'flex' }} className="hover:bg-gray-50" title="Website">

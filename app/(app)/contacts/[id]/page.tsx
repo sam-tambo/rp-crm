@@ -6,11 +6,12 @@ import { Contact, Deal, Activity } from '@/lib/types'
 import { formatDate, formatCurrency } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
-  ArrowLeft, Linkedin, ExternalLink, Building2, Users, DollarSign,
+  ArrowLeft, ExternalLink, Building2, Users, DollarSign,
   Mail, Phone, Briefcase, Tag, TrendingUp, BarChart3, Globe, MapPin
 } from 'lucide-react'
 import TopBar from '@/components/layout/TopBar'
 import ActivityFeed from '@/components/crm/ActivityFeed'
+import { LinkedInIcon } from '@/components/ui/linkedin-icon'
 
 /* ── helpers ──────────────────────────────── */
 function avatarColor(name: string) {
@@ -209,7 +210,7 @@ export default function ContactDetailPage() {
                 <a href={contact.linkedin_url} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-blue-50"
                   style={{ background: '#F8FAFE', border: '1px solid #DBEAFE', color: '#3B82F6' }}>
-                  <Linkedin size={12} /> LinkedIn
+                  <LinkedInIcon size={12} /> LinkedIn
                 </a>
               )}
             </div>
@@ -280,7 +281,7 @@ export default function ContactDetailPage() {
                       <PropRow icon={<Phone size={14} />} label="Phone" value={contact.phone} onSave={v => updateField('phone', v)} />
                       <PropRow icon={<Briefcase size={14} />} label="Job Title" value={contact.job_title} onSave={v => updateField('job_title', v)} />
                       <PropRow icon={<Tag size={14} />} label="Department" value={contact.department} onSave={v => updateField('department', v)} />
-                      <PropRow icon={<Linkedin size={14} />} label="LinkedIn" value={contact.linkedin_url} href={contact.linkedin_url ?? undefined} onSave={v => updateField('linkedin_url', v)} />
+                      <PropRow icon={<LinkedInIcon size={14} />} label="LinkedIn" value={contact.linkedin_url} href={contact.linkedin_url ?? undefined} onSave={v => updateField('linkedin_url', v)} />
                       {company && (
                         <div className="flex items-start gap-3 py-2.5" style={{ borderBottom: '1px solid #F0F7F3' }}>
                           <div className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#aac4b4' }}><Building2 size={14} /></div>

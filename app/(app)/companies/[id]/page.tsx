@@ -6,12 +6,13 @@ import { Company, Contact, Deal, Activity } from '@/lib/types'
 import { formatDate, formatCurrency } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
-  ArrowLeft, Globe, Linkedin, ExternalLink, Building2, Users, DollarSign,
+  ArrowLeft, Globe, ExternalLink, Building2, Users, DollarSign,
   MapPin, Tag, ChevronRight, Plus, Pencil, X, Check, Phone, Mail,
   TrendingUp, Calendar, Hash, BarChart3
 } from 'lucide-react'
 import TopBar from '@/components/layout/TopBar'
 import ActivityFeed from '@/components/crm/ActivityFeed'
+import { LinkedInIcon } from '@/components/ui/linkedin-icon'
 
 /* ── helpers ──────────────────────────────── */
 function avatarColor(name: string) {
@@ -246,7 +247,7 @@ export default function CompanyDetailPage() {
                   <a href={company.linkedin_url} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-blue-50"
                     style={{ background: '#F8FAFE', border: '1px solid #DBEAFE', color: '#3B82F6' }}>
-                    <Linkedin size={12} /> LinkedIn
+                    <LinkedInIcon size={12} /> LinkedIn
                   </a>
                 )}
               </div>
@@ -333,7 +334,7 @@ export default function CompanyDetailPage() {
                       <PropRow icon={<DollarSign size={14} />} label="Annual Revenue" value={fmtRev(company.annual_revenue)} onSave={v => updateField('annual_revenue', parseFloat(v.replace(/[^0-9.]/g,'')) || null)} />
                       <PropRow icon={<MapPin size={14} />} label="Country" value={company.country} onSave={v => updateField('country', v)} />
                       <PropRow icon={<Globe size={14} />} label="Website" value={company.website} href={company.website ?? undefined} onSave={v => updateField('website', v)} />
-                      <PropRow icon={<Linkedin size={14} />} label="LinkedIn" value={company.linkedin_url} href={company.linkedin_url ?? undefined} onSave={v => updateField('linkedin_url', v)} />
+                      <PropRow icon={<LinkedInIcon size={14} />} label="LinkedIn" value={company.linkedin_url} href={company.linkedin_url ?? undefined} onSave={v => updateField('linkedin_url', v)} />
                     </div>
                   </div>
                 </div>
@@ -495,7 +496,7 @@ export default function CompanyDetailPage() {
                     {company.linkedin_url && (
                       <a href={company.linkedin_url} target="_blank" rel="noopener noreferrer"
                         className="flex items-center gap-2 text-xs hover:opacity-80 transition-opacity" style={{ color: '#3B82F6' }}>
-                        <Linkedin size={12} /> View on LinkedIn
+                        <LinkedInIcon size={12} /> View on LinkedIn
                       </a>
                     )}
                   </div>

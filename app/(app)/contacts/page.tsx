@@ -3,12 +3,13 @@ import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Plus, Search, Users, SlidersHorizontal, X,
-  ChevronDown, ChevronRight, Linkedin, Mail,
+  ChevronDown, ChevronRight, Mail,
   ExternalLink, ArrowUpDown, ArrowUp, ArrowDown, Building2
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Contact } from '@/lib/types'
 import QuickCreateModal from '@/components/crm/QuickCreateModal'
+import { LinkedInIcon } from '@/components/ui/linkedin-icon'
 
 const AVATAR_COLORS = [
   ['#dbeafe','#1e40af'],['#fce7f3','#9d174d'],['#d1fae5','#065f46'],
@@ -272,7 +273,7 @@ export default function ContactsPage() {
                         </a>}
                         {contact.linkedin_url && <a href={contact.linkedin_url} target="_blank" rel="noopener" onClick={e=>e.stopPropagation()}
                           style={{ padding:5, borderRadius:6, display:'flex' }} className="hover:bg-blue-50" title="LinkedIn">
-                          <Linkedin size={13} style={{ color:'#0A66C2' }}/>
+                          <LinkedInIcon size={13} style={{ color:'#0A66C2' }}/>
                         </a>}
                         <button onClick={e=>{e.stopPropagation();router.push(`/contacts/${contact.id}`)}}
                           style={{ padding:5, borderRadius:6, display:'flex' }} className="hover:bg-gray-50">
