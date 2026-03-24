@@ -123,32 +123,11 @@ function EditModal({ company, onSave, onClose }: {
     onClose()
   }
 
-  const Field = ({ label, field, type = 'text', rows }: { label: string; field: string; type?: string; rows?: number }) => (
-    <div>
-      <label className="text-xs font-medium block mb-1" style={{ color: '#8aaa98' }}>{label}</label>
-      {rows ? (
-        <textarea
-          value={(form as any)[field]}
-          onChange={e => set(field, e.target.value)}
-          rows={rows}
-          className="w-full px-3 py-2 text-sm rounded-lg outline-none resize-none"
-          style={{ border: '1px solid #D4E8DC', background: '#FAFCFB', color: '#191D25' }}
-          onFocus={e => e.target.style.borderColor = '#1aaa5e'}
-          onBlur={e => e.target.style.borderColor = '#D4E8DC'}
-        />
-      ) : (
-        <input
-          type={type}
-          value={(form as any)[field]}
-          onChange={e => set(field, e.target.value)}
-          className="w-full px-3 py-2 text-sm rounded-lg outline-none"
-          style={{ border: '1px solid #D4E8DC', background: '#FAFCFB', color: '#191D25' }}
-          onFocus={e => e.target.style.borderColor = '#1aaa5e'}
-          onBlur={e => e.target.style.borderColor = '#D4E8DC'}
-        />
-      )}
-    </div>
-  )
+  const inputCls = "w-full px-3 py-2 text-sm rounded-lg outline-none"
+  const inputStyle = { border: '1px solid #D4E8DC', background: '#FAFCFB', color: '#191D25' }
+  const labelStyle = { color: '#8aaa98' }
+  const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.target.style.borderColor = '#1aaa5e' }
+  const onBlur  = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.target.style.borderColor = '#D4E8DC' }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.3)' }} onClick={onClose}>
@@ -167,16 +146,17 @@ function EditModal({ company, onSave, onClose }: {
           </button>
         </div>
 
-        {/* Form */}
+        {/* Form — all inputs inlined to avoid remount-on-keypress bug */}
         <div className="px-6 py-5 space-y-4">
-          {/* Row 1 */}
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Company Name *" field="name" />
             <div>
-              <label className="text-xs font-medium block mb-1" style={{ color: '#8aaa98' }}>Status</label>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Company Name *</label>
+              <input className={inputCls} style={inputStyle} value={form.name} onChange={e => set('name', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Status</label>
               <select value={form.status} onChange={e => set('status', e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-lg outline-none cursor-pointer"
-                style={{ border: '1px solid #D4E8DC', background: '#FAFCFB', color: '#191D25' }}>
+                className="w-full px-3 py-2 text-sm rounded-lg outline-none cursor-pointer" style={inputStyle}>
                 <option value="prospect">Prospect</option>
                 <option value="active">Active</option>
                 <option value="partner">Partner</option>
@@ -185,22 +165,49 @@ function EditModal({ company, onSave, onClose }: {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Domain" field="domain" />
-            <Field label="Industry" field="industry" />
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Domain</label>
+              <input className={inputCls} style={inputStyle} value={form.domain} onChange={e => set('domain', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Industry</label>
+              <input className={inputCls} style={inputStyle} value={form.industry} onChange={e => set('industry', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Employees" field="employee_count" />
-            <Field label="Annual Revenue" field="annual_revenue" />
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Employees</label>
+              <input className={inputCls} style={inputStyle} value={form.employee_count} onChange={e => set('employee_count', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Annual Revenue</label>
+              <input className={inputCls} style={inputStyle} value={form.annual_revenue} onChange={e => set('annual_revenue', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Country" field="country" />
-            <Field label="Website" field="website" />
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Country</label>
+              <input className={inputCls} style={inputStyle} value={form.country} onChange={e => set('country', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Website</label>
+              <input className={inputCls} style={inputStyle} value={form.website} onChange={e => set('website', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="LinkedIn URL" field="linkedin_url" />
-            <Field label="Logo URL" field="logo_url" />
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>LinkedIn URL</label>
+              <input className={inputCls} style={inputStyle} value={form.linkedin_url} onChange={e => set('linkedin_url', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
+            <div>
+              <label className="text-xs font-medium block mb-1" style={labelStyle}>Logo URL</label>
+              <input className={inputCls} style={inputStyle} value={form.logo_url} onChange={e => set('logo_url', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
+            </div>
           </div>
-          <Field label="Description" field="description" rows={4} />
+          <div>
+            <label className="text-xs font-medium block mb-1" style={labelStyle}>Description</label>
+            <textarea className="w-full px-3 py-2 text-sm rounded-lg outline-none resize-none" style={inputStyle} value={form.description} onChange={e => set('description', e.target.value)} rows={4} onFocus={onFocus} onBlur={onBlur} />
+          </div>
         </div>
 
         {/* Footer */}
