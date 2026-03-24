@@ -7,7 +7,8 @@ import { formatDate, formatCurrency } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
   ArrowLeft, Globe, ExternalLink, Building2, Users, DollarSign,
-  MapPin, Tag, TrendingUp, BarChart3, Pencil, X, Check
+  MapPin, Tag, ChevronRight, Plus, Pencil, X, Check, Phone, Mail,
+  TrendingUp, Calendar, Hash, BarChart3
 } from 'lucide-react'
 import TopBar from '@/components/layout/TopBar'
 import ActivityFeed from '@/components/crm/ActivityFeed'
@@ -54,197 +55,34 @@ function fitScore(c: Company) {
   return { label: 'Low Fit', score: s, color: '#6b7280', bg: '#f3f4f6', dot: '#9ca3af' }
 }
 
-/* ── CompanyLogo ─────────────────────────── */
-function CompanyLogo({ company, size = 64, radius = 16 }: { company: Company; size?: number; radius?: number }) {
-  const [logoErr, setLogoErr] = useState(false)
-  const [avatarBg, avatarFg] = avatarColor(company.name)
-  const fontSize = size * 0.38
-
-  if (company.logo_url && !logoErr) {
-    return (
-      <div style={{ width: size, height: size, borderRadius: radius, background: '#fff', border: '1px solid #E8F0EB', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4 }}>
-        <img
-          src={company.logo_url}
-          alt={company.name}
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          onError={() => setLogoErr(true)}
-        />
-      </div>
-    )
-  }
-  return (
-    <div style={{ width: size, height: size, borderRadius: radius, background: avatarBg, color: avatarFg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize, fontWeight: 700, flexShrink: 0 }}>
-      {company.name.charAt(0).toUpperCase()}
-    </div>
-  )
-}
-
-/* ── EditModal ───────────────────────────── */
-function EditModal({ company, onSave, onClose }: {
-  company: Company
-  onSave: (updates: Partial<Company>) => Promise<void>
-  onClose: () => void
+/* ── InlineEdit ──────────────────────────── */
+function InlineEdit({ value, onSave, className = '', placeholder = 'Click to edit', multiline = false }: {
+  value: string | null; onSave: (v: string) => void; className?: string; placeholder?: string; multiline?: boolean
 }) {
-  const [form, setForm] = useState({
-    name: company.name ?? '',
-    domain: company.domain ?? '',
-    industry: company.industry ?? '',
-    employee_count: company.employee_count?.toString() ?? '',
-    annual_revenue: company.annual_revenue?.toString() ?? '',
-    country: company.country ?? '',
-    website: company.website ?? '',
-    linkedin_url: company.linkedin_url ?? '',
-    logo_url: company.logo_url ?? '',
-    description: company.description ?? '',
-    status: company.status ?? 'prospect',
-  })
-  const [saving, setSaving] = useState(false)
-
-  function set(field: string, val: string) {
-    setForm(f => ({ ...f, [field]: val }))
+  const [editing, setEditing] = useState(false)
+  const [val, setVal] = useState(value ?? '')
+  function commit() { setEditing(false); if (val !== (value ?? '')) onSave(val) }
+  if (editing) {
+    const props = { autoFocus: true, value: val, onChange: (e: any) => setVal(e.target.value), onBlur: commit, onKeyDown: (e: any) => { if (e.key === 'Escape') { setVal(value ?? ''); setEditing(false) } if (!multiline && e.key === 'Enter') commit() }, style: { background: '#EEF7F2', border: '1px solid #1aaa5e', borderRadius: 6, padding: '4px 8px', outline: 'none', color: '#191D25', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', lineHeight: 'inherit', resize: 'none' as const } }
+    return multiline ? <textarea {...props} rows={4} className={className} /> : <input {...props} className={className} />
   }
-
-  async function handleSave() {
-    setSaving(true)
-    await onSave({
-      name: form.name || company.name,
-      domain: form.domain || null,
-      industry: form.industry || null,
-      employee_count: form.employee_count ? parseInt(form.employee_count.replace(/[^0-9]/g, '')) || null : null,
-      annual_revenue: form.annual_revenue ? parseFloat(form.annual_revenue.replace(/[^0-9.]/g, '')) || null : null,
-      country: form.country || null,
-      website: form.website || null,
-      linkedin_url: form.linkedin_url || null,
-      logo_url: form.logo_url || null,
-      description: form.description || null,
-      status: form.status as Company['status'],
-    })
-    setSaving(false)
-    onClose()
-  }
-
-  const inputCls = "w-full px-3 py-2 text-sm rounded-lg outline-none"
-  const inputStyle = { border: '1px solid #D4E8DC', background: '#FAFCFB', color: '#191D25' }
-  const labelStyle = { color: '#8aaa98' }
-  const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.target.style.borderColor = '#1aaa5e' }
-  const onBlur  = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.target.style.borderColor = '#D4E8DC' }
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.3)' }} onClick={onClose}>
-      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }} onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #E8F0EB' }}>
-          <div className="flex items-center gap-3">
-            <CompanyLogo company={company} size={36} radius={8} />
-            <div>
-              <h2 className="text-base font-semibold" style={{ color: '#191D25' }}>Edit Company</h2>
-              <p className="text-xs" style={{ color: '#8aaa98' }}>{company.name}</p>
-            </div>
-          </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors" style={{ color: '#638070' }}>
-            <X size={16} />
-          </button>
-        </div>
-
-        {/* Form — all inputs inlined to avoid remount-on-keypress bug */}
-        <div className="px-6 py-5 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Company Name *</label>
-              <input className={inputCls} style={inputStyle} value={form.name} onChange={e => set('name', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Status</label>
-              <select value={form.status} onChange={e => set('status', e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-lg outline-none cursor-pointer" style={inputStyle}>
-                <option value="prospect">Prospect</option>
-                <option value="active">Active</option>
-                <option value="partner">Partner</option>
-                <option value="churned">Churned</option>
-              </select>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Domain</label>
-              <input className={inputCls} style={inputStyle} value={form.domain} onChange={e => set('domain', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Industry</label>
-              <input className={inputCls} style={inputStyle} value={form.industry} onChange={e => set('industry', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Employees</label>
-              <input className={inputCls} style={inputStyle} value={form.employee_count} onChange={e => set('employee_count', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Annual Revenue</label>
-              <input className={inputCls} style={inputStyle} value={form.annual_revenue} onChange={e => set('annual_revenue', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Country</label>
-              <input className={inputCls} style={inputStyle} value={form.country} onChange={e => set('country', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Website</label>
-              <input className={inputCls} style={inputStyle} value={form.website} onChange={e => set('website', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>LinkedIn URL</label>
-              <input className={inputCls} style={inputStyle} value={form.linkedin_url} onChange={e => set('linkedin_url', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-            <div>
-              <label className="text-xs font-medium block mb-1" style={labelStyle}>Logo URL</label>
-              <input className={inputCls} style={inputStyle} value={form.logo_url} onChange={e => set('logo_url', e.target.value)} onFocus={onFocus} onBlur={onBlur} />
-            </div>
-          </div>
-          <div>
-            <label className="text-xs font-medium block mb-1" style={labelStyle}>Description</label>
-            <textarea className="w-full px-3 py-2 text-sm rounded-lg outline-none resize-none" style={inputStyle} value={form.description} onChange={e => set('description', e.target.value)} rows={4} onFocus={onFocus} onBlur={onBlur} />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4" style={{ borderTop: '1px solid #E8F0EB' }}>
-          <button onClick={onClose} className="px-4 py-2 text-sm rounded-lg transition-colors hover:bg-gray-50" style={{ color: '#638070', border: '1px solid #D4E8DC' }}>
-            Cancel
-          </button>
-          <button onClick={handleSave} disabled={saving}
-            className="px-4 py-2 text-sm rounded-lg font-medium transition-opacity hover:opacity-90 flex items-center gap-2"
-            style={{ background: '#1aaa5e', color: '#fff', opacity: saving ? 0.7 : 1 }}>
-            {saving ? 'Saving…' : <><Check size={14} /> Save Changes</>}
-          </button>
-        </div>
-      </div>
-    </div>
+    <span className={`cursor-text rounded hover:bg-black/5 transition-colors px-1 -mx-1 ${className}`} onClick={() => setEditing(true)} style={{ color: val ? undefined : '#9ca3af' }}>
+      {val || placeholder}
+    </span>
   )
 }
 
-/* ── SBadge ──────────────────────────────── */
-function SBadge({ value, type }: { value: string; type: 'company' | 'contact' | 'deal' }) {
-  const maps: Record<string, Record<string, [string, string]>> = {
-    company: { prospect: ['#EEF0FF','#6366F1'], active: ['#EEF7F2','#1aaa5e'], partner: ['#E8F0FF','#3B82F6'], churned: ['#FFF1F1','#EF4444'] },
-    contact: { lead: ['#EEF0FF','#6366F1'], active: ['#EEF7F2','#1aaa5e'], customer: ['#E8F0FF','#3B82F6'], inactive: ['#F3F4F6','#9CA3AF'] },
-    deal: { prospecting: ['#F3F4F6','#6B7280'], qualification: ['#EEF0FF','#6366F1'], proposal: ['#FFF4E6','#F97316'], negotiation: ['#FFF9E6','#EAB308'], closed_won: ['#EEF7F2','#1aaa5e'], closed_lost: ['#FFF1F1','#EF4444'] },
-  }
-  const [bg, color] = maps[type]?.[value] ?? ['#F3F4F6','#6B7280']
-  return <span style={{ background: bg, color, borderRadius: 4, padding: '2px 8px', fontSize: 11, fontWeight: 500 }}>{value.replace('_', ' ')}</span>
-}
-
-/* ── PropRow ─────────────────────────────── */
-function PropRow({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string | null | undefined; href?: string }) {
+/* ── Field row ───────────────────────────── */
+function PropRow({ icon, label, value, onSave, href }: { icon: React.ReactNode; label: string; value: string | null | undefined; onSave?: (v: string) => void; href?: string }) {
   return (
     <div className="flex items-start gap-3 py-2.5" style={{ borderBottom: '1px solid #F0F7F3' }}>
       <div className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#aac4b4' }}>{icon}</div>
       <div className="flex-1 min-w-0">
         <div className="text-xs mb-0.5" style={{ color: '#9abaaa' }}>{label}</div>
-        {href && value ? (
+        {onSave ? (
+          <InlineEdit value={value ?? null} onSave={onSave} placeholder="—" className="text-sm block w-full" />
+        ) : href && value ? (
           <a href={href} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline flex items-center gap-1" style={{ color: '#1aaa5e' }}>
             {value} <ExternalLink size={10} />
           </a>
@@ -254,6 +92,17 @@ function PropRow({ icon, label, value, href }: { icon: React.ReactNode; label: s
       </div>
     </div>
   )
+}
+
+/* ── StatusBadge ─────────────────────────── */
+function SBadge({ value, type }: { value: string; type: 'company' | 'contact' | 'deal' }) {
+  const maps: Record<string, Record<string, [string, string]>> = {
+    company: { prospect: ['#EEF0FF','#6366F1'], active: ['#EEF7F2','#1aaa5e'], partner: ['#E8F0FF','#3B82F6'], churned: ['#FFF1F1','#EF4444'] },
+    contact: { lead: ['#EEF0FF','#6366F1'], active: ['#EEF7F2','#1aaa5e'], customer: ['#E8F0FF','#3B82F6'], inactive: ['#F3F4F6','#9CA3AF'] },
+    deal: { prospecting: ['#F3F4F6','#6B7280'], qualification: ['#EEF0FF','#6366F1'], proposal: ['#FFF4E6','#F97316'], negotiation: ['#FFF9E6','#EAB308'], closed_won: ['#EEF7F2','#1aaa5e'], closed_lost: ['#FFF1F1','#EF4444'] },
+  }
+  const [bg, color] = maps[type]?.[value] ?? ['#F3F4F6','#6B7280']
+  return <span style={{ background: bg, color, borderRadius: 4, padding: '2px 8px', fontSize: 11, fontWeight: 500 }}>{value.replace('_', ' ')}</span>
 }
 
 /* ── Main page ───────────────────────────── */
@@ -266,7 +115,6 @@ export default function CompanyDetailPage() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [tab, setTab] = useState<'overview' | 'activity' | 'contacts' | 'deals'>('overview')
   const [loading, setLoading] = useState(true)
-  const [editOpen, setEditOpen] = useState(false)
   const supabase = createClient()
 
   const fetchAll = useCallback(async () => {
@@ -285,11 +133,11 @@ export default function CompanyDetailPage() {
 
   useEffect(() => { fetchAll() }, [fetchAll])
 
-  async function saveUpdates(updates: Partial<Company>) {
-    const { error } = await supabase.from('companies').update(updates).eq('id', id)
-    if (error) { toast.error('Failed to save') } else {
-      toast.success('Company updated')
-      setCompany(prev => prev ? { ...prev, ...updates } : prev)
+  async function updateField(field: string, value: string | number | null) {
+    const { error } = await supabase.from('companies').update({ [field]: value }).eq('id', id)
+    if (error) { toast.error('Failed to update') } else {
+      toast.success('Saved')
+      setCompany(prev => prev ? { ...prev, [field]: value } : prev)
     }
   }
 
@@ -315,6 +163,7 @@ export default function CompanyDetailPage() {
     </div>
   )
 
+  const [avatarBg, avatarFg] = avatarColor(company.name)
   const fit = fitScore(company)
   const totalDealValue = deals.reduce((s, d) => s + (d.value ?? 0), 0)
 
@@ -327,168 +176,171 @@ export default function CompanyDetailPage() {
 
   return (
     <div className="flex flex-col h-full" style={{ background: '#FAFCFB' }}>
-      {editOpen && <EditModal company={company} onSave={saveUpdates} onClose={() => setEditOpen(false)} />}
-
       <TopBar
         title={company.name}
         breadcrumb={[{ label: 'Companies', href: '/companies' }, { label: company.name }]}
         action={
-          <div className="flex items-center gap-2">
-            <button onClick={() => router.push('/companies')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors hover:bg-black/5" style={{ color: '#638070' }}>
-              <ArrowLeft size={14} /> Companies
-            </button>
-            <button onClick={() => setEditOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90" style={{ background: '#1aaa5e', color: '#fff' }}>
-              <Pencil size={13} /> Edit
-            </button>
-          </div>
+          <button onClick={() => router.push('/companies')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors hover:bg-black/5" style={{ color: '#638070' }}>
+            <ArrowLeft size={14} /> Companies
+          </button>
         }
       />
 
-      {/* ── Hero header ── */}
-      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
-        <div className="max-w-6xl mx-auto px-8 py-6">
-          <div className="flex items-start gap-5">
-            {/* Logo / avatar */}
-            <CompanyLogo company={company} size={64} radius={16} />
+      <div className="flex-1 overflow-y-auto">
+        {/* ── Hero header ── */}
+        <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
+          <div className="max-w-6xl mx-auto px-8 py-6">
+            <div className="flex items-start gap-5">
+              {/* Avatar */}
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold flex-shrink-0" style={{ background: avatarBg, color: avatarFg }}>
+                {company.name.charAt(0).toUpperCase()}
+              </div>
 
-            {/* Name + meta */}
-            <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-semibold mb-1 leading-tight" style={{ color: '#191D25' }}>{company.name}</h1>
+              {/* Name + meta */}
+              <div className="flex-1 min-w-0">
+                <h1 className="text-2xl font-semibold mb-1 leading-tight" style={{ color: '#191D25' }}>
+                  <InlineEdit value={company.name} onSave={v => updateField('name', v)} className="block" />
+                </h1>
 
-              {/* Meta chips */}
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                {company.domain && (
-                  <a href={`https://${company.domain}`} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs hover:opacity-80 transition-opacity"
-                    style={{ background: '#EEF7F2', color: '#1aaa5e', border: '1px solid #D4E8DC' }}>
-                    <Globe size={10} /> {company.domain}
+                {/* Meta chips */}
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  {company.domain && (
+                    <a href={`https://${company.domain}`} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs hover:opacity-80 transition-opacity"
+                      style={{ background: '#EEF7F2', color: '#1aaa5e', border: '1px solid #D4E8DC' }}>
+                      <Globe size={10} /> {company.domain}
+                    </a>
+                  )}
+                  {company.industry && (
+                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs" style={{ background: '#F0F0FF', color: '#6366F1', border: '1px solid #E0E0FF' }}>
+                      <Tag size={10} /> {company.industry}
+                    </span>
+                  )}
+                  {company.country && (
+                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs" style={{ background: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB' }}>
+                      <MapPin size={10} /> {company.country}
+                    </span>
+                  )}
+                  {company.employee_count && (
+                    <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs" style={{ background: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB' }}>
+                      <Users size={10} /> {fmtEmp(company.employee_count)} employees
+                    </span>
+                  )}
+                  {/* Fit score */}
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: fit.bg, color: fit.color, border: `1px solid ${fit.dot}30` }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: fit.dot, display: 'inline-block' }} />
+                    {fit.label} · {fit.score}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {company.website && (
+                  <a href={company.website.startsWith('http') ? company.website : `https://${company.website}`} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#EEF7F2]"
+                    style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#1aaa5e' }}>
+                    <Globe size={12} /> Website
                   </a>
                 )}
-                {company.industry && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs" style={{ background: '#F0F0FF', color: '#6366F1', border: '1px solid #E0E0FF' }}>
-                    <Tag size={10} /> {company.industry}
-                  </span>
+                {company.linkedin_url && (
+                  <a href={company.linkedin_url} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-blue-50"
+                    style={{ background: '#F8FAFE', border: '1px solid #DBEAFE', color: '#3B82F6' }}>
+                    <LinkedInIcon size={12} /> LinkedIn
+                  </a>
                 )}
-                {company.country && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs" style={{ background: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB' }}>
-                    <MapPin size={10} /> {company.country}
-                  </span>
-                )}
-                {company.employee_count && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs" style={{ background: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB' }}>
-                    <Users size={10} /> {fmtEmp(company.employee_count)} employees
-                  </span>
-                )}
-                <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: fit.bg, color: fit.color, border: `1px solid ${fit.dot}30` }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: fit.dot, display: 'inline-block' }} />
-                  {fit.label} · {fit.score}
-                </span>
               </div>
             </div>
 
-            {/* Action buttons */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {company.website && (
-                <a href={company.website.startsWith('http') ? company.website : `https://${company.website}`} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-[#EEF7F2]"
-                  style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#1aaa5e' }}>
-                  <Globe size={12} /> Website
-                </a>
-              )}
-              {company.linkedin_url && (
-                <a href={company.linkedin_url} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors hover:bg-blue-50"
-                  style={{ background: '#F8FAFE', border: '1px solid #DBEAFE', color: '#3B82F6' }}>
-                  <LinkedInIcon size={12} /> LinkedIn
-                </a>
-              )}
-            </div>
+            {/* Stats row */}
+            {(deals.length > 0 || contacts.length > 0) && (
+              <div className="flex gap-6 mt-5 pt-5" style={{ borderTop: '1px solid #F0F7F3' }}>
+                {contacts.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <Users size={14} style={{ color: '#9abaaa' }} />
+                    <span className="text-sm font-medium" style={{ color: '#191D25' }}>{contacts.length}</span>
+                    <span className="text-sm" style={{ color: '#8aaa98' }}>contact{contacts.length !== 1 ? 's' : ''}</span>
+                  </div>
+                )}
+                {deals.length > 0 && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <BarChart3 size={14} style={{ color: '#9abaaa' }} />
+                      <span className="text-sm font-medium" style={{ color: '#191D25' }}>{deals.length}</span>
+                      <span className="text-sm" style={{ color: '#8aaa98' }}>deal{deals.length !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <DollarSign size={14} style={{ color: '#9abaaa' }} />
+                      <span className="text-sm font-medium" style={{ color: '#191D25' }}>{formatCurrency(totalDealValue)}</span>
+                      <span className="text-sm" style={{ color: '#8aaa98' }}>pipeline</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
-
-          {/* Stats row */}
-          {(deals.length > 0 || contacts.length > 0) && (
-            <div className="flex gap-6 mt-5 pt-5" style={{ borderTop: '1px solid #F0F7F3' }}>
-              {contacts.length > 0 && (
-                <div className="flex items-center gap-2">
-                  <Users size={14} style={{ color: '#9abaaa' }} />
-                  <span className="text-sm font-medium" style={{ color: '#191D25' }}>{contacts.length}</span>
-                  <span className="text-sm" style={{ color: '#8aaa98' }}>contact{contacts.length !== 1 ? 's' : ''}</span>
-                </div>
-              )}
-              {deals.length > 0 && (
-                <>
-                  <div className="flex items-center gap-2">
-                    <BarChart3 size={14} style={{ color: '#9abaaa' }} />
-                    <span className="text-sm font-medium" style={{ color: '#191D25' }}>{deals.length}</span>
-                    <span className="text-sm" style={{ color: '#8aaa98' }}>deal{deals.length !== 1 ? 's' : ''}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <DollarSign size={14} style={{ color: '#9abaaa' }} />
-                    <span className="text-sm font-medium" style={{ color: '#191D25' }}>{formatCurrency(totalDealValue)}</span>
-                    <span className="text-sm" style={{ color: '#8aaa98' }}>pipeline</span>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
         </div>
-      </div>
 
-      {/* ── Tab bar ── */}
-      <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
-        <div className="max-w-6xl mx-auto px-8 flex">
-          {tabItems.map(({ key, label, count }) => (
-            <button key={key} onClick={() => setTab(key)}
-              className="flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors"
-              style={{ color: tab === key ? '#1aaa5e' : '#638070', borderBottom: tab === key ? '2px solid #1aaa5e' : '2px solid transparent', marginBottom: -1 }}>
-              {label}
-              {count !== undefined && count > 0 && (
-                <span className="text-xs rounded-full px-1.5 py-0.5" style={{ background: tab === key ? '#EEF7F2' : '#F3F4F6', color: tab === key ? '#1aaa5e' : '#9CA3AF', minWidth: 18, textAlign: 'center' }}>
-                  {count}
-                </span>
-              )}
-            </button>
-          ))}
+        {/* ── Tab bar ── */}
+        <div style={{ background: '#FFFFFF', borderBottom: '1px solid #E8F0EB' }}>
+          <div className="max-w-6xl mx-auto px-8 flex gap-0">
+            {tabItems.map(({ key, label, count }) => (
+              <button
+                key={key}
+                onClick={() => setTab(key)}
+                className="flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors relative"
+                style={{ color: tab === key ? '#1aaa5e' : '#638070', borderBottom: tab === key ? '2px solid #1aaa5e' : '2px solid transparent', marginBottom: -1 }}
+              >
+                {label}
+                {count !== undefined && count > 0 && (
+                  <span className="text-xs rounded-full px-1.5 py-0.5" style={{ background: tab === key ? '#EEF7F2' : '#F3F4F6', color: tab === key ? '#1aaa5e' : '#9CA3AF', minWidth: 18, textAlign: 'center' }}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* ── Content ── */}
-      <div className="flex-1 overflow-y-auto">
+        {/* ── Content ── */}
         <div className="max-w-6xl mx-auto px-8 py-6">
           <div className="flex gap-6">
             {/* Left / main */}
             <div className="flex-1 min-w-0">
+
+              {/* Overview tab */}
               {tab === 'overview' && (
                 <div className="space-y-5">
                   {/* Description */}
                   <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
                     <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>About</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: company.description ? '#191D25' : '#c0c0c0' }}>
-                      {company.description || 'No description — click Edit to add one.'}
-                    </p>
+                    <InlineEdit
+                      value={company.description}
+                      onSave={v => updateField('description', v)}
+                      placeholder="Add a description…"
+                      multiline
+                      className="text-sm leading-relaxed w-full block"
+                    />
                   </div>
 
                   {/* Details grid */}
                   <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8aaa98' }}>Details</h3>
-                      <button onClick={() => setEditOpen(true)} className="flex items-center gap-1 text-xs px-2 py-1 rounded-md hover:bg-[#EEF7F2] transition-colors" style={{ color: '#1aaa5e' }}>
-                        <Pencil size={11} /> Edit
-                      </button>
-                    </div>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#8aaa98' }}>Details</h3>
                     <div className="grid grid-cols-2 gap-x-8">
-                      <PropRow icon={<Globe size={14} />} label="Domain" value={company.domain} href={company.domain ? `https://${company.domain}` : undefined} />
-                      <PropRow icon={<Tag size={14} />} label="Industry" value={company.industry} />
-                      <PropRow icon={<Users size={14} />} label="Employees" value={fmtEmp(company.employee_count)} />
-                      <PropRow icon={<DollarSign size={14} />} label="Annual Revenue" value={fmtRev(company.annual_revenue)} />
-                      <PropRow icon={<MapPin size={14} />} label="Country" value={company.country} />
-                      <PropRow icon={<Globe size={14} />} label="Website" value={company.website} href={company.website?.startsWith('http') ? company.website : company.website ? `https://${company.website}` : undefined} />
-                      <PropRow icon={<LinkedInIcon size={14} />} label="LinkedIn" value={company.linkedin_url} href={company.linkedin_url ?? undefined} />
+                      <PropRow icon={<Globe size={14} />} label="Domain" value={company.domain} onSave={v => updateField('domain', v)} />
+                      <PropRow icon={<Tag size={14} />} label="Industry" value={company.industry} onSave={v => updateField('industry', v)} />
+                      <PropRow icon={<Users size={14} />} label="Employees" value={fmtEmp(company.employee_count)} onSave={v => updateField('employee_count', parseInt(v.replace(/[^0-9]/g,'')) || null)} />
+                      <PropRow icon={<DollarSign size={14} />} label="Annual Revenue" value={fmtRev(company.annual_revenue)} onSave={v => updateField('annual_revenue', parseFloat(v.replace(/[^0-9.]/g,'')) || null)} />
+                      <PropRow icon={<MapPin size={14} />} label="Country" value={company.country} onSave={v => updateField('country', v)} />
+                      <PropRow icon={<Globe size={14} />} label="Website" value={company.website} href={company.website ?? undefined} onSave={v => updateField('website', v)} />
+                      <PropRow icon={<LinkedInIcon size={14} />} label="LinkedIn" value={company.linkedin_url} href={company.linkedin_url ?? undefined} onSave={v => updateField('linkedin_url', v)} />
                     </div>
                   </div>
                 </div>
               )}
 
+              {/* Activity tab */}
               {tab === 'activity' && (
                 <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
                   <div className="p-5">
@@ -497,6 +349,7 @@ export default function CompanyDetailPage() {
                 </div>
               )}
 
+              {/* Contacts/People tab */}
               {tab === 'contacts' && (
                 <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
                   {contacts.length === 0 ? (
@@ -508,7 +361,7 @@ export default function CompanyDetailPage() {
                     <table className="w-full border-collapse">
                       <thead style={{ background: '#F8FBF9' }}>
                         <tr>
-                          {['Name', 'Job Title', 'Email', 'Status'].map(h => (
+                          {['Name & Role', 'Seniority', 'Email', 'Location', 'Links'].map(h => (
                             <th key={h} className="text-left px-5 py-3" style={{ color: '#8aaa98', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E8F0EB' }}>{h}</th>
                           ))}
                         </tr>
@@ -516,19 +369,52 @@ export default function CompanyDetailPage() {
                       <tbody>
                         {contacts.map(c => {
                           const [bg, fg] = avatarColor(`${c.first_name} ${c.last_name}`)
+                          const senColors: Record<string,[string,string]> = {
+                            'Vp':['#EEF0FF','#4F46E5'],'Director':['#FFF4E6','#C2410C'],
+                            'Head':['#DCFCE7','#166534'],'Manager':['#F0FDF4','#15803D'],
+                            'Owner':['#FEF3C7','#92400E'],'C Suite':['#FCE7F3','#9D174D'],
+                          }
+                          const sen = (c as any).seniority as string | null
+                          const [sBg,sTx] = sen && senColors[sen] ? senColors[sen] : ['#F3F4F6','#6B7280']
                           return (
-                            <tr key={c.id} className="cursor-pointer group" style={{ borderBottom: '1px solid #F0F7F3' }} onClick={() => router.push(`/contacts/${c.id}`)}>
+                            <tr key={c.id} className="cursor-pointer group hover:bg-[#FAFCFB]"
+                              style={{ borderBottom: '1px solid #F0F7F3', transition: 'background 0.1s' }}
+                              onClick={() => router.push(`/contacts/${c.id}`)}>
                               <td className="px-5 py-3">
                                 <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ background: bg, color: fg }}>
+                                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: bg, color: fg }}>
                                     {c.first_name.charAt(0)}{c.last_name.charAt(0)}
                                   </div>
-                                  <span className="text-sm font-medium group-hover:text-[#1aaa5e] transition-colors" style={{ color: '#191D25' }}>{c.first_name} {c.last_name}</span>
+                                  <div>
+                                    <div className="text-sm font-semibold group-hover:text-[#1aaa5e] transition-colors" style={{ color: '#191D25' }}>{c.first_name} {c.last_name}</div>
+                                    <div className="text-xs" style={{ color: '#9abaaa' }}>{c.job_title ?? '—'}</div>
+                                  </div>
                                 </div>
                               </td>
-                              <td className="px-5 py-3 text-sm" style={{ color: '#638070' }}>{c.job_title ?? '—'}</td>
-                              <td className="px-5 py-3 text-sm" style={{ color: '#638070' }}>{c.email ?? '—'}</td>
-                              <td className="px-5 py-3"><SBadge value={c.status} type="contact" /></td>
+                              <td className="px-5 py-3">
+                                {sen
+                                  ? <span style={{ display:'inline-block', padding:'2px 8px', borderRadius:999, fontSize:11, fontWeight:600, background:sBg, color:sTx }}>{sen}</span>
+                                  : <span style={{ color:'#D1D5DB', fontSize:12 }}>—</span>
+                                }
+                              </td>
+                              <td className="px-5 py-3">
+                                {c.email
+                                  ? <a href={`mailto:${c.email}`} onClick={e=>e.stopPropagation()} className="text-xs hover:underline" style={{ color:'#1aaa5e' }}>{c.email}</a>
+                                  : <span className="text-xs" style={{ color:'#D1D5DB' }}>—</span>
+                                }
+                              </td>
+                              <td className="px-5 py-3">
+                                {(c as any).country
+                                  ? <span className="text-xs" style={{ color:'#6B7280' }}>{(c as any).city ? `${(c as any).city}, ` : ''}{(c as any).country}</span>
+                                  : <span className="text-xs" style={{ color:'#D1D5DB' }}>—</span>
+                                }
+                              </td>
+                              <td className="px-5 py-3">
+                                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  {c.email && <a href={`mailto:${c.email}`} onClick={e=>e.stopPropagation()} className="p-1 rounded hover:bg-gray-100 transition-colors" title="Email"><Mail size={13} style={{ color:'#6B7280' }}/></a>}
+                                  {c.linkedin_url && <a href={c.linkedin_url} target="_blank" rel="noopener" onClick={e=>e.stopPropagation()} className="p-1 rounded hover:bg-blue-50 transition-colors" title="LinkedIn"><LinkedInIcon size={13} style={{ color:'#0A66C2' }}/></a>}
+                                </div>
+                              </td>
                             </tr>
                           )
                         })}
@@ -538,6 +424,7 @@ export default function CompanyDetailPage() {
                 </div>
               )}
 
+              {/* Deals tab */}
               {tab === 'deals' && (
                 <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
                   {deals.length === 0 ? (
@@ -556,14 +443,15 @@ export default function CompanyDetailPage() {
                       </thead>
                       <tbody>
                         {deals.map(d => (
-                          <tr key={d.id} className="cursor-pointer hover:bg-[#FAFCFB] group" style={{ borderBottom: '1px solid #F0F7F3' }} onClick={() => router.push(`/deals/${d.id}`)}>
+                          <tr key={d.id} className="cursor-pointer hover:bg-[#FAFCFB] group" style={{ borderBottom: '1px solid #F0F7F3' }}
+                            onClick={() => router.push(`/deals/${d.id}`)}>
                             <td className="px-5 py-3 text-sm font-medium group-hover:text-[#1aaa5e] transition-colors" style={{ color: '#191D25' }}>{d.name}</td>
                             <td className="px-5 py-3 text-sm font-medium" style={{ color: '#1aaa5e' }}>{formatCurrency(d.value)}</td>
                             <td className="px-5 py-3"><SBadge value={d.stage} type="deal" /></td>
                             <td className="px-5 py-3">
                               <div className="flex items-center gap-2">
                                 <div className="h-1.5 w-16 rounded-full overflow-hidden" style={{ background: '#E5E7EB' }}>
-                                  <div className="h-full rounded-full" style={{ width: `${d.probability ?? 0}%`, background: (d.probability ?? 0) >= 70 ? '#1aaa5e' : (d.probability ?? 0) >= 40 ? '#F59E0B' : '#EF4444' }} />
+                                  <div className="h-full rounded-full" style={{ width: `${d.probability ?? 0}%`, background: d.probability >= 70 ? '#1aaa5e' : d.probability >= 40 ? '#F59E0B' : '#EF4444' }} />
                                 </div>
                                 <span className="text-xs" style={{ color: '#638070' }}>{d.probability ?? 0}%</span>
                               </div>
@@ -583,7 +471,17 @@ export default function CompanyDetailPage() {
               {/* Status */}
               <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>Status</h3>
-                <SBadge value={company.status} type="company" />
+                <select
+                  value={company.status}
+                  onChange={e => updateField('status', e.target.value)}
+                  className="w-full text-sm rounded-lg px-3 py-2 outline-none cursor-pointer"
+                  style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}
+                >
+                  <option value="prospect">Prospect</option>
+                  <option value="active">Active</option>
+                  <option value="partner">Partner</option>
+                  <option value="churned">Churned</option>
+                </select>
               </div>
 
               {/* Fit score */}

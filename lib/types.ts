@@ -15,7 +15,6 @@ export interface Company {
   website: string | null
   linkedin_url: string | null
   description: string | null
-  logo_url: string | null
   status: CompanyStatus
   owner_id: string | null
   created_at: string
@@ -30,7 +29,11 @@ export interface Contact {
   phone: string | null
   job_title: string | null
   department: string | null
+  seniority: string | null
   linkedin_url: string | null
+  city: string | null
+  country: string | null
+  apollo_id: string | null
   company_id: string | null
   owner_id: string | null
   status: ContactStatus
