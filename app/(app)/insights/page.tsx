@@ -124,8 +124,8 @@ const SUSTAINABILITY_SIGNALS = [
 // ── Certifications Pocargil should pursue/promote ─────────────────────────
 const CERTIFICATIONS = [
   { cert: 'GOTS', full: 'Global Organic Textile Standard', demand: 95, tier: 'Essential', desc: 'Organic cotton/wool supply chain. Required by H&M, Patagonia, Inditex sustainable lines.' },
-  { cert: 'OEKO-TEX 100', full: 'Standard 100 by OEKO-TEX', demand: 92, tier: 'Essential', desc: 'Chemical safety certification. Non-negotiable for children's wear and most premium brands.' },
-  { cert: 'bluesign', full: 'bluesign System Partner', demand: 78, tier: 'High Value', desc: 'Chemical & resource management. Patagonia, Arc'teryx, Nike require it from key suppliers.' },
+  { cert: 'OEKO-TEX 100', full: 'Standard 100 by OEKO-TEX', demand: 92, tier: 'Essential', desc: "Chemical safety certification. Non-negotiable for children's wear and most premium brands." },
+  { cert: 'bluesign', full: 'bluesign System Partner', demand: 78, tier: 'High Value', desc: "Chemical & resource management. Patagonia, Arc'teryx, Nike require it from key suppliers." },
   { cert: 'SA8000', full: 'Social Accountability 8000', demand: 65, tier: 'High Value', desc: 'Labour rights certification. US & UK brands require it post-Rana Plaza for supply chain audits.' },
   { cert: 'GRS', full: 'Global Recycled Standard', demand: 74, tier: 'Growing Fast', desc: 'Recycled content traceability. Mandatory for brands with recycled material targets by 2025.' },
   { cert: 'BCI', full: 'Better Cotton Initiative', demand: 60, tier: 'Table Stakes', desc: 'Responsible cotton sourcing. H&M, Zara, M&S all mandate BCI cotton from suppliers.' },
@@ -191,8 +191,8 @@ const TRADE_SHOWS = [
   { show: 'Première Vision', city: 'Paris', date: 'Feb & Sep', focus: 'Premium fabrics & materials', relevance: 'Top-tier', why: 'Where Chanel, Hermès, and their sourcing teams scout new fabric suppliers. Essential for luxury segment.' },
   { show: 'Texworld Paris', city: 'Paris', date: 'Feb & Sep', focus: 'Mid-market apparel fabrics', relevance: 'High', why: 'H&M, Inditex, PVH send sourcing teams. Best place to meet UK/EU buying directors in one trip.' },
   { show: 'Munich Fabric Start', city: 'Munich', date: 'Jan & Aug', focus: 'Performance & sustainable fabrics', relevance: 'High', why: 'Strong outdoor/sportswear attendance (Adidas, Puma, Jack Wolfskin). Growing sustainability focus.' },
-  { show: 'Kingpins Amsterdam', city: 'Amsterdam', date: 'Apr & Oct', focus: 'Denim & responsible sourcing', relevance: 'Medium', why: 'Key for denim-focused brands. Levi's, G-Star, Nudie Jeans sourcing present.' },
-  { show: 'Modtissimo', city: 'Porto', date: 'Feb & Sep', focus: 'Portuguese textiles showcase', relevance: 'BD Tool', why: 'Portugal's flagship textile fair. Buyers visit specifically looking for Portuguese suppliers — highest conversion.' },
+  { show: 'Kingpins Amsterdam', city: 'Amsterdam', date: 'Apr & Oct', focus: 'Denim & responsible sourcing', relevance: 'Medium', why: "Key for denim-focused brands. Levi's, G-Star, Nudie Jeans sourcing present." },
+  { show: 'Modtissimo', city: 'Porto', date: 'Feb & Sep', focus: 'Portuguese textiles showcase', relevance: 'BD Tool', why: "Portugal's flagship textile fair. Buyers visit specifically looking for Portuguese suppliers — highest conversion." },
 ]
 
 function StatCard({ icon: Icon, label, value, sub, color = '#059669', badge }: { icon: any; label: string; value: string; sub: string; color?: string; badge?: string }) {
