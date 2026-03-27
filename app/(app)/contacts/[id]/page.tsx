@@ -30,6 +30,7 @@ function InlineEdit({ value, onSave, className = '', placeholder = 'Click to edi
 }) {
   const [editing, setEditing] = useState(false)
   const [val, setVal] = useState(value ?? '')
+  useEffect(() => { if (!editing) setVal(value ?? '') }, [value, editing])
   function commit() { setEditing(false); if (val !== (value ?? '')) onSave(val) }
   if (editing) {
     const props = { autoFocus: true, value: val, onChange: (e: any) => setVal(e.target.value), onBlur: commit, onKeyDown: (e: any) => { if (e.key === 'Escape') { setVal(value ?? ''); setEditing(false) } if (!multiline && e.key === 'Enter') commit() }, style: { background: '#EEF7F2', border: '1px solid #1aaa5e', borderRadius: 6, padding: '4px 8px', outline: 'none', color: '#191D25', width: '100%', fontSize: 'inherit', fontWeight: 'inherit', lineHeight: 'inherit', resize: 'none' as const } }
