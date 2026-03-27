@@ -84,6 +84,15 @@ export default function ContactsPage() {
   }, [])
   useEffect(() => { load() }, [load])
 
+  // Realtime: refresh when any teammate modifies a contact
+  useEffect(() => {
+    const channel = supabase
+      .channel('contacts_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'contacts' }, () => { load() })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [load])
+
   const allSeniorities = [...new Set(contacts.map(c=>c.seniority).filter(Boolean) as string[])].sort()
   const allCompanies   = [...new Set(contacts.map(c=>(c as any).company?.name).filter(Boolean) as string[])].sort()
   const allCountries   = [...new Set(contacts.map(c=>c.country).filter(Boolean) as string[])].sort()

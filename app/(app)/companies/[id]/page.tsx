@@ -255,6 +255,16 @@ export default function CompanyDetailPage() {
 
   useEffect(() => { fetchAll() }, [fetchAll])
 
+  // Realtime: keep activity feed live as teammates add notes or update the record
+  useEffect(() => {
+    const channel = supabase
+      .channel(`company_${id}_realtime`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'activities', filter: `entity_id=eq.${id}` }, () => { fetchAll() })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'companies', filter: `id=eq.${id}` }, () => { fetchAll() })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [id, fetchAll])
+
   async function updateField(field: string, value: string | number | null) {
     const { error } = await supabase.from('companies').update({ [field]: value }).eq('id', id)
     if (error) { toast.error('Failed to update') } else {

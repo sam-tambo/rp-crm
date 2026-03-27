@@ -3,6 +3,33 @@ export type ContactStatus = 'active' | 'inactive' | 'lead' | 'customer'
 export type DealStage = 'prospecting' | 'qualification' | 'proposal' | 'negotiation' | 'closed_won' | 'closed_lost'
 export type ActivityType = 'note' | 'email' | 'call' | 'meeting' | 'status_change' | 'field_update'
 export type EntityType = 'company' | 'contact' | 'deal'
+export type MemberRole = 'owner' | 'admin' | 'member' | 'viewer'
+
+export interface Workspace {
+  id: string
+  name: string
+  slug: string
+  logo_url: string | null
+  created_at: string
+}
+
+export interface UserProfile {
+  id: string
+  full_name: string | null
+  email: string | null
+  avatar_url: string | null
+  updated_at: string
+}
+
+export interface WorkspaceMember {
+  id: string
+  workspace_id: string
+  user_id: string
+  role: MemberRole
+  invited_by: string | null
+  joined_at: string
+  profile?: UserProfile
+}
 
 export interface Company {
   id: string
@@ -18,6 +45,7 @@ export interface Company {
   description: string | null
   status: CompanyStatus
   owner_id: string | null
+  workspace_id: string | null
   created_at: string
   updated_at: string
 }
@@ -37,6 +65,7 @@ export interface Contact {
   apollo_id: string | null
   company_id: string | null
   owner_id: string | null
+  workspace_id: string | null
   status: ContactStatus
   notes: string | null
   created_at: string
@@ -55,6 +84,7 @@ export interface Deal {
   company_id: string | null
   contact_id: string | null
   owner_id: string | null
+  workspace_id: string | null
   description: string | null
   created_at: string
   updated_at: string
@@ -69,5 +99,6 @@ export interface Activity {
   entity_type: EntityType
   entity_id: string
   user_id: string | null
+  workspace_id: string | null
   created_at: string
 }

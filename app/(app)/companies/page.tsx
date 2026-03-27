@@ -131,7 +131,17 @@ export default function CompaniesPage() {
     setCompanies(data ?? [])
     setLoading(false)
   }, [])
+
   useEffect(() => { load() }, [load])
+
+  // Realtime: re-fetch when any teammate creates/updates/deletes a company
+  useEffect(() => {
+    const channel = supabase
+      .channel('companies_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'companies' }, () => { load() })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [load])
 
   const allInd = [...new Set(companies.map(c => c.industry).filter(Boolean) as string[])].sort()
   const allCo = [...new Set(companies.map(c => c.country).filter(Boolean) as string[])].sort()

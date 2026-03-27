@@ -4,6 +4,7 @@ import { Activity } from '@/lib/types'
 import { formatRelativeTime } from '@/lib/utils'
 import { MessageSquare, ArrowRightLeft, Edit3, Phone, Mail, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { useWorkspace } from '@/lib/workspace-context'
 import { toast } from 'sonner'
 
 const ACTIVITY_ICONS = {
@@ -26,15 +27,18 @@ export default function ActivityFeed({ activities, entityType, entityId, onRefre
   const [note, setNote] = useState('')
   const [saving, setSaving] = useState(false)
   const supabase = createClient()
+  const { workspace, userId } = useWorkspace()
 
   async function addNote() {
-    if (!note.trim()) return
+    if (!note.trim() || !workspace?.id) return
     setSaving(true)
     const { error } = await supabase.from('activities').insert({
       type: 'note',
       content: note.trim(),
       entity_type: entityType,
       entity_id: entityId,
+      workspace_id: workspace.id,
+      user_id: userId,
     })
     if (error) {
       toast.error('Failed to add note')

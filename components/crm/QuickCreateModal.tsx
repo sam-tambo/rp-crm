@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { useWorkspace } from '@/lib/workspace-context'
 import { toast } from 'sonner'
 import { Company, Contact } from '@/lib/types'
 
@@ -17,8 +18,9 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
   const [companies, setCompanies] = useState<Company[]>([])
   const [contacts, setContacts] = useState<Contact[]>([])
   const supabase = createClient()
+  const { workspace } = useWorkspace()
+  const workspaceId = workspace?.id
 
-  // Form state
   const [form, setForm] = useState<Record<string, string>>({})
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!workspaceId) { toast.error('No workspace found'); return }
     setLoading(true)
     let error: any = null
 
@@ -52,6 +55,7 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
         domain: form.domain || null,
         industry: form.industry || null,
         status: form.status || 'prospect',
+        workspace_id: workspaceId,
       }))
     } else if (type === 'contact') {
       ;({ error } = await supabase.from('contacts').insert({
@@ -61,6 +65,7 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
         job_title: form.job_title || null,
         company_id: form.company_id || null,
         status: 'lead',
+        workspace_id: workspaceId,
       }))
     } else {
       ;({ error } = await supabase.from('deals').insert({
@@ -70,6 +75,7 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
         company_id: form.company_id || null,
         contact_id: form.contact_id || null,
         close_date: form.close_date || null,
+        workspace_id: workspaceId,
       }))
     }
 
@@ -86,19 +92,11 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
   const inputClass = "w-full px-3 py-2 text-sm rounded-md outline-none"
   const inputStyle = { background: '#F0FDF4', border: '1px solid #E4E4EB', color: '#111118' }
   const labelStyle = { color: '#6B7280' }
-
   const titles = { company: 'New Company', contact: 'New Contact', deal: 'New Deal' }
 
   return (
     <>
-      {/* Overlay */}
-      {open && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50"
-          onClick={onClose}
-        />
-      )}
-      {/* Slide-over */}
+      {open && <div className="fixed inset-0 z-40 bg-black/50" onClick={onClose} />}
       <div
         className="fixed right-0 top-0 h-full w-96 z-50 flex flex-col transform transition-transform duration-300"
         style={{
@@ -217,10 +215,10 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
         <div className="px-6 py-4" style={{ borderTop: '1px solid #E4E4EB' }}>
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !workspaceId}
             onClick={handleSubmit as any}
             className="w-full py-2.5 rounded-md text-sm font-medium transition-all"
-            style={{ background: '#059669', color: 'white', opacity: loading ? 0.7 : 1 }}
+            style={{ background: '#059669', color: 'white', opacity: (loading || !workspaceId) ? 0.7 : 1 }}
           >
             {loading ? 'Creating...' : `Create ${type.charAt(0).toUpperCase() + type.slice(1)}`}
           </button>

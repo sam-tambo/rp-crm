@@ -85,6 +85,15 @@ export default function DealsPage() {
 
   useEffect(() => { fetchDeals() }, [fetchDeals])
 
+  // Realtime: refresh when any teammate moves/edits a deal
+  useEffect(() => {
+    const channel = supabase
+      .channel('deals_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'deals' }, () => { fetchDeals() })
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [fetchDeals])
+
   function openModal(stage: DealStage = 'prospecting') {
     setDefaultStage(stage)
     setModalOpen(true)
