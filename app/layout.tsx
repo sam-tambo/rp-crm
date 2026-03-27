@@ -5,6 +5,10 @@ import { Toaster } from 'sonner'
 export const metadata: Metadata = {
   title: 'RP CRM — Revenue Precision',
   description: 'B2B Sales CRM for Revenue Precision',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
