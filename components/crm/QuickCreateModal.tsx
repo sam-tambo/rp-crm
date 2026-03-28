@@ -98,7 +98,7 @@ export default function QuickCreateModal({ type, open, onClose, onSuccess }: Pro
     <>
       {open && <div className="fixed inset-0 z-40 bg-black/50" onClick={onClose} />}
       <div
-        className="fixed right-0 top-0 h-full w-96 z-50 flex flex-col transform transition-transform duration-300"
+        className="fixed right-0 top-0 h-screen w-96 z-50 flex flex-col transform transition-transform duration-300"
         style={{
           background: '#F9F9FB',
           borderLeft: '1px solid #E4E4EB',
