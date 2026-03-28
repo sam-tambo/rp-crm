@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { DndContext, DragEndEvent, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -19,14 +20,16 @@ const STAGES: { id: DealStage; label: string; color: string; bg: string }[] = [
 ]
 
 function DealCard({ deal, isDragging }: { deal: Deal; isDragging?: boolean }) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: deal.id })
+const router = useRouter()
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: deal.id })
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }
 
   const cardStyle = { ...style, background: '#EEF7F2', border: '1px solid #D4E8DC', marginBottom: '8px' }
 
   return (
     <div ref={setNodeRef} style={cardStyle} {...attributes} {...listeners}
-      className="rounded-lg p-3 cursor-grab active:cursor-grabbing">
+      onClick={() => router.push(`/deals/${deal.id}`)}
+      className="rounded-lg p-3 cucursor-pointer active:cursor-grabbing
       <div className="font-medium text-sm mb-1.5 truncate" style={{ color: '#191D25' }}>{deal.name}</div>
       {(deal as any).company?.name && (
         <div className="text-xs mb-1.5 truncate" style={{ color: '#638070' }}>{(deal as any).company.name}</div>
