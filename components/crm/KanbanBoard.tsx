@@ -20,16 +20,16 @@ const STAGES: { id: DealStage; label: string; color: string; bg: string }[] = [
 ]
 
 function DealCard({ deal, isDragging }: { deal: Deal; isDragging?: boolean }) {
-const router = useRouter()
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: deal.id })
+  const router = useRouter()
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: deal.id })
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }
 
   const cardStyle = { ...style, background: '#EEF7F2', border: '1px solid #D4E8DC', marginBottom: '8px' }
 
   return (
     <div ref={setNodeRef} style={cardStyle} {...attributes} {...listeners}
-      onClick={() => router.push(`/deals/${deal.id}`)}
-      className="rounded-lg p-3 cucursor-pointer active:cursor-grabbing
+      onClick={() => router.push('/deals/' + deal.id)}
+      className="rounded-lg p-3 cursor-pointer active:cursor-grabbing">
       <div className="font-medium text-sm mb-1.5 truncate" style={{ color: '#191D25' }}>{deal.name}</div>
       {(deal as any).company?.name && (
         <div className="text-xs mb-1.5 truncate" style={{ color: '#638070' }}>{(deal as any).company.name}</div>
@@ -80,7 +80,7 @@ export default function KanbanBoard({ deals, onAddDeal, onRefresh }: Props) {
 
     const { error } = await supabase.from('deals').update({ stage: targetStage }).eq('id', active.id as string)
     if (error) { toast.error('Failed to update deal stage') } else {
-      toast.success(`Moved to ${STAGES.find(s => s.id === targetStage)?.label}`)
+      toast.success('Moved to ' + (STAGES.find(s => s.id === targetStage)?.label ?? ''))
       onRefresh()
     }
   }
@@ -89,20 +89,20 @@ export default function KanbanBoard({ deals, onAddDeal, onRefresh }: Props) {
     <DndContext sensors={sensors} onDragStart={e => setActiveId(e.active.id as string)} onDragEnd={handleDragEnd}>
       <div className="flex gap-4 pb-6 overflow-x-auto min-h-0" style={{ height: 'calc(100vh - 120px)' }}>
         {STAGES.map(stage => (
-          <div key={stage.id} className="flex-shrink-0 w-64 flex flex-col rounded-xl" style={{ background: stage.bg, border: `1px solid ${stage.color}22` }}>
+          <div key={stage.id} className="flex-shrink-0 w-64 flex flex-col rounded-xl" style={{ background: stage.bg, border: '1px solid ' + stage.color + '22' }}>
             {/* Column header */}
-            <div className="px-3 py-3 flex items-center justify-between" style={{ borderBottom: `1px solid ${stage.color}22` }}>
+            <div className="px-3 py-3 flex items-center justify-between" style={{ borderBottom: '1px solid ' + stage.color + '22' }}>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full" style={{ background: stage.color }} />
                 <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: stage.color }}>{stage.label}</span>
-                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ background: `${stage.color}22`, color: stage.color }}>{dealsByStage(stage.id).length}</span>
+                <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ background: stage.color + '22', color: stage.color }}>{dealsByStage(stage.id).length}</span>
               </div>
               <button onClick={() => onAddDeal(stage.id)} className="p-1 rounded hover:bg-white/5 transition-colors">
                 <Plus size={13} style={{ color: stage.color }} />
               </button>
             </div>
             {/* Total */}
-            <div className="px-3 py-1.5 text-xs font-medium" style={{ color: stage.color, borderBottom: `1px solid ${stage.color}11` }}>
+            <div className="px-3 py-1.5 text-xs font-medium" style={{ color: stage.color, borderBottom: '1px solid ' + stage.color + '11' }}>
               {formatCurrency(totalByStage(stage.id))}
             </div>
             {/* Cards */}
