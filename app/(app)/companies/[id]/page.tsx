@@ -324,7 +324,7 @@ export default function CompanyDetailPage() {
           <div className="max-w-6xl mx-auto px-8 py-6">
             <div className="flex items-start gap-5">
               {/* Avatar / Logo */}
-              <CompanyLogo name={company.name} logoUrl={company.logo_url} bg={avatarBg} fg={avatarFg} />
+              <CompanyLogo name={company.name} logoUrl={company.domain ? `https://logo.clearbit.com/${company.domain}` : (company.logo_url ?? null)} bg={avatarBg} fg={avatarFg} />
 
               {/* Name + meta */}
               <div className="flex-1 min-w-0">
@@ -582,7 +582,7 @@ export default function CompanyDetailPage() {
                           <tr key={d.id} className="cursor-pointer hover:bg-[#FAFAFA] group" style={{ borderBottom: '1px solid #F4F4F8' }}
                             onClick={() => router.push(`/deals/${d.id}`)}>
                             <td className="px-5 py-3 text-sm font-medium group-hover:text-[#059669] transition-colors" style={{ color: '#111118' }}>{d.name}</td>
-                            <td className="px-5 py-3 text-sm font-medium" style={{ color: '#059669' }}>{formatCurrency(d.value)}</td>
+                            <td cssName="px-5 py-3 text-sm font-medium" style={{ color: '#059669' }}>{formatCurrency(d.value)}</td>
                             <td className="px-5 py-3"><SBadge value={d.stage} type="deal" /></td>
                             <td className="px-5 py-3">
                               <div className="flex items-center gap-2">
@@ -623,7 +623,7 @@ export default function CompanyDetailPage() {
               {/* Fit score */}
               <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>ICP Fit Score</h3>
-                <div className="flex items-center justify-between mb-2">
+    0           <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold" style={{ color: fit.color }}>{fit.label}</span>
                   <span className="text-lg font-bold" style={{ color: fit.color }}>{fit.score}</span>
                 </div>
@@ -633,11 +633,87 @@ export default function CompanyDetailPage() {
                 <p className="text-xs mt-2" style={{ color: '#9CA3AF' }}>Based on industry, size & data completeness</p>
               </div>
 
+              {/* Supply Chain Intelligence */}
+              <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#9CA3AF' }}>Supply Chain Intel</h3>
+                  {company.composite_priority_score != null && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{ background: company.composite_priority_score >= 7 ? '#EEF7F2' : '#F3F4F6', color: company.composite_priority_score >= 7 ? '#059669' : '#6B7280' }}>
+                      Score {company.composite_priority_score}
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2.5">
+                  <div>
+                    <div className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Asia Dependency %</div>
+                    <div className="flex items-center gap-2">
+                      <input type="number" min={0} max={100}
+                        defaultValue={company.asia_dependency_pct ?? ''}
+                        placeholder="0–100"
+                        onBlur={e => updateField('asia_dependency_pct', parseInt(e.target.value) || null)}
+                        className="text-sm w-full rounded-md px-2 py-1 outline-none"
+                        style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }} />
+                      {company.asia_dependency_pct != null && (
+                        <div className="w-16 h-1.5 rounded-full overflow-hidden flex-shrink-0" style={{ background: '#E5E7EB' }}>
+                          <div className="h-full rounded-full" style={{ width: company.asia_dependency_pct + '%', background: company.asia_dependency_pct > 70 ? '#EF4444' : company.asia_dependency_pct > 40 ? '#F59E0B' : '#10B981' }} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs mb-1" style={{ color: '#9CA3AF' }}>CSRD Obligation</div>
+                    <select defaultValue={company.csrd_obligation ?? ''}
+                      onBlur={e => updateField('csrd_obligation', e.target.value || null)}
+                      className="text-sm w-full rounded-md px-2 py-1 outline-none"
+                      style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }}>
+                      <option value="">Unknown</option>
+                      <option>Mandatory 2025</option>
+                      <option>Mandatory 2026</option>
+                      <option>Mandatory 2027</option>
+                      <option>Voluntary</option>
+                    </select>
+                  </div>
+             0    <div>
+                    <div className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Avg Order Size</div>
+                    <select defaultValue={company.avg_order_size_units ?? ''}
+                      onBlur={e => updateField('avg_order_size_units', e.target.value || null)}
+                      className="text-sm w-full rounded-md px-2 py-1 outline-none"
+                      style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }}>
+                      <option value="">Unknown</option>
+                      <option>&lt;500 units</option>
+                      <option>500–2K units</option>
+                      <option>2K–10K units</option>
+                      <option>10K+ units</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Has EU Supplier?</div>
+                    <select defaultValue={company.has_nearshore_supplier ? 'yes' : 'no'}
+                      onChange={e => updateField('has_nearshore_supplier', e.target.value === 'yes' ? true : false)}
+                      className="text-sm w-full rounded-md px-2 py-1 outline-none"
+                      style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }}>
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Priority Score</div>
+                    <input type="number" min={1} max={10}
+                      defaultValue={company.composite_priority_score ?? ''}
+                      placeholder="1–10"
+                      onBlur={e => updateField('composite_priority_score', parseInt(e.target.value) || null)}
+                      className="text-sm w-full rounded-md px-2 py-1 outline-none"
+                      style={{ background: '#F9F9FB', border: '1px solid #E4E4EB', color: '#111118' }} />
+                  </div>
+                </div>
+              </div>
+
               {/* Record info */}
               <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>Record Info</h3>
                 <div className="space-y-2">
-                  <div className="flex justify-between">
+           0      <div className="flex justify-between">
                     <span className="text-xs" style={{ color: '#9CA3AF' }}>Created</span>
                     <span className="text-xs" style={{ color: '#111118' }}>{formatDate(company.created_at)}</span>
                   </div>
