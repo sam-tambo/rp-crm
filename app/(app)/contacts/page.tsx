@@ -77,7 +77,7 @@ export default function ContactsPage() {
     setLoading(true)
     const { data } = await supabase
       .from('contacts')
-      .select('*, company:companies(id,name,logo_url)')
+      .select('*, company:companies(id,name,domain)')
       .order('created_at', { ascending:false })
     setContacts(data ?? [])
     setLoading(false)
@@ -141,8 +141,8 @@ export default function ContactsPage() {
       <button onClick={e=>{e.stopPropagation();router.push(`/companies/${co.id}`)}}
         className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-green-50 transition-colors"
         style={{fontSize:12,color:'#059669',fontWeight:500,maxWidth:160}}>
-        {co.logo_url && !err
-          ? <img src={co.logo_url} alt="" onError={()=>setErr(true)} style={{width:16,height:16,borderRadius:3,objectFit:'contain',background:'#fff',border:'1px solid #E5E7EB',flexShrink:0}}/>
+        {co.domain && !err
+          ? <img src={`https://logo.clearbit.com/${co.domain}`} alt="" onError={()=>setErr(true)} style={{width:16,height:16,borderRadius:3,objectFit:'contain',background:'#fff',border:'1px solid #E5E7EB',flexShrink:0}}/>
           : <Building2 size={11} style={{flexShrink:0}}/>
         }
         <span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>

@@ -83,7 +83,7 @@ export default function ContactDetailPage() {
   const [contact, setContact] = useState<Contact | null>(null)
   const [deals, setDeals] = useState<Deal[]>([])
   const [activities, setActivities] = useState<Activity[]>([])
-  const [tab, setTab] = useState<'overview' | 'activity' | 'deals'>('overview')
+  const [tab, setTab] = useState<'overview' | 'activity' | 'deals' | 'outreach'>('overview')
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
@@ -150,6 +150,7 @@ export default function ContactDetailPage() {
     { key: 'overview', label: 'Overview' },
     { key: 'activity', label: 'Activity', count: activities.length },
     { key: 'deals', label: 'Deals', count: deals.length },
+    { key: 'outreach', label: 'Outreach' },
   ]
 
   return (
@@ -313,6 +314,152 @@ export default function ContactDetailPage() {
                 <div className="rounded-xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
                   <div className="p-5">
                     <ActivityFeed activities={activities} entityType="contact" entityId={id} onRefresh={fetchAll} />
+                  </div>
+                </div>
+              )}
+
+              {tab === 'outreach' && (
+                <div className="space-y-5">
+                  {/* Outreach persona + channel */}
+                  <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>Outreach Profile</h3>
+                    <div className="grid grid-cols-2 gap-x-8">
+                      <div className="flex items-start gap-3 py-2.5" style={{ borderBottom: '1px solid #F0F7F3' }}>
+                        <div className="flex-1">
+                          <div className="text-xs mb-1" style={{ color: '#9abaaa' }}>Persona</div>
+                          <select value={contact.outreach_persona ?? ''} onChange={e => updateField('outreach_persona', e.target.value)}
+                            className="text-sm w-full rounded-md px-2 py-1 outline-none" style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}>
+                            <option value="">— Select —</option>
+                            <option>Sourcing Director</option>
+                            <option>Head of Supply Chain</option>
+                            <option>Procurement VP</option>
+                            <option>Sustainability Manager</option>
+                            <option>Other</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 py-2.5" style={{ borderBottom: '1px solid #F0F7F3' }}>
+                        <div className="flex-1">
+                          <div className="text-xs mb-1" style={{ color: '#9abaaa' }}>Preferred Channel</div>
+                          <select value={contact.preferred_contact_channel ?? ''} onChange={e => updateField('preferred_contact_channel', e.target.value)}
+                            className="text-sm w-full rounded-md px-2 py-1 outline-none" style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}>
+                            <option value="">— Select —</option>
+                            <option>LinkedIn</option>
+                            <option>Email</option>
+                            <option>Phone</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-3">
+                      <div className="text-xs mb-1" style={{ color: '#9abaaa' }}>Outreach Notes (personalisation hook)</div>
+                      <InlineEdit value={contact.outreach_notes} onSave={v => updateField('outreach_notes', v)}
+                        placeholder="What's unique about this person / company that you'll reference in the DM?"
+                        multiline className="text-sm leading-relaxed w-full block" />
+                    </div>
+                  </div>
+
+                  {/* Touch sequence tracker */}
+                  <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#8aaa98' }}>3-Touch Sequence</h3>
+                    <div className="space-y-3">
+                      {[
+                        { num: 1, field: 'touch_1_sent_at' as const, label: 'Touch 1 — LinkedIn DM', desc: 'Specific observation + genuine question. Under 50 words. No pitch.' },
+                        { num: 2, field: 'touch_2_sent_at' as const, label: 'Touch 2 — Email (Day 4)', desc: 'Follow up. Offer the scorecard link.' },
+                        { num: 3, field: 'touch_3_sent_at' as const, label: 'Touch 3 — LinkedIn DM (Day 9)', desc: 'Last note. Mention the pilot programme + production slot.' },
+                      ].map(({ num, field, label, desc }) => {
+                        const sent = contact[field]
+                        const sentDate = sent ? new Date(sent) : null
+                        return (
+                          <div key={num} className="flex items-start gap-4 p-3 rounded-lg" style={{ background: sent ? '#EEF7F2' : '#F8FBF9', border: '1px solid ' + (sent ? '#D4E8DC' : '#EAECF0') }}>
+                            <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"
+                              style={{ background: sent ? '#1aaa5e' : '#E5E7EB', color: sent ? 'white' : '#9CA3AF' }}>{num}</div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-medium" style={{ color: '#191D25' }}>{label}</div>
+                              <div className="text-xs mt-0.5" style={{ color: '#8aaa98' }}>{desc}</div>
+                              {sentDate && (
+                                <div className="text-xs mt-1" style={{ color: '#1aaa5e' }}>
+                                  Sent {sentDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </div>
+                              )}
+                            </div>
+                            {!sent && (
+                              <button onClick={() => updateField(field, new Date().toISOString())}
+                                className="flex-shrink-0 text-xs px-2.5 py-1 rounded-md font-medium transition-colors hover:bg-[#EEF7F2]"
+                                style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#1aaa5e' }}>
+                                Mark Sent
+                              </button>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                    {/* Status + Reply */}
+                    <div className="grid grid-cols-2 gap-4 mt-4 pt-4" style={{ borderTop: '1px solid #F0F7F3' }}>
+                      <div>
+                        <div className="text-xs mb-1" style={{ color: '#9abaaa' }}>Touch Status</div>
+                        <select value={contact.touch_status ?? 'Not started'} onChange={e => updateField('touch_status', e.target.value)}
+                          className="text-sm w-full rounded-md px-2 py-1 outline-none" style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}>
+                          <option>Not started</option>
+                          <option>Touch 1 sent</option>
+                          <option>Touch 2 sent</option>
+                          <option>Touch 3 sent</option>
+                          <option>Replied</option>
+                          <option>Unresponsive</option>
+                        </select>
+                      </div>
+                      <div>
+                        <div className="text-xs mb-1" style={{ color: '#9abaaa' }}>Reply Sentiment</div>
+                        <select value={contact.reply_sentiment ?? ''} onChange={e => updateField('reply_sentiment', e.target.value)}
+                          className="text-sm w-full rounded-md px-2 py-1 outline-none" style={{ background: '#F8FBF9', border: '1px solid #D4E8DC', color: '#191D25' }}>
+                          <option value="">— No reply yet —</option>
+                          <option>Positive</option>
+                          <option>Neutral</option>
+                          <option>Not now</option>
+                          <option>No</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Scorecard */}
+                  <div className="rounded-xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E8F0EB' }}>
+                    <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#8aaa98' }}>Nearshore Readiness Scorecard</h3>
+                    {contact.scorecard_submitted ? (
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold"
+                          style={{ background: (contact.scorecard_score ?? 0) <= 4 ? '#FFF1F1' : (contact.scorecard_score ?? 0) <= 6 ? '#FFFBE6' : '#EEF7F2', color: (contact.scorecard_score ?? 0) <= 4 ? '#EF4444' : (contact.scorecard_score ?? 0) <= 6 ? '#F59E0B' : '#1aaa5e' }}>
+                          {contact.scorecard_score ?? '?'}
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium" style={{ color: '#191D25' }}>Score: {contact.scorecard_score ?? '?'} / 10</div>
+                          <div className="text-xs" style={{ color: '#8aaa98' }}>
+                            {contact.scorecard_submitted_at ? `Submitted ${new Date(contact.scorecard_submitted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}` : 'Submitted'}
+                          </div>
+                          <div className="text-xs mt-1" style={{ color: (contact.scorecard_score ?? 0) <= 4 ? '#EF4444' : '#1aaa5e' }}>
+                            {(contact.scorecard_score ?? 0) <= 4 ? '⚡ Priority — high compliance gap' : (contact.scorecard_score ?? 0) <= 6 ? '⚠ Moderate gap' : '✓ Well prepared'}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-3">
+                        <div className="text-sm" style={{ color: '#8aaa98' }}>Not submitted yet</div>
+                        <button onClick={() => {
+                          const score = window.prompt('Enter scorecard score (0-10):')
+                          if (score === null) return
+                          const n = parseInt(score)
+                          if (!isNaN(n) && n >= 0 && n <= 10) {
+                            updateField('scorecard_submitted', 'true')
+                            updateField('scorecard_score', score)
+                            updateField('scorecard_submitted_at', new Date().toISOString())
+                          }
+                        }} className="text-xs px-2.5 py-1 rounded-md font-medium"
+                          style={{ background: '#EEF7F2', border: '1px solid #D4E8DC', color: '#1aaa5e' }}>
+                          Log Score
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

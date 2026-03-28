@@ -419,7 +419,7 @@ export default function CompaniesPage() {
                     {/* Company */}
                     <td style={{ padding:'10px 12px' }} onClick={()=>router.push(`/companies/${c.id}`)}>
                       <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                        <CompanyAvatar name={c.name} logoUrl={(c as any).logo_url ?? null} size={32} />
+                        <CompanyAvatar name={c.name} logoUrl={c.domain ? `https://logo.clearbit.com/${c.domain}` : null} size={32} />
                         <div style={{ minWidth:0 }}>
                           <div style={{ fontWeight:600, fontSize:13, color:'#111118', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{c.name}</div>
                           {c.domain && <div style={{ fontSize:11, color:'#9CA3AF', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{c.domain}</div>}

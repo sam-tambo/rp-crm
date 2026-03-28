@@ -582,7 +582,7 @@ export default function CompanyDetailPage() {
                           <tr key={d.id} className="cursor-pointer hover:bg-[#FAFAFA] group" style={{ borderBottom: '1px solid #F4F4F8' }}
                             onClick={() => router.push(`/deals/${d.id}`)}>
                             <td className="px-5 py-3 text-sm font-medium group-hover:text-[#059669] transition-colors" style={{ color: '#111118' }}>{d.name}</td>
-                            <td cssName="px-5 py-3 text-sm font-medium" style={{ color: '#059669' }}>{formatCurrency(d.value)}</td>
+                            <td className="px-5 py-3 text-sm font-medium" style={{ color: '#059669' }}>{formatCurrency(d.value)}</td>
                             <td className="px-5 py-3"><SBadge value={d.stage} type="deal" /></td>
                             <td className="px-5 py-3">
                               <div className="flex items-center gap-2">
@@ -623,7 +623,7 @@ export default function CompanyDetailPage() {
               {/* Fit score */}
               <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>ICP Fit Score</h3>
-    0           <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold" style={{ color: fit.color }}>{fit.label}</span>
                   <span className="text-lg font-bold" style={{ color: fit.color }}>{fit.score}</span>
                 </div>
@@ -674,7 +674,7 @@ export default function CompanyDetailPage() {
                       <option>Voluntary</option>
                     </select>
                   </div>
-             0    <div>
+                  <div>
                     <div className="text-xs mb-1" style={{ color: '#9CA3AF' }}>Avg Order Size</div>
                     <select defaultValue={company.avg_order_size_units ?? ''}
                       onBlur={e => updateField('avg_order_size_units', e.target.value || null)}
@@ -713,7 +713,7 @@ export default function CompanyDetailPage() {
               <div className="rounded-xl p-4" style={{ background: '#FFFFFF', border: '1px solid #EBEBF0' }}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#9CA3AF' }}>Record Info</h3>
                 <div className="space-y-2">
-           0      <div className="flex justify-between">
+                  <div className="flex justify-between">
                     <span className="text-xs" style={{ color: '#9CA3AF' }}>Created</span>
                     <span className="text-xs" style={{ color: '#111118' }}>{formatDate(company.created_at)}</span>
                   </div>

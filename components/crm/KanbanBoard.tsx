@@ -12,14 +12,14 @@ import { Plus, AlertTriangle } from 'lucide-react'
 
 const STAGES: { id: DealStage; label: string; color: string; bg: string }[] = [
   { id: 'identified',     label: 'Identified',     color: '#6B7280', bg: 'rgba(107,114,128,0.05)' },
-  { id: 'in_sequence',    label: 'In Sequence',    color: '#8B5CF6', bg: 'rgba(139,92,246,0.06)' },
-  { id: 'scorecard_sent', label: 'Scorecard Sent', color: '#6366F1', bg: 'rgba(99,102,241,0.06)' },
-  { id: 'discovery_call', label: 'Discovery Call', color: '#3B82F6', bg: 'rgba(59,130,246,0.06)' },
-  { id: 'pilot_proposed', label: 'Pilot Proposed', color: '#F59E0B', bg: 'rgba(245,158,11,0.06)' },
-  { id: 'slot_confirmed', label: 'Slot Confirmed', color: '#10B981', bg: 'rgba(16,185,129,0.08)' },
-  { id: 'in_production',  label: 'In Production',  color: '#059669', bg: 'rgba(5,150,105,0.08)' },
-  { id: 'closed_won',     label: 'Closed Won',     color: '#065f46', bg: 'rgba(6,95,70,0.06)' },
-  { id: 'closed_lost',    label: 'Closed Lost',    color: '#EF4444', bg: 'rgba(239,68,68,0.05)' },
+  { id: 'in_sequence',    label: 'In Sequence',     color: '#8B5CF6', bg: 'rgba(139,92,246,0.06)' },
+  { id: 'scorecard_sent', label: 'Scorecard Sent',  color: '#6366F1', bg: 'rgba(99,102,241,0.06)' },
+  { id: 'discovery_call', label: 'Discovery Call',  color: '#3B82F6', bg: 'rgba(59,130,246,0.06)' },
+  { id: 'pilot_proposed', label: 'Pilot Proposed',  color: '#F59E0B', bg: 'rgba(245,158,11,0.06)' },
+  { id: 'slot_confirmed', label: 'Slot Confirmed',  color: '#10B981', bg: 'rgba(16,185,129,0.08)' },
+  { id: 'in_production',  label: 'In Production',   color: '#059669', bg: 'rgba(5,150,105,0.08)' },
+  { id: 'closed_won',     label: 'Closed Won',      color: '#065f46', bg: 'rgba(6,95,70,0.06)' },
+  { id: 'closed_lost',    label: 'Closed Lost',     color: '#EF4444', bg: 'rgba(239,68,68,0.05)' },
 ]
 
 function isStale(deal: Deal): boolean {
@@ -69,7 +69,7 @@ function DealCard({ deal, isDragging }: { deal: Deal; isDragging?: boolean }) {
   )
 }
 
-/* ── Slot Status Bar ───────────────────────────────────────────────── */
+/* ── Slot Status Bar ───────────────────────────────────── */
 function SlotStatusBar({ slots }: { slots: ProductionSlot[] }) {
   const q2Slots = slots.filter(s => s.quarter === 'Q2-2026')
   const nextQuarter = 'Q3 → Jul 1'
@@ -145,9 +145,10 @@ export default function KanbanBoard({ deals, onAddDeal, onRefresh }: Props) {
     const deal = deals.find(d => d.id === active.id)
     if (!deal || deal.stage === targetStage) return
 
+    // Prompt for loss reason if moving to closed_lost
     if (targetStage === 'closed_lost') {
       const reason = window.prompt('Reason for closing lost? (No reply / Chose competitor / Poor timing / No budget / Quality concern / Other)')
-      if (reason === null) return
+      if (reason === null) return // cancelled
       await supabase.from('deals').update({ stage: targetStage, loss_reason: reason, last_activity_at: new Date().toISOString() }).eq('id', active.id as string)
       toast.success('Deal closed lost')
       onRefresh()
@@ -163,12 +164,14 @@ export default function KanbanBoard({ deals, onAddDeal, onRefresh }: Props) {
 
   return (
     <div>
+      {/* Slot status bar */}
       {slots.length > 0 && <SlotStatusBar slots={slots} />}
 
       <DndContext sensors={sensors} onDragStart={e => setActiveId(e.active.id as string)} onDragEnd={handleDragEnd}>
         <div className="flex gap-3 pb-6 overflow-x-auto min-h-0" style={{ height: 'calc(100vh - 180px)' }}>
           {STAGES.map(stage => (
             <div key={stage.id} className="flex-shrink-0 w-60 flex flex-col rounded-xl" style={{ background: stage.bg, border: '1px solid ' + stage.color + '22' }}>
+              {/* Column header */}
               <div className="px-3 py-2.5 flex items-center justify-between" style={{ borderBottom: '1px solid ' + stage.color + '22' }}>
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: stage.color }} />
@@ -179,9 +182,11 @@ export default function KanbanBoard({ deals, onAddDeal, onRefresh }: Props) {
                   <Plus size={12} style={{ color: stage.color }} />
                 </button>
               </div>
+              {/* Total */}
               <div className="px-3 py-1.5 text-xs font-medium" style={{ color: stage.color, borderBottom: '1px solid ' + stage.color + '11' }}>
                 {formatCurrency(totalByStage(stage.id))}
               </div>
+              {/* Cards */}
               <div className="flex-1 overflow-y-auto p-2.5">
                 <SortableContext items={dealsByStage(stage.id).map(d => d.id)} strategy={verticalListSortingStrategy}>
                   {dealsByStage(stage.id).map(deal => (

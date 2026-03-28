@@ -209,7 +209,6 @@ export default function SettingsPage() {
     fetch('/api/setup-status').then(r => r.json()).then(d => setInviteEnabled(d.inviteEnabled))
   }, [])
 
-
   // Profile form
   const [fullName, setFullName] = useState(profile?.full_name ?? '')
   const [savingProfile, setSavingProfile] = useState(false)
