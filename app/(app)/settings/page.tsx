@@ -203,6 +203,12 @@ export default function SettingsPage() {
   const [members, setMembers] = useState<MemberWithProfile[]>([])
   const [loadingMembers, setLoadingMembers] = useState(true)
   const [showInvite, setShowInvite] = useState(false)
+  const [inviteEnabled, setInviteEnabled] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    fetch('/api/setup-status').then(r => r.json()).then(d => setInviteEnabled(d.inviteEnabled))
+  }, [])
+
 
   // Profile form
   const [fullName, setFullName] = useState(profile?.full_name ?? '')
@@ -384,12 +390,14 @@ export default function SettingsPage() {
               </div>
 
               {/* Setup note if service role key missing */}
-              <div className="rounded-lg p-4" style={{ background: '#FFFBEB', border: '1px solid #FDE68A' }}>
-                <p className="text-xs font-medium mb-1" style={{ color: '#92400E' }}>Invite emails require setup</p>
-                <p className="text-xs" style={{ color: '#B45309' }}>
-                  To enable email invites, add <code className="px-1 py-0.5 rounded text-[10px]" style={{ background: '#FEF3C7' }}>SUPABASE_SERVICE_ROLE_KEY</code> to your Vercel environment variables. Find it in your Supabase dashboard under Settings → API.
-                </p>
-              </div>
+              {inviteEnabled === false && (
+                <div className="rounded-lg p-4" style={{ background: '#FFFBEB', border: '1px solid #FDE68A' }}>
+                  <p className="text-xs font-medium mb-1" style={{ color: '#92400E' }}>Invite emails require setup</p>
+                  <p className="text-xs" style={{ color: '#B45309' }}>
+                    To enable email invites, add <code className="px-1 py-0.5 rounded text-[10px]" style={{ background: '#FEF3C7' }}>SUPABASE_SERVICE_ROLE_KEY</code> to your Vercel environment variables. Find it in your Supabase dashboard under Settings → API.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
